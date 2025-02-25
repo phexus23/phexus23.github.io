@@ -1,0 +1,31 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    if: github.event.repository.fork == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/phexus23/phexus23.github.io.git
+
+      - name: Sync with upstream
+        run: |
+          git fetch upstream
+          git merge upstream/master master
+          git push origin master
