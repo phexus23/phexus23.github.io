@@ -54,7 +54,10 @@ elif platform.system() == 'Darwin':
     print("Folder opening for macOS not implemented.")
 # No 'return' outside a function
 
-html = f"""<!DOCTYPE html><html lang="en"><head> <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3858578074050552" crossorigin="anonymous"></script> <script src="../js/fetchington.js"></script> <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Y3T9NZGP8"></script> <script> window.dataLayer = window.dataLayer || []; function gtag() {{ dataLayer.push(arguments); }} gtag('js', new Date()); gtag('config', 'G-9Y3T9NZGP8'); </script></head><body> <script> fetchData({gameIndex}); </script></body></html>
+pageTitle = f"Play {name} Unblocked | Vafor"
+pageDescription = f"Play {name} unblocked for free on Vafor. No downloads or sign-ups — just click and play instantly."
+
+html = f"""<!DOCTYPE html><html lang="en"><head><title>{pageTitle}</title><meta name="description" content="{pageDescription}"> <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3858578074050552" crossorigin="anonymous"></script> <script src="../js/fetchington.js"></script> <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Y3T9NZGP8"></script> <script> window.dataLayer = window.dataLayer || []; function gtag() {{ dataLayer.push(arguments); }} gtag('js', new Date()); gtag('config', 'G-9Y3T9NZGP8'); </script></head><body> <script> fetchData({gameIndex}); </script></body></html>
 """
 
 indexPath = os.path.join(gxmesGamePath, "index.html")

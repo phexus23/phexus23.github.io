@@ -24,11 +24,14 @@ async function fetchData(index) {
         image.src = imgsrc; 
         document.getElementById('gameTitle').textContent = 'Play ' + name1 + ' on ' + SiteText;
         const keywords = 'game, gxmes, ' + name1 + ' unblocked, ' + name1 + ' ' + SiteText + ', Vafor, Vafor IT, ' + name1 + ', ' + name1 + ' school, github gxmes, github ' + name1;
-        var meta = document.createElement('meta');
-        meta.name = 'description';
+        var meta = document.querySelector('meta[name="description"]');
+        if (!meta) {
+            meta = document.createElement('meta');
+            meta.name = 'description';
+            document.getElementsByTagName('head')[0].appendChild(meta);
+        }
         meta.content = 'Play ' + name1 + ' on maxwellstevenson.com';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        
+
         const savedTabName = localStorage.getItem('tabName');
         const savedTabImage = localStorage.getItem('tabImage');
 
