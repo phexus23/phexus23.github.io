@@ -359,6 +359,11 @@ document.addEventListener("DOMContentLoaded", function () {
             right:0;
             margin-right:7px;
         }
+        @media (max-width: 1100px) {
+            .unique-sidebar {
+                display: none;
+            }
+        }
         </style>
         <header>
             <a class="title" href="/gxmes">Vafor</a>
@@ -373,9 +378,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     <i class="fas fa-expand"></i>
                 </button>
             </div>
-            <!--
             <div class="unique-sidebar adbar-left">
-                <div class="ad-preview"> 
+                <div class="ad-preview">
                     <ins class="adsbygoogle"
                     style="display:block"
                     data-ad-client="ca-pub-3858578074050552"
@@ -385,7 +389,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             </div>
             <div class="unique-sidebar adbar-right">
-                <div class="ad-preview"> 
+                <div class="ad-preview">
                     <ins class="adsbygoogle"
                     style="display:block"
                     data-ad-client="ca-pub-3858578074050552"
@@ -394,8 +398,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     data-full-width-responsive="true"></ins>
                 </div>
             </div>
-            -->
-            <div>      
+            <div>
             <ins class="adsbygoogle"
             style="display:block"
             data-ad-client="ca-pub-3858578074050552"
@@ -442,10 +445,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
     fetchRecommendedGames();
-    (adsbygoogle = window.adsbygoogle || []).push({});
-    (adsbygoogle = window.adsbygoogle || []).push({});
-    (adsbygoogle = window.adsbygoogle || []).push({});
-    //(adsbygoogle = window.adsbygoogle || []).push({});
+    for (let i = 0; i < 5; i++) {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    }
 
 });
 
