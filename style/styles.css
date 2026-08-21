@@ -21,6 +21,12 @@ body {
     height: 100vh;
     position: fixed;
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+#open-modal {
+    margin-top: 15px;
 }
 
 .side-nav h2 {
@@ -93,8 +99,8 @@ main {
         margin: 0;
     }
 
-    .cogig {
-        position: static;
+    #open-modal {
+        margin-top: 0;
         margin-left: auto;
     }
 
@@ -287,8 +293,6 @@ a:hover {
     margin-left: 10px;
 }
 .cogig {
-    position: fixed;
-    bottom:0;
     color: #cfcfcf;
     font-size: 1.25rem;
     padding-bottom: 10px;
