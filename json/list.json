@@ -719,5 +719,26 @@
         "linksrc": "/Vafor_IT/half-life/",
         "foldername": "half-life",
         "category": "Action"
+    },
+    {
+        "name": "T-Rex Runner",
+        "imgsrc": "/assets/img/trex-runner.png",
+        "linksrc": "/Vafor_IT/trex-runner/",
+        "foldername": "trex-runner",
+        "category": "Arcade"
+    },
+    {
+        "name": "Snake",
+        "imgsrc": "/assets/img/snake-game.png",
+        "linksrc": "/Vafor_IT/snake-game/",
+        "foldername": "snake-game",
+        "category": "Arcade"
+    },
+    {
+        "name": "Minesweeper",
+        "imgsrc": "/assets/img/emoji-minesweeper.png",
+        "linksrc": "/Vafor_IT/minesweeper/",
+        "foldername": "minesweeper",
+        "category": "Puzzle"
     }
 ]
