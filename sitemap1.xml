@@ -1,326 +1,527 @@
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://maxwellstevenson.com/</loc>
-    <lastmod>2025-01-17T02:02:55+00:00</lastmod>
-    <priority>0.80</priority>
-  </url>
-  
-  <url>
-    <loc>https://maxwellstevenson.com/gxmes/</loc>
-    <lastmod>2025-01-17T02:02:55+00:00</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <priority>1.00</priority>
   </url>
-  
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/stickman-hook/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/1v1.lol/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/stickman-hook/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/buildnow-gg/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/1v1.lol/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/cookie-clicker/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/buildnow.gg/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/retro-football/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/cookie-clicker/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/agar-io/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/retro-football/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/smash-karts/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/agar.io/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/slope/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/smash-karts/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/yohoho-io/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/slope/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/motor-x3m/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/yohoho.io/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://maxwellstevenson.com/gxmes/monkey-mart/index.html</loc>
-    <lastmod>2025-01-16T00:00:00+00:00</lastmod>
+    <loc>https://maxwellstevenson.com/gxmes/gunspin/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
   </url>
   <url>
-  <loc>https://maxwellstevenson.com/gxmes/awesome-tanks-2/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/time-shooter-3/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/sling-drift/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/drift-boss/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/bank-robbery/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/ovo/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/tiny-fishing/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/vex-6/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/basketball-stars/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/super-mario-64/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/60-second-burger-run/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/paper-io-2/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/cat-mario/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/idle-breakout/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/ducklife1/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/ducklife2/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/ducklife3/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/pixel-gun-2/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/drive-mad/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/cluster-rush/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/10-minutes-till-dawn/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/google-snake/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/gun-mayhem-2/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/generic-fishing/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/fnaf/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/ninja-vs-evilcorp/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/csgo-clicker/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/madalin-stunt-cars/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/bitlife/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/snowrider/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/jetpack-joyride/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/impossible-quiz/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/papaspizzaria/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/papasfreezeria/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/papaspancakeareia/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/worlds-hardest-gm-2/index.html</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/rooftop-snipers</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/stack</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/tanuki-sunset</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/soccer-random</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/subway-surfers</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/learn-to-fly</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/learn2fly</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/hilldraw</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/snowball-io</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/fireboy-and-watergirl</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/pixel-speedrun</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/a-dance-of-fire-and-ice</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/giraffes-volleyball</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/deepest-sword</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/bottle-flip-3d</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/choppy-orc</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/minecraft</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/funny-shooter</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/hole-io</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/tomb-of-the-mask</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/doge-miner</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/run-3</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/sausage-flip</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/sandstrike.io</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/color-tunnel</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/polytrack</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/friday-night-funkin</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/last-horizon</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/fruit-ninja</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-<url>
-  <loc>https://maxwellstevenson.com/gxmes/rocket-pult</loc>
-  <lastmod>2025-01-16</lastmod>
-</url>
-
-
-
-
+    <loc>https://maxwellstevenson.com/gxmes/monkey-mart/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/awesome-tanks-2/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/time-shooter-3/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/sling-drift/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/drift-boss/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bank-robbery/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/ovo/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/tiny-fishing/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/vex-6/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/basketball-stars/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/super-mario-64/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/60-second-burger-run/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/paper.io-2/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/cat-mario/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/idle-breakout/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/ducklife/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/ducklife2/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/ducklife3/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/pixel-gun-2/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/drive-mad/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/cluster-rush/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/10-minutes-till-dawn/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/google-snake/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/gun-mayhem-2/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/generic-fishing/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/fnaf/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/ninja-vs-evilcorp/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/csgo-clicker/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/madalin-stunt-cars/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bitlife/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/snowrider/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/jetpack-joyride/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/impossible-quiz/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/pappas-pizzeria/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/pappas-freezeria/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/pappas-pancakearia/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/worlds-hardest-gm-2/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/rooftop-snipers/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/stack/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/tanuki-sunset/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/soccer-random/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/subway-surfers/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/learn-to-fly/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/learn2fly/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/hilldraw/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/snowball-io/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/fireboy-and-watergirl/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/pixel-speedrun/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/a-dance-of-fire-and-ice/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/giraffes-volleyball/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/deepest-sword/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bottle-flip-3d/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/choppy-orc/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/minecraft/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/funny-shooter/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/hole-io/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/tomb-of-the-mask/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/doge-miner/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/run-3/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/sausage-flip/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/sandstrike.io/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/color-tunnel/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/polytrack/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/friday-night-funkin/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/last-horizon/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/fruit-ninja/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/rocket-pult/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/block-blast/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/moto-x3m/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/moto-x3m-winter/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/moto-x3m-spookyland/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/moto-x3m-pool-party/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/eggycar/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bob-the-robber/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bob-the-robber-2/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bob-the-robber-3/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bob-the-robber-4/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/2048/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/tetris/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/crazy-cattle/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/snake-is-mlg/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/tower-of-destiny/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/HenryStickman/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/breaking-the-bank/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/fleeing-the-complex/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/infiltrating-the-airship/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/stealing-the-diamond/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bouncemasters/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bow-masters/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/amaze/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/bridge-race/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/state-io/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maxwellstevenson.com/gxmes/half-life/</loc>
+    <lastmod>2026-08-20</lastmod>
+    <priority>0.70</priority>
+  </url>
 </urlset>

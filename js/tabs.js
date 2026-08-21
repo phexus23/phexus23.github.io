@@ -58,7 +58,7 @@ function populategxmes(sectionId, gxmesList) {
                 </button>
                 <img src="${gxme.imgsrc}" alt="${gxme.name}">
                 <h3>${gxme.name}</h3>
-                <a href="/gxmes/${gxme.foldername}" class="play-link" data-gxme='${JSON.stringify(gxme)}'>Play Now</a>
+                <a href="/gxmes/${gxme.foldername}/" class="play-link" data-gxme='${JSON.stringify(gxme)}'>Play Now</a>
             </div>
         `;
         grid.innerHTML += gxmeHTML;

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             randomgxmes.forEach(gxme => {
                 let gxmeLink = document.createElement('a');
-                gxmeLink.href = "/gxmes/" + gxme.foldername;
+                gxmeLink.href = "/gxmes/" + gxme.foldername + "/";
                 gxmeLink.style.textDecoration = 'none';
                 gxmeLink.style.color = 'inherit';
 

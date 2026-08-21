@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("div");
       card.className = "search-game-card";
       card.innerHTML = `
-        <a href="/gxmes/${gxme.foldername}">
+        <a href="/gxmes/${gxme.foldername}/">
           <img src="${gxme.imgsrc}" alt="${gxme.name}">
           <h3>${gxme.name}</h3>
         </a>

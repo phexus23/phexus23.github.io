@@ -93,7 +93,7 @@ async function fetchData(index) {
                 const gameCard = document.createElement('div');
                 gameCard.className = 'game-card';
                 gameCard.innerHTML = `
-                    <a href="/gxmes/${game.foldername}">
+                    <a href="/gxmes/${game.foldername}/">
                     <img src="${game.imgsrc}" alt="${game.name}">
                     <p>${game.name}</p>
                     </a>
@@ -366,7 +366,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         </style>
         <header>
-            <a class="title" href="/gxmes">Vafor</a>
+            <a class="title" href="/gxmes/">Vafor</a>
         </header>
         <div class="content">
             <div class="game-info">

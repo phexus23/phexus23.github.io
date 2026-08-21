@@ -1,6 +1,8 @@
 import os
 import json
 import platform
+import subprocess
+import sys
 
 homeDir = r"C:\Users\maxwe\Documents\GitHub\phexus23.github.io"
 jsonPath = os.path.join(homeDir, "json", "list.json")
@@ -56,12 +58,15 @@ elif platform.system() == 'Darwin':
 
 pageTitle = f"Play {name} Unblocked | Vafor"
 pageDescription = f"Play {name} unblocked for free on Vafor. No downloads or sign-ups — just click and play instantly."
+canonicalUrl = f"https://maxwellstevenson.com/gxmes/{foldername}/"
 
-html = f"""<!DOCTYPE html><html lang="en"><head><title>{pageTitle}</title><meta name="description" content="{pageDescription}"> <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3858578074050552" crossorigin="anonymous"></script> <script src="../js/fetchington.js"></script> <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Y3T9NZGP8"></script> <script> window.dataLayer = window.dataLayer || []; function gtag() {{ dataLayer.push(arguments); }} gtag('js', new Date()); gtag('config', 'G-9Y3T9NZGP8'); </script></head><body> <script> fetchData({gameIndex}); </script></body></html>
+html = f"""<!DOCTYPE html><html lang="en"><head><title>{pageTitle}</title><meta name="description" content="{pageDescription}"><link rel="canonical" href="{canonicalUrl}"> <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3858578074050552" crossorigin="anonymous"></script> <script src="../js/fetchington.js"></script> <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Y3T9NZGP8"></script> <script> window.dataLayer = window.dataLayer || []; function gtag() {{ dataLayer.push(arguments); }} gtag('js', new Date()); gtag('config', 'G-9Y3T9NZGP8'); </script></head><body> <script> fetchData({gameIndex}); </script></body></html>
 """
 
 indexPath = os.path.join(gxmesGamePath, "index.html")
 with open(indexPath, 'w') as f:
     f.write(html)
+
+subprocess.run([sys.executable, os.path.join(homeDir, "generate_sitemap.py")], check=True)
 
 print(f"All done! Game added as entry #{gameIndex}.")
