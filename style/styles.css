@@ -157,6 +157,27 @@ main {
     color: #a0d1a4;
 }
 
+.game-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #1a1a1a;
+}
+
+.game-badge.badge-top {
+    background-color: #ffcc00;
+}
+
+.game-badge.badge-new {
+    background-color: #a0d1a4;
+}
+
 #top-10 h2 {
     color: #a0d1a4;
     font-size: 2rem;

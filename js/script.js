@@ -21,14 +21,16 @@ async function fetchTop10FolderNames() {
     return data[0].Top10; 
 }
 
-function rendergxmes(gxmes, containerId) {
+function rendergxmes(gxmes, containerId, badge) {
     const container = document.getElementById(containerId);
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const badgeHTML = badge ? `<span class="game-badge badge-${badge.toLowerCase()}">${badge}</span>` : '';
 
     container.innerHTML = gxmes.map(gxme => {
         const isFavorite = favorites.includes(gxme.name);
-        return `  
+        return `
             <div class="gxme-card">
+                ${badgeHTML}
                 <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-gxme='${JSON.stringify(gxme)}'>
                     <i class="fas fa-star"></i>
                 </button>
@@ -57,7 +59,7 @@ async function loadTop10() {
     const gxmes = await fetchgxmes();
     const top10FolderNames = await fetchTop10FolderNames();
     const top10gxmes = gxmes.filter(gxme => top10FolderNames.includes(gxme.foldername));
-    rendergxmes(top10gxmes, 'top-10-gxmes');
+    rendergxmes(top10gxmes, 'top-10-gxmes', 'TOP');
 }
 
 async function loadAllgxmes() {
@@ -67,7 +69,7 @@ async function loadAllgxmes() {
 async function loadLast10gxmes() {
     const gxmes = await fetchgxmes();
     const last10gxmes = gxmes.slice(-10).reverse();
-    rendergxmes(last10gxmes, 'last-10-gxmes');
+    rendergxmes(last10gxmes, 'last-10-gxmes', 'NEW');
 }
 function toggleFavorite(button) {
     const gxme = JSON.parse(button.dataset.gxme);
