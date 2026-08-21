@@ -66,6 +66,44 @@ main {
     width: calc(100% - 250px);
 }
 
+@media (max-width: 768px) {
+    .side-nav {
+        position: static;
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px 18px;
+        box-shadow: none;
+    }
+
+    .side-nav h2 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .side-nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+    }
+
+    .side-nav ul li {
+        margin: 0;
+    }
+
+    .cogig {
+        position: static;
+        margin-left: auto;
+    }
+
+    main {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
 .gxmes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

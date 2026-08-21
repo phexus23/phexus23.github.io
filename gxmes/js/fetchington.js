@@ -364,6 +364,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 display: none;
             }
         }
+        @media (max-width: 700px) {
+            .game-iframe,
+            .fullscreen-strip,
+            .recommended-games,
+            .keywords-section {
+                width: 96%;
+            }
+            .keywords-section {
+                flex-direction: column;
+            }
+            .keywords {
+                width: 100%;
+            }
+            .game-image {
+                text-align: left;
+                margin-top: 15px;
+            }
+            .game-image img {
+                width: 120px;
+                height: 120px;
+            }
+        }
         </style>
         <header>
             <a class="title" href="/gxmes/">Vafor</a>

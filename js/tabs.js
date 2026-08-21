@@ -91,8 +91,6 @@ fetch('../json/list.json')
             populategxmes(`${category.toLowerCase()}-gxmes`, catgxmes);
         });
 
-        populategxmes('all-gxmes-grid', gxmes);
-
         hideAllSections();
         defaultSections.forEach(id => {
             const section = document.getElementById(id);
