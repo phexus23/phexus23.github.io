@@ -5,10 +5,19 @@ function isEzClassworkGameEntry(item) {
     return item && item.source === SOURCE_TWO;
 }
 
+function ezClassworkPlaceholderImage(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+    const hue = hash % 360;
+    const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="hsl(${hue},45%,35%)"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="72" fill="hsl(${hue},60%,88%)" text-anchor="middle" dominant-baseline="central">${initials}</text></svg>`;
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
 function normalizeEzClassworkGame(item) {
     return {
         ...item,
-        imgsrc: '/assets/img/sddefault.jpg',
+        imgsrc: ezClassworkPlaceholderImage(item.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${item.slug}`,
         category: 'EZClasswork',
@@ -28,7 +37,7 @@ function isScraperGameEntry(item) {
 }
 
 function getGameSource(item) {
-    if (isEzClassworkGameEntry(item)) return item.gameUrl;
+    if (isEzClassworkGameEntry(item)) return item.embedUrl || item.gameUrl;
     return isScraperGameEntry(item) && item.foldername
         ? `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(item.foldername)}.html`
         : item.linksrc;
@@ -93,7 +102,14 @@ function initializeGameAds() {
         document.head.appendChild(adScript);
     }
 
-    adSlots.forEach(() => adQueue.push({}));
+    adSlots.forEach((ins) => {
+        if (ins.dataset.adsbygoogleStatus) return;
+        try {
+            adQueue.push({});
+        } catch (e) {
+            console.error('AdSense push failed:', e);
+        }
+    });
 }
 
 function hideGameStatus(status) {

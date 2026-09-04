@@ -3,6 +3,15 @@ const SOURCE_TWO = 'Source #2';
 const SOURCE_AVAILABILITY_KEY = 'sourceAvailabilityV2';
 const SOURCE_OVERRIDES_KEY = 'sourceAvailabilityOverrides';
 
+function ezClassworkPlaceholderImage(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+    const hue = hash % 360;
+    const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="hsl(${hue},45%,35%)"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="72" fill="hsl(${hue},60%,88%)" text-anchor="middle" dominant-baseline="central">${initials}</text></svg>`;
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
 function readSourceState(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; }
 }
@@ -38,7 +47,7 @@ async function checkHomepageSources(games) {
         const result = representative && await probeSource(
             source === SOURCE_ONE
                 ? `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(representative.foldername)}.html`
-                : representative.gameUrl
+                : (representative.embedUrl || representative.gameUrl)
         );
         state[source] = result && (result.reachable || result.inconclusive) ? 'available' : 'blocked';
     }
@@ -55,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(async ([data, ezClassworkGames]) => {
             const ezGames = ezClassworkGames.map(game => ({
                 ...game,
-                imgsrc: '/assets/img/sddefault.jpg',
+                imgsrc: ezClassworkPlaceholderImage(game.name),
                 foldername: `ezclasswork-${game.slug}`,
                 category: 'EZClasswork',
                 source: 'Source #2'

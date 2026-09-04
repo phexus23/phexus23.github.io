@@ -368,8 +368,13 @@ a:hover {
         <p>Open an issue: <a href="https://github.com/phexus23/phexus23.github.io">Official repository</a></p>
     </footer>
     <script>
-        document.querySelectorAll('ins.adsbygoogle').forEach(function() {
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        document.querySelectorAll('ins.adsbygoogle').forEach(function(ins) {
+            if (ins.dataset.adsbygoogleStatus) return;
+            try {
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                console.error('AdSense push failed:', e);
+            }
         });
     </script>
 </body>

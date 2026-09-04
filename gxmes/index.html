@@ -212,8 +212,13 @@
 <script src="../js/s.js"></script>
 <script src="../js/search.js"></script>
 <script>
-    document.querySelectorAll('ins.adsbygoogle').forEach(function() {
-        (adsbygoogle = window.adsbygoogle || []).push({});
+    document.querySelectorAll('ins.adsbygoogle').forEach(function(ins) {
+        if (ins.dataset.adsbygoogleStatus) return;
+        try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+            console.error('AdSense push failed:', e);
+        }
     });
 </script>
 </body>

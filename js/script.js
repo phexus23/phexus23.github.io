@@ -6,6 +6,15 @@ const SOURCE_TWO = 'Source #2';
 const EZCLASSWORK_SOURCE = SOURCE_TWO;
 let sourceAvailabilityPromise = null;
 
+function ezClassworkPlaceholderImage(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+    const hue = hash % 360;
+    const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="hsl(${hue},45%,35%)"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="72" fill="hsl(${hue},60%,88%)" text-anchor="middle" dominant-baseline="central">${initials}</text></svg>`;
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
 function readSourceState(key, fallback) {
     try {
         return JSON.parse(localStorage.getItem(key)) || fallback;
@@ -26,7 +35,7 @@ function getSourceProbeUrl(game) {
     if (game.source === SOURCE_ONE) {
         return `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(game.foldername)}.html`;
     }
-    if (game.source === SOURCE_TWO) return game.gameUrl;
+    if (game.source === SOURCE_TWO) return game.embedUrl || game.gameUrl;
     return null;
 }
 
@@ -162,7 +171,7 @@ function preferMainSource(gxmes) {
 function normalizeEzClassworkGames(gxmes) {
     return gxmes.map(gxme => ({
         ...gxme,
-        imgsrc: '/assets/img/sddefault.jpg',
+        imgsrc: ezClassworkPlaceholderImage(gxme.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${gxme.slug}`,
         category: 'EZClasswork',
