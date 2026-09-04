@@ -1,20 +1,126 @@
+const SOURCE_ONE = 'Source #1';
+const SOURCE_TWO = 'Source #2';
+
+function isEzClassworkGameEntry(item) {
+    return item && item.source === SOURCE_TWO;
+}
+
+function normalizeEzClassworkGame(item) {
+    return {
+        ...item,
+        imgsrc: '/assets/img/sddefault.jpg',
+        linksrc: '/gxmes/ezclasswork/',
+        foldername: `ezclasswork-${item.slug}`,
+        category: 'EZClasswork',
+        source: SOURCE_TWO
+    };
+}
+
 function isScraperGameEntry(item) {
-    if (typeof item.linksrc !== 'string' || !item.linksrc.startsWith('/gxmes/')) {
+    if (isEzClassworkGameEntry(item) || typeof item.linksrc !== 'string' || !item.linksrc.startsWith('/gxmes/')) {
         return false;
     }
 
     const imageSource = typeof item.imgsrc === 'string' ? item.imgsrc : '';
-    return /\/covers@main\/\d+\.png(?:[?#].*)?$/.test(imageSource) ||
+    return item.source === SOURCE_ONE ||
+        /\/covers@main\/\d+\.png(?:[?#].*)?$/.test(imageSource) ||
         /_\d+\.(?:png|jpe?g|webp)(?:[?#].*)?$/i.test(imageSource);
 }
 
 function getGameSource(item) {
+    if (isEzClassworkGameEntry(item)) return item.gameUrl;
     return isScraperGameEntry(item) && item.foldername
         ? `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(item.foldername)}.html`
         : item.linksrc;
 }
 
 const SCRAPER_GAMES_DISABLED_KEY = 'scraperGamesDisabled';
+const SOURCE_AVAILABILITY_KEY = 'sourceAvailability';
+const SOURCE_OVERRIDES_KEY = 'sourceAvailabilityOverrides';
+
+function readSourceState(key, fallback) {
+    try {
+        return JSON.parse(localStorage.getItem(key)) || fallback;
+    } catch {
+        return fallback;
+    }
+}
+
+function sourceIsOverridden(source) {
+    return readSourceState(SOURCE_OVERRIDES_KEY, {})[source] === true;
+}
+
+function sourceIsBlocked(source) {
+    return readSourceState(SOURCE_AVAILABILITY_KEY, {})[source] === 'blocked' && !sourceIsOverridden(source);
+}
+
+async function checkSourceAvailability(item) {
+    const source = item.source;
+    if (source !== SOURCE_ONE && source !== SOURCE_TWO) return;
+
+    const state = readSourceState(SOURCE_AVAILABILITY_KEY, {});
+    if (state[source] === 'available' || state[source] === 'blocked') return;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    try {
+        const response = await fetch(getGameSource(item), { cache: 'no-store', signal: controller.signal });
+        const html = response.ok ? await response.text() : '';
+        const parsed = html.trim() ? new DOMParser().parseFromString(html, 'text/html') : null;
+        state[source] = parsed && parsed.body && parsed.body.querySelector('*') ? 'available' : 'blocked';
+    } catch {
+        state[source] = 'blocked';
+    } finally {
+        clearTimeout(timeout);
+        localStorage.setItem(SOURCE_AVAILABILITY_KEY, JSON.stringify(state));
+    }
+}
+
+function createSourceSettings() {
+    if (document.getElementById('source-settings-button')) return;
+    const button = document.createElement('button');
+    button.id = 'source-settings-button';
+    button.type = 'button';
+    button.textContent = 'Source Settings';
+    button.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:10000;padding:8px 12px;border:1px solid #777;border-radius:6px;background:#3e3e3e;color:#fff;cursor:pointer;';
+
+    const panel = document.createElement('div');
+    panel.id = 'source-settings-panel';
+    panel.hidden = true;
+    panel.style.cssText = 'position:fixed;left:12px;bottom:54px;z-index:10000;width:250px;padding:14px;border:1px solid #777;border-radius:8px;background:#2d2d2d;color:#fff;box-shadow:0 4px 16px #0008;';
+    panel.innerHTML = `<strong>Game source settings</strong><p style="margin:8px 0;font-size:.85rem;">Blocked sources stay hidden unless overridden.</p>${[SOURCE_ONE, SOURCE_TWO].map(source => `<label style="display:block;margin:8px 0;"><input type="checkbox" data-source-setting="${source}"> Override ${source} <span data-source-status="${source}">checking</span></label>`).join('')}<button type="button" id="source-recheck" style="margin-top:8px;padding:5px 8px;">Recheck sources</button>`;
+
+    function render() {
+        const state = readSourceState(SOURCE_AVAILABILITY_KEY, {});
+        const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
+        panel.querySelectorAll('[data-source-setting]').forEach(input => {
+            const source = input.dataset.sourceSetting;
+            input.checked = overrides[source] === true;
+            const status = panel.querySelector(`[data-source-status="${source}"]`);
+            if (status) status.textContent = state[source] || 'checking';
+        });
+    }
+
+    button.addEventListener('click', () => { panel.hidden = !panel.hidden; render(); });
+    panel.querySelectorAll('[data-source-setting]').forEach(input => input.addEventListener('change', () => {
+        const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
+        overrides[input.dataset.sourceSetting] = input.checked;
+        localStorage.setItem(SOURCE_OVERRIDES_KEY, JSON.stringify(overrides));
+        window.location.reload();
+    }));
+    panel.querySelector('#source-recheck').addEventListener('click', () => {
+        localStorage.removeItem(SOURCE_AVAILABILITY_KEY);
+        window.location.reload();
+    });
+    document.body.append(button, panel);
+}
+
+function initializeSourceSettings() {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', createSourceSettings, { once: true });
+    else createSourceSettings();
+}
+
+initializeSourceSettings();
 
 function hideGameStatus(status) {
     if (status) status.remove();
@@ -25,7 +131,11 @@ function scraperGamesAreDisabled() {
 }
 
 function removeScraperGames() {
+    if (sourceIsOverridden(SOURCE_ONE)) return;
     localStorage.setItem(SCRAPER_GAMES_DISABLED_KEY, 'true');
+    const sourceState = readSourceState(SOURCE_AVAILABILITY_KEY, {});
+    sourceState[SOURCE_ONE] = 'blocked';
+    localStorage.setItem(SOURCE_AVAILABILITY_KEY, JSON.stringify(sourceState));
     const gamesToRemove = new Set();
 
     document.querySelectorAll('[data-scraper-game="true"]').forEach(element => {
@@ -58,9 +168,23 @@ async function validateCdnGame(src) {
 
 async function fetchData(index) {
     try {
-        const response = await fetch('../../json/list.json');
-        const data = await response.json();
-        const item = data[index];
+        const ezClassworkSlug = new URLSearchParams(window.location.search).get('game');
+        let item;
+
+        if (ezClassworkSlug) {
+            const response = await fetch('../../json/ezclasswork.json');
+            const data = await response.json();
+            const sourceItem = data.find(game => game.slug === ezClassworkSlug);
+            if (!sourceItem) throw new Error('EZClasswork game not found');
+            item = normalizeEzClassworkGame(sourceItem);
+        } else {
+            const response = await fetch('../../json/list.json');
+            const data = await response.json();
+            item = data[index];
+        }
+
+        if (!item) throw new Error('Game not found');
+        await checkSourceAvailability(item);
         const name1 = item.name;
         const imgsrc = item.imgsrc;
         const src = getGameSource(item);
@@ -79,12 +203,21 @@ async function fetchData(index) {
         const iframe = document.getElementById('game-iframe');
         const status = document.getElementById('game-status');
         const isScraperGame = isScraperGameEntry(item) && Boolean(item.foldername);
+        const source = item.source || (isScraperGame ? SOURCE_ONE : 'Main');
         iframe.removeAttribute('src');
+
+        if (sourceIsBlocked(source)) {
+            iframe.closest('.game-frame-wrap')?.remove();
+            document.querySelector('.fullscreen-strip')?.remove();
+            if (status) status.textContent = `${source} is unavailable.`;
+            document.getElementById('gameTitle').textContent = `${source} is unavailable.`;
+            return;
+        }
 
         if (isScraperGame) {
             iframe.dataset.scraperGame = 'true';
             iframe.closest('.game-frame-wrap')?.setAttribute('data-scraper-game', 'true');
-            if (scraperGamesAreDisabled()) {
+            if (scraperGamesAreDisabled() && sourceIsBlocked(SOURCE_ONE)) {
                 removeScraperGames();
                 return;
             }
@@ -169,10 +302,34 @@ async function fetchData(index) {
         console.error('Fetch error:', error);
     }
 }
+
+function preferMainSource(games) {
+    const preferred = new Map();
+    games.forEach(game => {
+        const key = String(game.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+        const current = preferred.get(key);
+        if (!current || sourcePriority(game) < sourcePriority(current)) {
+            preferred.set(key, game);
+        }
+    });
+    return [...preferred.values()];
+}
+
+function sourcePriority(game) {
+    return game.source === SOURCE_ONE ? 1 : game.source === SOURCE_TWO ? 2 : 0;
+}
+
     async function fetchRecommendedGames() {
         try {
-            const response = await fetch('../../json/list.json');
-            const data = await response.json();
+            const [gamesResponse, ezClassworkResponse] = await Promise.all([
+                fetch('../../json/list.json'),
+                fetch('../../json/ezclasswork.json')
+            ]);
+            const [data, ezClassworkGames] = await Promise.all([
+                gamesResponse.json(),
+                ezClassworkResponse.json()
+            ]);
+            const allGames = data.concat(ezClassworkGames.map(normalizeEzClassworkGame));
             const recommendedGamesContainer = document.getElementById('recommendedGames');
             recommendedGamesContainer.innerHTML = ''; 
 
@@ -180,19 +337,20 @@ async function fetchData(index) {
             const containerWidth = recommendedGamesContainer.clientWidth;
             const cardsPerRow = Math.floor(containerWidth / cardWidth);
 
-            const availableGames = data.filter(game =>
+            const availableGames = allGames.filter(game =>
                 !scraperGamesAreDisabled() || !isScraperGameEntry(game) || !game.foldername
             );
-            const shuffledGames = availableGames.sort(() => 0.5 - Math.random()).slice(0, cardsPerRow);
+            const shuffledGames = preferMainSource(availableGames).sort(() => 0.5 - Math.random()).slice(0, cardsPerRow);
 
             shuffledGames.forEach(game => {
                 const gameCard = document.createElement('div');
                 gameCard.className = 'game-card';
+                gameCard.dataset.gameSource = game.source || (isScraperGameEntry(game) ? SOURCE_ONE : 'original');
                 if (isScraperGameEntry(game) && game.foldername) {
                     gameCard.dataset.scraperGame = 'true';
                 }
                 gameCard.innerHTML = `
-                    <a href="/gxmes/${game.foldername}/">
+                    <a href="${isEzClassworkGameEntry(game) ? `/gxmes/ezclasswork/?game=${encodeURIComponent(game.slug)}` : `/gxmes/${game.foldername}/`}">
                     <img src="${game.imgsrc}" alt="${game.name}">
                     <p>${game.name}</p>
                     </a>
@@ -585,6 +743,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </footer>
     `;
 
+    createSourceSettings();
     window.addEventListener('resize', fetchRecommendedGames);
 
     

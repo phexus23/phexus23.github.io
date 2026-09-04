@@ -52,13 +52,13 @@ function populategxmes(sectionId, gxmesList) {
     gxmesList.forEach(gxme => {
         const isFavorite = favorites.includes(gxme.name);
         const gxmeHTML = `
-            <div class="gxme-card" ${typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
+            <div class="gxme-card" data-game-source="${gxme.source || (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'Source #1' : 'Main')}" data-source-label="${gxme.source === 'Source #1' ? 'Source #1' : gxme.source === 'Source #2' ? 'Source #2' : 'Main'}" ${typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
                 <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-gxme='${JSON.stringify(gxme)}'>
                     <i class="fas fa-star"></i>
                 </button>
                 <img src="${gxme.imgsrc}" alt="${gxme.name}">
                 <h3>${gxme.name}</h3>
-                <a href="/gxmes/${gxme.foldername}/" class="play-link" data-gxme='${JSON.stringify(gxme)}'>Play Now</a>
+                <a href="${typeof getGamePageUrl === 'function' ? getGamePageUrl(gxme) : `/gxmes/${gxme.foldername}/`}" class="play-link" data-gxme='${JSON.stringify(gxme)}'>Play Now</a>
             </div>
         `;
         grid.innerHTML += gxmeHTML;
@@ -79,10 +79,19 @@ function populategxmes(sectionId, gxmesList) {
     }
 }
 
-fetch('../json/list.json')
-    .then(res => res.json())
-    .then(data => {
-        gxmes = typeof filterAvailableGames === 'function' ? filterAvailableGames(data) : data;
+Promise.all([
+    fetch('../json/list.json').then(res => res.json()),
+    fetch('../json/ezclasswork.json').then(res => res.json())
+])
+    .then(async ([data, ezClassworkGames]) => {
+        const normalizedEzGames = typeof normalizeEzClassworkGames === 'function'
+            ? normalizeEzClassworkGames(ezClassworkGames)
+            : ezClassworkGames;
+        const allGames = data.concat(normalizedEzGames);
+        if (typeof checkSourceAvailability === 'function') {
+            await checkSourceAvailability(allGames);
+        }
+        gxmes = typeof filterAvailableGames === 'function' ? filterAvailableGames(allGames) : allGames;
 
         const categories = [...new Set(gxmes.map(g => g.category))];
         categories.forEach(category => {

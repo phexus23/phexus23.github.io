@@ -6,10 +6,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let gxmes = [];
 
-  fetch("../json/list.json")
-    .then(res => res.json())
-    .then(data => {
-      gxmes = typeof filterAvailableGames === 'function' ? filterAvailableGames(data) : data;
+  Promise.all([
+    fetch("../json/list.json").then(res => res.json()),
+    fetch("../json/ezclasswork.json").then(res => res.json())
+  ]).then(async ([data, ezClassworkGames]) => {
+      const normalizedEzGames = typeof normalizeEzClassworkGames === 'function'
+        ? normalizeEzClassworkGames(ezClassworkGames)
+        : ezClassworkGames;
+      const allGames = data.concat(normalizedEzGames);
+      if (typeof checkSourceAvailability === 'function') {
+        await checkSourceAvailability(allGames);
+      }
+      gxmes = typeof filterAvailableGames === 'function' ? filterAvailableGames(allGames) : allGames;
     });
 
   searchInput.addEventListener("input", () => {
@@ -38,11 +46,15 @@ document.addEventListener("DOMContentLoaded", () => {
     filtered.forEach(gxme => {
       const card = document.createElement("div");
       card.className = "search-game-card";
+      card.dataset.gameSource = gxme.source || (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'Source #1' : 'Main');
+      card.dataset.sourceLabel = gxme.source === 'Source #1'
+        ? 'Source #1'
+        : gxme.source === 'Source #2' ? 'Source #2' : 'Main';
       if (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme)) {
         card.dataset.scraperGame = "true";
       }
       card.innerHTML = `
-        <a href="/gxmes/${gxme.foldername}/">
+        <a href="${typeof getGamePageUrl === 'function' ? getGamePageUrl(gxme) : `/gxmes/${gxme.foldername}/`}">
           <img src="${gxme.imgsrc}" alt="${gxme.name}">
           <h3>${gxme.name}</h3>
         </a>

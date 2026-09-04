@@ -10,6 +10,9 @@ domain = "https://maxwellstevenson.com"
 with open(jsonPath, encoding="utf-8") as f:
     games = json.load(f)
 
+with open(os.path.join(homeDir, "json", "ezclasswork.json"), encoding="utf-8") as f:
+    ezclasswork_games = json.load(f)
+
 today = date.today().isoformat()
 
 entries = [
@@ -17,6 +20,7 @@ entries = [
     (f"{domain}/gxmes/", "0.90"),
 ]
 entries += [(f"{domain}/gxmes/{g['foldername']}/", "0.70") for g in games]
+entries += [(f"{domain}/gxmes/ezclasswork/?game={g['slug']}", "0.70") for g in ezclasswork_games]
 
 lines = ['<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for loc, priority in entries:
