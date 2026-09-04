@@ -1,3 +1,61 @@
+function isScraperGameEntry(item) {
+    if (typeof item.linksrc !== 'string' || !item.linksrc.startsWith('/gxmes/')) {
+        return false;
+    }
+
+    const imageSource = typeof item.imgsrc === 'string' ? item.imgsrc : '';
+    return /\/covers@main\/\d+\.png(?:[?#].*)?$/.test(imageSource) ||
+        /_\d+\.(?:png|jpe?g|webp)(?:[?#].*)?$/i.test(imageSource);
+}
+
+function getGameSource(item) {
+    return isScraperGameEntry(item) && item.foldername
+        ? `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(item.foldername)}.html`
+        : item.linksrc;
+}
+
+const SCRAPER_GAMES_DISABLED_KEY = 'scraperGamesDisabled';
+
+function hideGameStatus(status) {
+    if (status) status.remove();
+}
+
+function scraperGamesAreDisabled() {
+    return localStorage.getItem(SCRAPER_GAMES_DISABLED_KEY) === 'true';
+}
+
+function removeScraperGames() {
+    localStorage.setItem(SCRAPER_GAMES_DISABLED_KEY, 'true');
+    const gamesToRemove = new Set();
+
+    document.querySelectorAll('[data-scraper-game="true"]').forEach(element => {
+        const game = element.closest('.game-frame-wrap, .game-card, .gxme-card, .search-game-card') || element;
+        gamesToRemove.add(game);
+    });
+
+    gamesToRemove.forEach(game => game.remove());
+    document.querySelector('.fullscreen-strip')?.remove();
+
+    const title = document.getElementById('gameTitle');
+    if (title) title.textContent = 'This game is unavailable.';
+}
+
+async function validateCdnGame(src) {
+    try {
+        const response = await fetch(src, { cache: 'no-store' });
+        if (!response.ok) return false;
+
+        const html = await response.text();
+        if (!html.trim()) return false;
+
+        const parsed = new DOMParser().parseFromString(html, 'text/html');
+        return Boolean(parsed.body && parsed.body.querySelector('*'));
+    } catch (error) {
+        // A CORS/network read failure is inconclusive; the iframe may still load.
+        return null;
+    }
+}
+
 async function fetchData(index) {
     try {
         const response = await fetch('../../json/list.json');
@@ -5,7 +63,7 @@ async function fetchData(index) {
         const item = data[index];
         const name1 = item.name;
         const imgsrc = item.imgsrc;
-        const src = item.linksrc;
+        const src = getGameSource(item);
 
         console.log("name", name1);
         console.log("src", src);
@@ -18,7 +76,42 @@ async function fetchData(index) {
             SiteText = window.location.host
             console.log(SiteText)
         }
-        const iframe = document.getElementById('game-iframe');    
+        const iframe = document.getElementById('game-iframe');
+        const status = document.getElementById('game-status');
+        const isScraperGame = isScraperGameEntry(item) && Boolean(item.foldername);
+        iframe.removeAttribute('src');
+
+        if (isScraperGame) {
+            iframe.dataset.scraperGame = 'true';
+            iframe.closest('.game-frame-wrap')?.setAttribute('data-scraper-game', 'true');
+            if (scraperGamesAreDisabled()) {
+                removeScraperGames();
+                return;
+            }
+            let iframeLoaded = false;
+            let validationComplete = false;
+            let validationValid = false;
+            const validationTimeout = window.setTimeout(() => {
+                if (!iframeLoaded) removeScraperGames();
+            }, 10000);
+
+            iframe.addEventListener('load', () => {
+                iframeLoaded = true;
+                window.clearTimeout(validationTimeout);
+                hideGameStatus(status);
+                if (validationComplete && validationValid === false) removeScraperGames();
+            }, { once: true });
+            iframe.addEventListener('error', removeScraperGames, { once: true });
+            validateCdnGame(src).then(isValid => {
+                validationComplete = true;
+                validationValid = isValid;
+                if (isValid === false) removeScraperGames();
+                else if (isValid === true) hideGameStatus(status);
+            });
+        } else {
+            hideGameStatus(status);
+        }
+
         iframe.src = src;
         const image = document.getElementById('bottomimage');
         image.src = imgsrc; 
@@ -87,11 +180,17 @@ async function fetchData(index) {
             const containerWidth = recommendedGamesContainer.clientWidth;
             const cardsPerRow = Math.floor(containerWidth / cardWidth);
 
-            const shuffledGames = data.sort(() => 0.5 - Math.random()).slice(0, cardsPerRow);
+            const availableGames = data.filter(game =>
+                !scraperGamesAreDisabled() || !isScraperGameEntry(game) || !game.foldername
+            );
+            const shuffledGames = availableGames.sort(() => 0.5 - Math.random()).slice(0, cardsPerRow);
 
             shuffledGames.forEach(game => {
                 const gameCard = document.createElement('div');
                 gameCard.className = 'game-card';
+                if (isScraperGameEntry(game) && game.foldername) {
+                    gameCard.dataset.scraperGame = 'true';
+                }
                 gameCard.innerHTML = `
                     <a href="/gxmes/${game.foldername}/">
                     <img src="${game.imgsrc}" alt="${game.name}">
@@ -173,8 +272,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 flex: 1;
             }
 
-            .game-iframe {
+            .game-frame-wrap {
+                position: relative;
                 width: 80%;
+                margin: 0 auto;
+            }
+
+            .game-status {
+                position: absolute;
+                top: 12px;
+                left: 50%;
+                z-index: 1;
+                transform: translateX(-50%);
+                padding: 6px 12px;
+                border-radius: 6px;
+                background: rgba(0, 0, 0, 0.75);
+                color: #fff;
+                font-size: 0.9rem;
+                pointer-events: none;
+            }
+
+            .game-iframe {
+                width: 100%;
                 height: 70vh;
                 border: none;
                 border-radius: 10px 10px 0 0;
@@ -365,7 +484,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
         @media (max-width: 700px) {
-            .game-iframe,
+            .game-frame-wrap,
             .fullscreen-strip,
             .recommended-games,
             .keywords-section {
@@ -394,7 +513,10 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="game-info">
                 <h2 id="gameTitle">Loading...</h2>
             </div>
-            <iframe id="game-iframe" class="game-iframe" src=""></iframe>
+            <div class="game-frame-wrap">
+                <span id="game-status" class="game-status" data-scraper-game-status="loading">Loading game...</span>
+                <iframe id="game-iframe" class="game-iframe" src=""></iframe>
+            </div>
             <div class="fullscreen-strip">
                 <button class="fullscreen-btn" onclick="toggleFullscreen()">
                     <i class="fas fa-expand"></i>

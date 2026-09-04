@@ -3,7 +3,18 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             const gxmeGrid = document.getElementById('gxmeGrid');
-            const randomgxmes = data.sort(() => 0.5 - Math.random()).slice(0, 4);
+            const scraperGamesDisabled = localStorage.getItem('scraperGamesDisabled') === 'true';
+            const availableGames = scraperGamesDisabled
+                ? data.filter(gxme => {
+                    const imageSource = typeof gxme.imgsrc === 'string' ? gxme.imgsrc : '';
+                    const isScraperGame = typeof gxme.linksrc === 'string' &&
+                        gxme.linksrc.startsWith('/gxmes/') &&
+                        (/\/covers@main\/\d+\.png(?:[?#].*)?$/.test(imageSource) ||
+                            /_\d+\.(?:png|jpe?g|webp)(?:[?#].*)?$/i.test(imageSource));
+                    return !isScraperGame;
+                })
+                : data;
+            const randomgxmes = availableGames.sort(() => 0.5 - Math.random()).slice(0, 4);
 
             randomgxmes.forEach(gxme => {
                 let gxmeLink = document.createElement('a');

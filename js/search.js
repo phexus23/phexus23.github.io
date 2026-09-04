@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("../json/list.json")
     .then(res => res.json())
     .then(data => {
-      gxmes = data;
+      gxmes = typeof filterAvailableGames === 'function' ? filterAvailableGames(data) : data;
     });
 
   searchInput.addEventListener("input", () => {
@@ -38,6 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
     filtered.forEach(gxme => {
       const card = document.createElement("div");
       card.className = "search-game-card";
+      if (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme)) {
+        card.dataset.scraperGame = "true";
+      }
       card.innerHTML = `
         <a href="/gxmes/${gxme.foldername}/">
           <img src="${gxme.imgsrc}" alt="${gxme.name}">

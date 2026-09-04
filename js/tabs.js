@@ -52,7 +52,7 @@ function populategxmes(sectionId, gxmesList) {
     gxmesList.forEach(gxme => {
         const isFavorite = favorites.includes(gxme.name);
         const gxmeHTML = `
-            <div class="gxme-card">
+            <div class="gxme-card" ${typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
                 <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-gxme='${JSON.stringify(gxme)}'>
                     <i class="fas fa-star"></i>
                 </button>
@@ -82,7 +82,7 @@ function populategxmes(sectionId, gxmesList) {
 fetch('../json/list.json')
     .then(res => res.json())
     .then(data => {
-        gxmes = data;
+        gxmes = typeof filterAvailableGames === 'function' ? filterAvailableGames(data) : data;
 
         const categories = [...new Set(gxmes.map(g => g.category))];
         categories.forEach(category => {

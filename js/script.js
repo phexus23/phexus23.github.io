@@ -1,11 +1,31 @@
+const SCRAPER_GAMES_DISABLED_KEY = 'scraperGamesDisabled';
+
+function isScraperGameEntry(gxme) {
+    if (typeof gxme.linksrc !== 'string' || !gxme.linksrc.startsWith('/gxmes/')) {
+        return false;
+    }
+
+    const imageSource = typeof gxme.imgsrc === 'string' ? gxme.imgsrc : '';
+    return /\/covers@main\/\d+\.png(?:[?#].*)?$/.test(imageSource) ||
+        /_\d+\.(?:png|jpe?g|webp)(?:[?#].*)?$/i.test(imageSource);
+}
+
+function filterAvailableGames(gxmes) {
+    if (localStorage.getItem(SCRAPER_GAMES_DISABLED_KEY) !== 'true') {
+        return gxmes;
+    }
+
+    return gxmes.filter(gxme => !isScraperGameEntry(gxme));
+}
+
 async function fetchgxmes() {
     const response = await fetch('../json/list.json');
     const gxmes = await response.json();
-    return gxmes;
+    return filterAvailableGames(gxmes);
 }
 
 function renderLastPlayed() {
-    const lastPlayed = JSON.parse(localStorage.getItem('lastPlayed')) || [];
+    const lastPlayed = filterAvailableGames(JSON.parse(localStorage.getItem('lastPlayed')) || []);
     const container = document.getElementById('last-played-gxmes');
     
     if (lastPlayed.length > 0) {
@@ -23,13 +43,14 @@ async function fetchTop10FolderNames() {
 
 function rendergxmes(gxmes, containerId, badge) {
     const container = document.getElementById(containerId);
+    gxmes = filterAvailableGames(gxmes);
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const badgeHTML = badge ? `<span class="game-badge badge-${badge.toLowerCase()}">${badge}</span>` : '';
 
     container.innerHTML = gxmes.map(gxme => {
         const isFavorite = favorites.includes(gxme.name);
         return `
-            <div class="gxme-card">
+            <div class="gxme-card" ${isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
                 ${badgeHTML}
                 <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-gxme='${JSON.stringify(gxme)}'>
                     <i class="fas fa-star"></i>
