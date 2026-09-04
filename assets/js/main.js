@@ -1,6 +1,6 @@
 const SOURCE_ONE = 'Source #1';
 const SOURCE_TWO = 'Source #2';
-const SOURCE_AVAILABILITY_KEY = 'sourceAvailability';
+const SOURCE_AVAILABILITY_KEY = 'sourceAvailabilityV2';
 const SOURCE_OVERRIDES_KEY = 'sourceAvailabilityOverrides';
 
 function readSourceState(key, fallback) {
@@ -24,7 +24,8 @@ async function probeSource(url) {
         const parsed = html.trim() ? new DOMParser().parseFromString(html, 'text/html') : null;
         return { reachable: Boolean(parsed && parsed.body && parsed.body.querySelector('*')), inconclusive: false };
     } catch {
-        return { reachable: false, inconclusive: false };
+        // CORS/network errors do not prove that an iframe source is unavailable.
+        return { reachable: false, inconclusive: true };
     }
     finally { clearTimeout(timeout); }
 }
@@ -39,52 +40,14 @@ async function checkHomepageSources(games) {
                 ? `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(representative.foldername)}.html`
                 : representative.gameUrl
         );
-        state[source] = result && result.reachable ? 'available' : 'blocked';
+        state[source] = result && (result.reachable || result.inconclusive) ? 'available' : 'blocked';
     }
     localStorage.setItem(SOURCE_AVAILABILITY_KEY, JSON.stringify(state));
 }
 
-function createSourceSettings() {
-    if (document.getElementById('source-settings-button')) return;
-    const button = document.createElement('button');
-    button.id = 'source-settings-button';
-    button.type = 'button';
-    button.textContent = 'Source Settings';
-    button.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:10000;padding:8px 12px;border:1px solid #777;border-radius:6px;background:#3e3e3e;color:#fff;cursor:pointer;';
 
-    const panel = document.createElement('div');
-    panel.id = 'source-settings-panel';
-    panel.hidden = true;
-    panel.style.cssText = 'position:fixed;left:12px;bottom:54px;z-index:10000;width:250px;padding:14px;border:1px solid #777;border-radius:8px;background:#2d2d2d;color:#fff;box-shadow:0 4px 16px #0008;';
-    panel.innerHTML = `<strong>Game source settings</strong><p style="margin:8px 0;font-size:.85rem;">Blocked sources stay hidden unless overridden.</p>${[SOURCE_ONE, SOURCE_TWO].map(source => `<label style="display:block;margin:8px 0;"><input type="checkbox" data-source-setting="${source}"> Override ${source} <span data-source-status="${source}">checking</span></label>`).join('')}<button type="button" id="source-recheck" style="margin-top:8px;padding:5px 8px;">Recheck sources</button>`;
-
-    function render() {
-        const state = readSourceState(SOURCE_AVAILABILITY_KEY, {});
-        const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
-        panel.querySelectorAll('[data-source-setting]').forEach(input => {
-            const source = input.dataset.sourceSetting;
-            input.checked = overrides[source] === true;
-            const status = panel.querySelector(`[data-source-status="${source}"]`);
-            if (status) status.textContent = state[source] || 'checking';
-        });
-    }
-
-    button.addEventListener('click', () => { panel.hidden = !panel.hidden; render(); });
-    panel.querySelectorAll('[data-source-setting]').forEach(input => input.addEventListener('change', () => {
-        const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
-        overrides[input.dataset.sourceSetting] = input.checked;
-        localStorage.setItem(SOURCE_OVERRIDES_KEY, JSON.stringify(overrides));
-        window.location.reload();
-    }));
-    panel.querySelector('#source-recheck').addEventListener('click', () => {
-        localStorage.removeItem(SOURCE_AVAILABILITY_KEY);
-        window.location.reload();
-    });
-    document.body.append(button, panel);
-}
 
 document.addEventListener('DOMContentLoaded', function() {
-    createSourceSettings();
     Promise.all([
         fetch('json/list.json').then(response => response.json()),
         fetch('json/ezclasswork.json').then(response => response.json())

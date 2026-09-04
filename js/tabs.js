@@ -2,6 +2,7 @@ const navTabs = document.getElementById('nav-tabs');
 const tabContents = document.getElementById('tab-contents');
 let gxmes = [];
 let categorySections = {};
+let sourceSections = {};
 
 const defaultSections = ['Favorites', 'last-played', 'top-10', 'last-10'];
 
@@ -39,6 +40,29 @@ function createCategorySection(category) {
     li.querySelector('a').addEventListener('click', () => {
         showSection(`${category.toLowerCase()}-gxmes`);
     });
+}
+
+function createSourceSection(source) {
+    const sectionId = source === 'Source #1' ? 'source-1-gxmes' : 'source-2-gxmes';
+    if (sourceSections[source]) return sectionId;
+
+    const section = document.createElement('section');
+    section.id = sectionId;
+    section.className = 'tab-content';
+    section.innerHTML = `
+        <h2>${source} games</h2>
+        <div class="gxmes-grid"></div>
+    `;
+    tabContents.appendChild(section);
+    sourceSections[source] = section;
+    section.style.display = 'none';
+
+    const li = document.createElement('li');
+    li.id = source === 'Source #1' ? 'source-1' : 'source-2';
+    li.innerHTML = `<a>${source}</a>`;
+    navTabs.insertBefore(li, document.getElementById('all-gxmes'));
+    li.querySelector('a').addEventListener('click', () => showSection(sectionId));
+    return sectionId;
 }
 
 function populategxmes(sectionId, gxmesList) {
@@ -100,6 +124,14 @@ Promise.all([
             populategxmes(`${category.toLowerCase()}-gxmes`, catgxmes);
         });
 
+        [ 'Source #1', 'Source #2' ].forEach(source => {
+            const sourceGames = gxmes.filter(game => getGameSourceGroup(game) === source);
+            if (sourceGames.length > 0) {
+                const sectionId = createSourceSection(source);
+                populategxmes(sectionId, sourceGames);
+            }
+        });
+
         hideAllSections();
         defaultSections.forEach(id => {
             const section = document.getElementById(id);
@@ -122,6 +154,10 @@ navTabs.addEventListener('click', e => {
         diffrentname();
     } else if (tabId === 'all-gxmes') {
         showSection('all-gxmes2');
+    } else if (tabId === 'source-1') {
+        showSection('source-1-gxmes');
+    } else if (tabId === 'source-2') {
+        showSection('source-2-gxmes');
     } else if (categorySections[tabId]) {
         showSection(`${tabId}-gxmes`);
     }

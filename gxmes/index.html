@@ -95,6 +95,20 @@
     <span class="modal-close" id="close-modal">&times;</span>
     <h2>Settings</h2>
 
+    <div id="source-settings-group" class="modal-group">
+      <h6>Alternate Game Sources</h6>
+      <p>Blocked sources stay hidden unless overridden.</p>
+      <div class="modal-item">
+        <label><input type="checkbox" data-source-setting="Source #1"> Override Source #1 <span data-source-status="Source #1">checking</span></label>
+      </div>
+      <div class="modal-item">
+        <label><input type="checkbox" data-source-setting="Source #2"> Override Source #2 <span data-source-status="Source #2">checking</span></label>
+      </div>
+      <div class="modal-item">
+        <button type="button" id="source-recheck">Recheck sources</button>
+      </div>
+    </div>
+
     <!-- Group 1: Tab Renaming / Cloak -->
     <div class="modal-group">
       <h6>Tab Cloak Options</h6>

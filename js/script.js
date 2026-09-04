@@ -1,5 +1,5 @@
 const SCRAPER_GAMES_DISABLED_KEY = 'scraperGamesDisabled';
-const SOURCE_AVAILABILITY_KEY = 'sourceAvailability';
+const SOURCE_AVAILABILITY_KEY = 'sourceAvailabilityV2';
 const SOURCE_OVERRIDES_KEY = 'sourceAvailabilityOverrides';
 const SOURCE_ONE = 'Source #1';
 const SOURCE_TWO = 'Source #2';
@@ -42,7 +42,8 @@ async function probeGameSource(url) {
         const documentCopy = new DOMParser().parseFromString(html, 'text/html');
         return { reachable: Boolean(documentCopy.body && documentCopy.body.querySelector('*')), inconclusive: false };
     } catch {
-        return { reachable: false, inconclusive: false };
+        // CORS/network errors do not prove that an iframe source is unavailable.
+        return { reachable: false, inconclusive: true };
     } finally {
         clearTimeout(timeout);
     }
@@ -72,55 +73,50 @@ async function checkSourceAvailability(games, force = false) {
     return sourceAvailabilityPromise;
 }
 
-function sourceSettingsLabel(source) {
-    return source === SOURCE_ONE ? 'Source #1' : 'Source #2';
-}
-
 function renderSourceSettings() {
-    const panel = document.getElementById('source-settings-panel');
-    if (!panel) return;
+    const group = document.getElementById('source-settings-group');
+    if (!group) return;
     const state = readSourceState(SOURCE_AVAILABILITY_KEY, {});
     const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
-    panel.querySelectorAll('[data-source-setting]').forEach(input => {
+    group.querySelectorAll('[data-source-setting]').forEach(input => {
         const source = input.dataset.sourceSetting;
         input.checked = overrides[source] === true;
-        const status = panel.querySelector(`[data-source-status="${source}"]`);
+        const status = group.querySelector(`[data-source-status="${source}"]`);
         if (status) status.textContent = state[source] === 'blocked' ? 'blocked' : state[source] === 'available' ? 'available' : 'checking';
     });
 }
 
-function createSourceSettings() {
-    if (document.getElementById('source-settings-button')) return;
-    const button = document.createElement('button');
-    button.id = 'source-settings-button';
-    button.type = 'button';
-    button.textContent = 'Source Settings';
-    button.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:10000;padding:8px 12px;border:1px solid #777;border-radius:6px;background:#3e3e3e;color:#fff;cursor:pointer;';
+function addSourceSettingsToModal() {
+    let group = document.getElementById('source-settings-group');
+    if (!group) {
+        const modalContent = document.querySelector('#modal .modal-content');
+        if (!modalContent) return;
 
-    const panel = document.createElement('div');
-    panel.id = 'source-settings-panel';
-    panel.hidden = true;
-    panel.style.cssText = 'position:fixed;left:12px;bottom:54px;z-index:10000;width:250px;padding:14px;border:1px solid #777;border-radius:8px;background:#2d2d2d;color:#fff;box-shadow:0 4px 16px #0008;';
-    panel.innerHTML = `<strong>Game source settings</strong><p style="margin:8px 0;font-size:.85rem;">Blocked sources stay hidden unless overridden.</p>${[SOURCE_ONE, SOURCE_TWO].map(source => `<label style="display:block;margin:8px 0;"><input type="checkbox" data-source-setting="${source}"> Override ${sourceSettingsLabel(source)} <span data-source-status="${source}">checking</span></label>`).join('')}<button type="button" id="source-recheck" style="margin-top:8px;padding:5px 8px;">Recheck sources</button>`;
+        group = document.createElement('div');
+        group.id = 'source-settings-group';
+        group.className = 'modal-group';
+        group.innerHTML = `<h6>Alternate Game Sources</h6><p>Blocked sources stay hidden unless overridden.</p>${[SOURCE_ONE, SOURCE_TWO].map(source => `<div class="modal-item"><label><input type="checkbox" data-source-setting="${source}"> Override ${source} <span data-source-status="${source}">checking</span></label></div>`).join('')}<div class="modal-item"><button type="button" id="source-recheck">Recheck sources</button></div>`;
+        modalContent.appendChild(group);
+    }
+    if (group.dataset.sourceSettingsBound === 'true') return;
+    group.dataset.sourceSettingsBound = 'true';
 
-    button.addEventListener('click', () => { panel.hidden = !panel.hidden; renderSourceSettings(); });
-    panel.querySelectorAll('[data-source-setting]').forEach(input => input.addEventListener('change', () => {
+    group.querySelectorAll('[data-source-setting]').forEach(input => input.addEventListener('change', () => {
         const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
         overrides[input.dataset.sourceSetting] = input.checked;
         localStorage.setItem(SOURCE_OVERRIDES_KEY, JSON.stringify(overrides));
         window.location.reload();
     }));
-    panel.querySelector('#source-recheck').addEventListener('click', () => {
+    group.querySelector('#source-recheck').addEventListener('click', () => {
         localStorage.removeItem(SOURCE_AVAILABILITY_KEY);
         window.location.reload();
     });
-    document.body.append(button, panel);
     renderSourceSettings();
 }
 
 function initializeSourceSettings() {
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', createSourceSettings, { once: true });
-    else createSourceSettings();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addSourceSettingsToModal, { once: true });
+    else addSourceSettingsToModal();
 }
 
 initializeSourceSettings();

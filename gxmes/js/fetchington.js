@@ -35,7 +35,7 @@ function getGameSource(item) {
 }
 
 const SCRAPER_GAMES_DISABLED_KEY = 'scraperGamesDisabled';
-const SOURCE_AVAILABILITY_KEY = 'sourceAvailability';
+const SOURCE_AVAILABILITY_KEY = 'sourceAvailabilityV2';
 const SOURCE_OVERRIDES_KEY = 'sourceAvailabilityOverrides';
 
 function readSourceState(key, fallback) {
@@ -69,58 +69,32 @@ async function checkSourceAvailability(item) {
         const parsed = html.trim() ? new DOMParser().parseFromString(html, 'text/html') : null;
         state[source] = parsed && parsed.body && parsed.body.querySelector('*') ? 'available' : 'blocked';
     } catch {
-        state[source] = 'blocked';
+        // CORS/network errors do not prove that an iframe source is unavailable.
+        state[source] = 'available';
     } finally {
         clearTimeout(timeout);
         localStorage.setItem(SOURCE_AVAILABILITY_KEY, JSON.stringify(state));
     }
 }
 
-function createSourceSettings() {
-    if (document.getElementById('source-settings-button')) return;
-    const button = document.createElement('button');
-    button.id = 'source-settings-button';
-    button.type = 'button';
-    button.textContent = 'Source Settings';
-    button.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:10000;padding:8px 12px;border:1px solid #777;border-radius:6px;background:#3e3e3e;color:#fff;cursor:pointer;';
 
-    const panel = document.createElement('div');
-    panel.id = 'source-settings-panel';
-    panel.hidden = true;
-    panel.style.cssText = 'position:fixed;left:12px;bottom:54px;z-index:10000;width:250px;padding:14px;border:1px solid #777;border-radius:8px;background:#2d2d2d;color:#fff;box-shadow:0 4px 16px #0008;';
-    panel.innerHTML = `<strong>Game source settings</strong><p style="margin:8px 0;font-size:.85rem;">Blocked sources stay hidden unless overridden.</p>${[SOURCE_ONE, SOURCE_TWO].map(source => `<label style="display:block;margin:8px 0;"><input type="checkbox" data-source-setting="${source}"> Override ${source} <span data-source-status="${source}">checking</span></label>`).join('')}<button type="button" id="source-recheck" style="margin-top:8px;padding:5px 8px;">Recheck sources</button>`;
+function initializeGameAds() {
+    const adSlots = document.querySelectorAll('ins.adsbygoogle');
+    if (!adSlots.length) return;
 
-    function render() {
-        const state = readSourceState(SOURCE_AVAILABILITY_KEY, {});
-        const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
-        panel.querySelectorAll('[data-source-setting]').forEach(input => {
-            const source = input.dataset.sourceSetting;
-            input.checked = overrides[source] === true;
-            const status = panel.querySelector(`[data-source-status="${source}"]`);
-            if (status) status.textContent = state[source] || 'checking';
-        });
+    // Some older game wrappers do not include the AdSense script in their head.
+    // Load it once here, while preserving the normal AdSense command queue.
+    const adQueue = window.adsbygoogle = window.adsbygoogle || [];
+    if (!document.querySelector('script[src*="adsbygoogle.js"]')) {
+        const adScript = document.createElement('script');
+        adScript.async = true;
+        adScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3858578074050552';
+        adScript.crossOrigin = 'anonymous';
+        document.head.appendChild(adScript);
     }
 
-    button.addEventListener('click', () => { panel.hidden = !panel.hidden; render(); });
-    panel.querySelectorAll('[data-source-setting]').forEach(input => input.addEventListener('change', () => {
-        const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
-        overrides[input.dataset.sourceSetting] = input.checked;
-        localStorage.setItem(SOURCE_OVERRIDES_KEY, JSON.stringify(overrides));
-        window.location.reload();
-    }));
-    panel.querySelector('#source-recheck').addEventListener('click', () => {
-        localStorage.removeItem(SOURCE_AVAILABILITY_KEY);
-        window.location.reload();
-    });
-    document.body.append(button, panel);
+    adSlots.forEach(() => adQueue.push({}));
 }
-
-function initializeSourceSettings() {
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', createSourceSettings, { once: true });
-    else createSourceSettings();
-}
-
-initializeSourceSettings();
 
 function hideGameStatus(status) {
     if (status) status.remove();
@@ -743,14 +717,11 @@ document.addEventListener("DOMContentLoaded", function () {
         </footer>
     `;
 
-    createSourceSettings();
     window.addEventListener('resize', fetchRecommendedGames);
 
     
     fetchRecommendedGames();
-    for (let i = 0; i < 5; i++) {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    }
+    initializeGameAds();
 
 });
 
