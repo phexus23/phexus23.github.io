@@ -53,7 +53,7 @@ function addSourceSettingsToModal() {
         // Deliberately quiet and unlabeled with jargon — this is just a quick
         // kill switch for troubleshooting, not something a visitor needs to
         // understand or think about.
-        group.innerHTML = `<div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_ONE}"> Hide extra arcade games</label></div><div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_TWO}"> Hide classroom games</label></div>`;
+        group.innerHTML = `<div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_TWO}"> Hide classroom games</label></div>`;
         modalContent.appendChild(group);
     }
     if (group.dataset.sourceSettingsBound === 'true') return;
