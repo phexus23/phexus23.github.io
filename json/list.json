@@ -731,7 +731,7 @@
         "name": "Snake",
         "imgsrc": "/assets/img/snake-game.png",
         "linksrc": "/Vafor_IT/snake-game/",
-        "foldername": "snake-game",
+        "foldername": "snake",
         "category": "Arcade"
     },
     {
@@ -961,9 +961,10 @@
         "name": "Suika Game",
         "imgsrc": "/assets/img/suika-game_766.png",
         "source": "Source #1",
-        "linksrc": "/gxmes/suika-game/",
-        "foldername": "suika-game",
-        "category": "Action"
+        "linksrc": "/gxmes/suika/",
+        "foldername": "suika",
+        "category": "Action",
+        "cdnfile": "suika-game"
     },
     {
         "name": "Stick Slasher",
@@ -1457,9 +1458,10 @@
         "name": "Animal Crossing (GAMECUBE)",
         "imgsrc": "/assets/img/animal-crossing-gamecube_828.png",
         "source": "Source #1",
-        "linksrc": "/gxmes/animal-crossing-gamecube/",
-        "foldername": "animal-crossing-gamecube",
-        "category": "Port"
+        "linksrc": "/gxmes/animal-crossing-console/",
+        "foldername": "animal-crossing-console",
+        "category": "Port",
+        "cdnfile": "animal-crossing-gamecube"
     },
     {
         "name": "Touhou 1 Touhou-Reiiden",
@@ -1577,9 +1579,10 @@
         "name": "La Madriguera (Lazy Bear Game)",
         "imgsrc": "/assets/img/la-madriguera-lazy-bear-game_843.png",
         "source": "Source #1",
-        "linksrc": "/gxmes/la-madriguera-lazy-bear-game/",
-        "foldername": "la-madriguera-lazy-bear-game",
-        "category": "Port"
+        "linksrc": "/gxmes/la-madriguera-lazy-bear/",
+        "foldername": "la-madriguera-lazy-bear",
+        "category": "Port",
+        "cdnfile": "la-madriguera-lazy-bear-game"
     },
     {
         "name": "Hammer 2: Reloaded",

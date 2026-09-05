@@ -149,7 +149,12 @@ async function fetchgxmes() {
             ezClassworkResponse.json()
         ]);
         const allGames = gxmes.concat(normalizeEzClassworkGames(ezClassworkGames));
-        return filterAvailableGames(allGames);
+        // A downloaded/self-hosted game always wins over an embedded
+        // EZClasswork game of the same name (~17 collide, e.g. "2048",
+        // "Minesweeper", "Snake") — applied once here so every consumer
+        // (category tabs, All Games, search) sees the deduped catalog
+        // instead of the same game appearing twice.
+        return filterAvailableGames(preferMainSource(allGames));
     })();
     return catalogPromise;
 }

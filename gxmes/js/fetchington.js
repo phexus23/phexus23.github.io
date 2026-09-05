@@ -38,8 +38,12 @@ function isScraperGameEntry(item) {
 
 function getGameSource(item) {
     if (isEzClassworkGameEntry(item)) return item.embedUrl || item.gameUrl;
-    return isScraperGameEntry(item) && item.foldername
-        ? `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(item.foldername)}.html`
+    // cdnfile is only set when our own URL slug (foldername) was cleaned up
+    // (e.g. to drop "game"/"unblocked") and no longer matches the filename
+    // the upstream freebuisness/html CDN actually hosts the game under.
+    const cdnKey = item.cdnfile || item.foldername;
+    return isScraperGameEntry(item) && cdnKey
+        ? `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(cdnKey)}.html`
         : item.linksrc;
 }
 

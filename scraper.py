@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import sys
 import urllib.request
 import ssl
@@ -30,7 +31,14 @@ def slugify(name):
     s = s.replace("_", "-")
     s = "".join(c for c in s if c.isalnum() or c in "-_")
     s = s.strip("-_")
-    return s
+    # School filters commonly keyword-match "game"/"unblocked" in the URL
+    # path itself, so new slugs never carry either word going forward.
+    # `games?` (not a literal "-game-") so it also catches it embedded in
+    # a larger word (e.g. "gamecube" -> "cube") and the plural ("games").
+    s = re.sub(r"unblocked", "", s)
+    s = re.sub(r"games?", "", s)
+    s = re.sub(r"-{2,}", "-", s).strip("-_")
+    return s or "gxme"
 
 def safe_print(text):
     try:
