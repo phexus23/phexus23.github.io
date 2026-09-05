@@ -178,6 +178,36 @@ main {
     background-color: #a0d1a4;
 }
 
+.game-badge.badge-src {
+    top: auto;
+    bottom: 10px;
+    left: 10px;
+    background-color: #6c8ebf;
+    color: #fff;
+}
+
+.side-nav ul li.nav-divider {
+    margin: 20px 0 6px;
+    padding-top: 10px;
+    border-top: 1px solid #555;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #8a8a8a;
+    font-weight: 700;
+    cursor: default;
+}
+
+.side-nav ul li.nav-alt-source a {
+    color: #9a9a9a;
+    font-weight: 500;
+    font-size: 0.92rem;
+}
+
+.side-nav ul li.nav-alt-source a:hover {
+    color: #a0d1a4;
+}
+
 #top-10 h2 {
     color: #a0d1a4;
     font-size: 2rem;
@@ -489,6 +519,7 @@ a:hover {
   text-align: center;
   margin-bottom: 10px;
   flex: 0 1 100px;
+  position: relative;
 }
 
 .search-game-card:hover {

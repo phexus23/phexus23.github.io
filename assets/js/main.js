@@ -1,7 +1,6 @@
 const SOURCE_ONE = 'Source #1';
 const SOURCE_TWO = 'Source #2';
-const SOURCE_AVAILABILITY_KEY = 'sourceAvailabilityV2';
-const SOURCE_OVERRIDES_KEY = 'sourceAvailabilityOverrides';
+const SOURCE_DISABLED_KEY = 'sourceDisabled';
 
 function ezClassworkPlaceholderImage(name) {
     let hash = 0;
@@ -12,56 +11,28 @@ function ezClassworkPlaceholderImage(name) {
     return 'data:image/svg+xml,' + encodeURIComponent(svg);
 }
 
+function hasRealImage(gxme) {
+    return !(gxme.imgsrc || '').startsWith('data:image/svg+xml');
+}
+
 function readSourceState(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; }
 }
 
-function sourceIsOverridden(source) {
-    return readSourceState(SOURCE_OVERRIDES_KEY, {})[source] === true;
-}
-
+// Same manual, per-browser toggle used on the games hub (Settings > Alternate
+// Game Sources) — no automatic reachability probing. Probing a single
+// representative game to decide a whole source's fate used to hang page load
+// for seconds and could wrongly hide an entire source over one broken file.
 function sourceIsEnabled(source) {
-    return readSourceState(SOURCE_AVAILABILITY_KEY, {})[source] !== 'blocked' || sourceIsOverridden(source);
+    return readSourceState(SOURCE_DISABLED_KEY, {})[source] !== true;
 }
-
-async function probeSource(url) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-        const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
-        const html = response.ok ? await response.text() : '';
-        const parsed = html.trim() ? new DOMParser().parseFromString(html, 'text/html') : null;
-        return { reachable: Boolean(parsed && parsed.body && parsed.body.querySelector('*')), inconclusive: false };
-    } catch {
-        // CORS/network errors do not prove that an iframe source is unavailable.
-        return { reachable: false, inconclusive: true };
-    }
-    finally { clearTimeout(timeout); }
-}
-
-async function checkHomepageSources(games) {
-    const state = readSourceState(SOURCE_AVAILABILITY_KEY, {});
-    for (const source of [SOURCE_ONE, SOURCE_TWO]) {
-        if (state[source] === 'available' || state[source] === 'blocked') continue;
-        const representative = games.find(game => game.source === source);
-        const result = representative && await probeSource(
-            source === SOURCE_ONE
-                ? `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(representative.foldername)}.html`
-                : (representative.embedUrl || representative.gameUrl)
-        );
-        state[source] = result && (result.reachable || result.inconclusive) ? 'available' : 'blocked';
-    }
-    localStorage.setItem(SOURCE_AVAILABILITY_KEY, JSON.stringify(state));
-}
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
     Promise.all([
         fetch('json/list.json').then(response => response.json()),
         fetch('json/ezclasswork.json').then(response => response.json())
     ])
-        .then(async ([data, ezClassworkGames]) => {
+        .then(([data, ezClassworkGames]) => {
             const ezGames = ezClassworkGames.map(game => ({
                 ...game,
                 imgsrc: ezClassworkPlaceholderImage(game.name),
@@ -70,10 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 source: 'Source #2'
             }));
             const allGames = data.concat(ezGames);
-            await checkHomepageSources(allGames);
             const gxmeGrid = document.getElementById('gxmeGrid');
             const availableGames = allGames.filter(gxme => sourceIsEnabled(gxme.source));
-            const randomgxmes = preferMainSource(availableGames).sort(() => 0.5 - Math.random()).slice(0, 4);
+            // This is the first thing most visitors see, so only promote
+            // games with a real picture — not the generated placeholder used
+            // for EZClasswork games that have no artwork of their own.
+            const showcaseGames = preferMainSource(availableGames).filter(hasRealImage);
+            const randomgxmes = showcaseGames.sort(() => 0.5 - Math.random()).slice(0, 4);
 
             randomgxmes.forEach(gxme => {
                 let gxmeLink = document.createElement('a');
@@ -86,10 +60,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 let gxmeCard = document.createElement('div');
                 gxmeCard.classList.add('gxme-card');
                 gxmeCard.dataset.gameSource = gxme.source || 'Main';
-                gxmeCard.dataset.sourceLabel = gxme.source === 'Source #1'
-                    ? 'Source #1'
-                    : gxme.source === 'Source #2' ? 'Source #2' : 'Main';
                 gxmeCard.style.cursor = 'pointer';
+
+                if (gxme.source === SOURCE_ONE || gxme.source === SOURCE_TWO) {
+                    let srcBadge = document.createElement('span');
+                    srcBadge.classList.add('game-badge', 'badge-src');
+                    srcBadge.textContent = gxme.source === SOURCE_ONE ? 'SRC 1' : 'SRC 2';
+                    gxmeCard.appendChild(srcBadge);
+                }
 
                 let img = document.createElement('img');
                 img.src = gxme.imgsrc;

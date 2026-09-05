@@ -1,10 +1,7 @@
-const SCRAPER_GAMES_DISABLED_KEY = 'scraperGamesDisabled';
-const SOURCE_AVAILABILITY_KEY = 'sourceAvailabilityV2';
-const SOURCE_OVERRIDES_KEY = 'sourceAvailabilityOverrides';
+const SOURCE_DISABLED_KEY = 'sourceDisabled';
 const SOURCE_ONE = 'Source #1';
 const SOURCE_TWO = 'Source #2';
 const EZCLASSWORK_SOURCE = SOURCE_TWO;
-let sourceAvailabilityPromise = null;
 
 function ezClassworkPlaceholderImage(name) {
     let hash = 0;
@@ -15,6 +12,15 @@ function ezClassworkPlaceholderImage(name) {
     return 'data:image/svg+xml,' + encodeURIComponent(svg);
 }
 
+function hasRealImage(gxme) {
+    return !(gxme.imgsrc || '').startsWith('data:image/svg+xml');
+}
+
+function sourceBadgeLabel(gxme) {
+    const source = getGameSourceGroup(gxme);
+    return source === SOURCE_ONE ? 'SRC 1' : source === SOURCE_TWO ? 'SRC 2' : null;
+}
+
 function readSourceState(key, fallback) {
     try {
         return JSON.parse(localStorage.getItem(key)) || fallback;
@@ -23,75 +29,20 @@ function readSourceState(key, fallback) {
     }
 }
 
-function sourceIsOverridden(source) {
-    return readSourceState(SOURCE_OVERRIDES_KEY, {})[source] === true;
-}
-
+// A whole source is only ever hidden by an explicit, manual toggle here — never
+// by an automated reachability probe. Probing a single representative game to
+// decide a whole source's fate is fragile: if that one game happens to be down,
+// every other (perfectly working) game from that source got hidden forever.
 function sourceIsBlocked(source) {
-    return readSourceState(SOURCE_AVAILABILITY_KEY, {})[source] === 'blocked' && !sourceIsOverridden(source);
-}
-
-function getSourceProbeUrl(game) {
-    if (game.source === SOURCE_ONE) {
-        return `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(game.foldername)}.html`;
-    }
-    if (game.source === SOURCE_TWO) return game.embedUrl || game.gameUrl;
-    return null;
-}
-
-async function probeGameSource(url) {
-    if (!url) return { reachable: false, inconclusive: false };
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-        const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
-        if (!response.ok) return { reachable: false, inconclusive: false };
-        const html = await response.text();
-        if (!html.trim()) return { reachable: false, inconclusive: false };
-        const documentCopy = new DOMParser().parseFromString(html, 'text/html');
-        return { reachable: Boolean(documentCopy.body && documentCopy.body.querySelector('*')), inconclusive: false };
-    } catch {
-        // CORS/network errors do not prove that an iframe source is unavailable.
-        return { reachable: false, inconclusive: true };
-    } finally {
-        clearTimeout(timeout);
-    }
-}
-
-async function checkSourceAvailability(games, force = false) {
-    if (sourceAvailabilityPromise && !force) return sourceAvailabilityPromise;
-    sourceAvailabilityPromise = (async () => {
-        const state = readSourceState(SOURCE_AVAILABILITY_KEY, {});
-        const sources = [...new Set(games.map(game => game.source))]
-            .filter(source => source === SOURCE_ONE || source === SOURCE_TWO);
-        const results = await Promise.all(sources.map(async source => {
-            if (!force && (state[source] === 'available' || state[source] === 'blocked')) {
-                return [source, state[source]];
-            }
-            const representative = games.find(game => game.source === source);
-            const result = representative
-                ? await probeGameSource(getSourceProbeUrl(representative))
-                : { reachable: false, inconclusive: false };
-            return [source, result.inconclusive ? 'available' : result.reachable ? 'available' : 'blocked'];
-        }));
-        results.forEach(([source, status]) => { state[source] = status; });
-        localStorage.setItem(SOURCE_AVAILABILITY_KEY, JSON.stringify(state));
-        renderSourceSettings();
-        return state;
-    })();
-    return sourceAvailabilityPromise;
+    return readSourceState(SOURCE_DISABLED_KEY, {})[source] === true;
 }
 
 function renderSourceSettings() {
     const group = document.getElementById('source-settings-group');
     if (!group) return;
-    const state = readSourceState(SOURCE_AVAILABILITY_KEY, {});
-    const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
+    const disabled = readSourceState(SOURCE_DISABLED_KEY, {});
     group.querySelectorAll('[data-source-setting]').forEach(input => {
-        const source = input.dataset.sourceSetting;
-        input.checked = overrides[source] === true;
-        const status = group.querySelector(`[data-source-status="${source}"]`);
-        if (status) status.textContent = state[source] === 'blocked' ? 'blocked' : state[source] === 'available' ? 'available' : 'checking';
+        input.checked = disabled[input.dataset.sourceSetting] === true;
     });
 }
 
@@ -104,22 +55,18 @@ function addSourceSettingsToModal() {
         group = document.createElement('div');
         group.id = 'source-settings-group';
         group.className = 'modal-group';
-        group.innerHTML = `<h6>Alternate Game Sources</h6><p>Blocked sources stay hidden unless overridden.</p>${[SOURCE_ONE, SOURCE_TWO].map(source => `<div class="modal-item"><label><input type="checkbox" data-source-setting="${source}"> Override ${source} <span data-source-status="${source}">checking</span></label></div>`).join('')}<div class="modal-item"><button type="button" id="source-recheck">Recheck sources</button></div>`;
+        group.innerHTML = `<h6>Alternate Game Sources</h6><p>Games tagged SRC 1 / SRC 2 come from an alternate source. Hide a whole source instantly if it's down or misbehaving.</p>${[SOURCE_ONE, SOURCE_TWO].map(source => `<div class="modal-item"><label><input type="checkbox" data-source-setting="${source}"> Hide ${source} games</label></div>`).join('')}`;
         modalContent.appendChild(group);
     }
     if (group.dataset.sourceSettingsBound === 'true') return;
     group.dataset.sourceSettingsBound = 'true';
 
     group.querySelectorAll('[data-source-setting]').forEach(input => input.addEventListener('change', () => {
-        const overrides = readSourceState(SOURCE_OVERRIDES_KEY, {});
-        overrides[input.dataset.sourceSetting] = input.checked;
-        localStorage.setItem(SOURCE_OVERRIDES_KEY, JSON.stringify(overrides));
+        const disabled = readSourceState(SOURCE_DISABLED_KEY, {});
+        disabled[input.dataset.sourceSetting] = input.checked;
+        localStorage.setItem(SOURCE_DISABLED_KEY, JSON.stringify(disabled));
         window.location.reload();
     }));
-    group.querySelector('#source-recheck').addEventListener('click', () => {
-        localStorage.removeItem(SOURCE_AVAILABILITY_KEY);
-        window.location.reload();
-    });
     renderSourceSettings();
 }
 
@@ -186,18 +133,27 @@ function filterAvailableGames(gxmes) {
     });
 }
 
+// Every widget on this page (top 10, all games, recently added, favorites,
+// search, category tabs...) needs the same combined catalog. Fetching and
+// normalizing it separately for each one is what made the page lag — this
+// memoizes it so the ~660-game catalog is fetched, parsed and normalized
+// exactly once per page load no matter how many features ask for it.
+let catalogPromise = null;
 async function fetchgxmes() {
-    const [gamesResponse, ezClassworkResponse] = await Promise.all([
-        fetch('../json/list.json'),
-        fetch('../json/ezclasswork.json')
-    ]);
-    const [gxmes, ezClassworkGames] = await Promise.all([
-        gamesResponse.json(),
-        ezClassworkResponse.json()
-    ]);
-    const allGames = gxmes.concat(normalizeEzClassworkGames(ezClassworkGames));
-    await checkSourceAvailability(allGames);
-    return filterAvailableGames(allGames);
+    if (catalogPromise) return catalogPromise;
+    catalogPromise = (async () => {
+        const [gamesResponse, ezClassworkResponse] = await Promise.all([
+            fetch('../json/list.json'),
+            fetch('../json/ezclasswork.json')
+        ]);
+        const [gxmes, ezClassworkGames] = await Promise.all([
+            gamesResponse.json(),
+            ezClassworkResponse.json()
+        ]);
+        const allGames = gxmes.concat(normalizeEzClassworkGames(ezClassworkGames));
+        return filterAvailableGames(allGames);
+    })();
+    return catalogPromise;
 }
 
 function renderLastPlayed() {
@@ -225,29 +181,33 @@ function rendergxmes(gxmes, containerId, badge) {
 
     container.innerHTML = gxmes.map(gxme => {
         const isFavorite = favorites.includes(gxme.name);
+        const srcLabel = sourceBadgeLabel(gxme);
         return `
-            <div class="gxme-card" data-game-source="${getGameSourceGroup(gxme)}" ${isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
+            <div class="gxme-card" data-game-source="${getGameSourceGroup(gxme)}" data-gxme-name="${gxme.name}" ${isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
                 ${badgeHTML}
-                <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-gxme='${JSON.stringify(gxme)}'>
+                ${srcLabel ? `<span class="game-badge badge-src">${srcLabel}</span>` : ''}
+                <button class="favorite-btn ${isFavorite ? 'active' : ''}">
                     <i class="fas fa-star"></i>
                 </button>
                 <img src="${gxme.imgsrc}" alt="${gxme.name}">
                 <h3>${gxme.name}</h3>
-                <a href="${getGamePageUrl(gxme)}" class="play-link" data-gxme='${JSON.stringify(gxme)}'>Play Now</a>
+                <a href="${getGamePageUrl(gxme)}" class="play-link">Play Now</a>
             </div>
         `;
     }).join('');
 
-    container.querySelectorAll('.favorite-btn').forEach(button => {
-        button.addEventListener('click', () => toggleFavorite(button));
-    });
-
-    container.querySelectorAll('.play-link').forEach(link => {
-        link.addEventListener('click', (e) => {
+    // Attach handlers by zipping with the source array (same order the markup
+    // was built in) instead of round-tripping every game through JSON in a
+    // data attribute — cheaper, and immune to names containing quotes.
+    container.querySelectorAll('.gxme-card').forEach((card, i) => {
+        const gxme = gxmes[i];
+        card.querySelector('.favorite-btn').addEventListener('click', function () {
+            toggleFavorite(this, gxme);
+        });
+        card.querySelector('.play-link').addEventListener('click', (e) => {
             e.preventDefault();
-            const gxme = JSON.parse(link.dataset.gxme);
             updateLastPlayed(gxme);
-            window.location.href = link.href;
+            window.location.href = e.currentTarget.href;
         });
     });
 }
@@ -266,11 +226,12 @@ async function loadAllgxmes() {
 }
 async function loadLast10gxmes() {
     const gxmes = await fetchgxmes();
-    const last10gxmes = gxmes.slice(-10).reverse();
+    // "Recently Added" is one of the first things a visitor sees, so only
+    // promote games with a real picture here — not the generated placeholder.
+    const last10gxmes = gxmes.filter(hasRealImage).slice(-10).reverse();
     rendergxmes(last10gxmes, 'last-10-gxmes', 'NEW');
 }
-function toggleFavorite(button) {
-    const gxme = JSON.parse(button.dataset.gxme);
+function toggleFavorite(button, gxme) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const isFavorite = favorites.includes(gxme.name);
 
@@ -313,8 +274,7 @@ function updateFavoritesDisplay() {
 
     document.querySelectorAll('.gxme-card').forEach(card => {
         const button = card.querySelector('.favorite-btn');
-        const gxme = JSON.parse(button.dataset.gxme);
-        const isFavorite = favorites.includes(gxme.name);
+        const isFavorite = favorites.includes(card.dataset.gxmeName);
         if (isFavorite) {
             button.classList.add('active');
         } else {

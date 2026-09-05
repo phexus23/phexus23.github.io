@@ -6,19 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let gxmes = [];
 
-  Promise.all([
-    fetch("../json/list.json").then(res => res.json()),
-    fetch("../json/ezclasswork.json").then(res => res.json())
-  ]).then(async ([data, ezClassworkGames]) => {
-      const normalizedEzGames = typeof normalizeEzClassworkGames === 'function'
-        ? normalizeEzClassworkGames(ezClassworkGames)
-        : ezClassworkGames;
-      const allGames = data.concat(normalizedEzGames);
-      if (typeof checkSourceAvailability === 'function') {
-        await checkSourceAvailability(allGames);
-      }
-      gxmes = typeof filterAvailableGames === 'function' ? filterAvailableGames(allGames) : allGames;
-    });
+  // Reuses script.js's memoized catalog fetch instead of re-fetching and
+  // re-normalizing list.json + ezclasswork.json a third time on this page.
+  fetchgxmes().then(loadedGxmes => {
+    gxmes = loadedGxmes;
+  });
 
   searchInput.addEventListener("input", () => {
     searchContainer.style.borderBottomLeftRadius = "0";
@@ -53,8 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme)) {
         card.dataset.scraperGame = "true";
       }
+      const srcLabel = typeof sourceBadgeLabel === 'function' ? sourceBadgeLabel(gxme) : null;
       card.innerHTML = `
         <a href="${typeof getGamePageUrl === 'function' ? getGamePageUrl(gxme) : `/gxmes/${gxme.foldername}/`}">
+          ${srcLabel ? `<span class="game-badge badge-src">${srcLabel}</span>` : ''}
           <img src="${gxme.imgsrc}" alt="${gxme.name}">
           <h3>${gxme.name}</h3>
         </a>

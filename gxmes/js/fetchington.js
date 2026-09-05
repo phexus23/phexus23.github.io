@@ -43,9 +43,7 @@ function getGameSource(item) {
         : item.linksrc;
 }
 
-const SCRAPER_GAMES_DISABLED_KEY = 'scraperGamesDisabled';
-const SOURCE_AVAILABILITY_KEY = 'sourceAvailabilityV2';
-const SOURCE_OVERRIDES_KEY = 'sourceAvailabilityOverrides';
+const SOURCE_DISABLED_KEY = 'sourceDisabled';
 
 function readSourceState(key, fallback) {
     try {
@@ -55,35 +53,22 @@ function readSourceState(key, fallback) {
     }
 }
 
-function sourceIsOverridden(source) {
-    return readSourceState(SOURCE_OVERRIDES_KEY, {})[source] === true;
+function hasRealImage(item) {
+    return !(item.imgsrc || '').startsWith('data:image/svg+xml');
 }
 
+function sourceBadgeLabel(item) {
+    return item.source === SOURCE_ONE ? 'SRC 1' : item.source === SOURCE_TWO ? 'SRC 2' : null;
+}
+
+// A whole source is only hidden by an explicit, manual toggle in Settings —
+// never by an automatic reachability probe. Probing (or lazily flagging) one
+// game and using the result to hide an entire source is fragile: one broken
+// file used to wrongly hide every other, perfectly working game from that
+// source. A specific broken game is instead removed from just the page it's
+// on, by removeScraperGames() below, when its own iframe turns out blank.
 function sourceIsBlocked(source) {
-    return readSourceState(SOURCE_AVAILABILITY_KEY, {})[source] === 'blocked' && !sourceIsOverridden(source);
-}
-
-async function checkSourceAvailability(item) {
-    const source = item.source;
-    if (source !== SOURCE_ONE && source !== SOURCE_TWO) return;
-
-    const state = readSourceState(SOURCE_AVAILABILITY_KEY, {});
-    if (state[source] === 'available' || state[source] === 'blocked') return;
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-        const response = await fetch(getGameSource(item), { cache: 'no-store', signal: controller.signal });
-        const html = response.ok ? await response.text() : '';
-        const parsed = html.trim() ? new DOMParser().parseFromString(html, 'text/html') : null;
-        state[source] = parsed && parsed.body && parsed.body.querySelector('*') ? 'available' : 'blocked';
-    } catch {
-        // CORS/network errors do not prove that an iframe source is unavailable.
-        state[source] = 'available';
-    } finally {
-        clearTimeout(timeout);
-        localStorage.setItem(SOURCE_AVAILABILITY_KEY, JSON.stringify(state));
-    }
+    return readSourceState(SOURCE_DISABLED_KEY, {})[source] === true;
 }
 
 
@@ -116,16 +101,10 @@ function hideGameStatus(status) {
     if (status) status.remove();
 }
 
-function scraperGamesAreDisabled() {
-    return localStorage.getItem(SCRAPER_GAMES_DISABLED_KEY) === 'true';
-}
-
 function removeScraperGames() {
-    if (sourceIsOverridden(SOURCE_ONE)) return;
-    localStorage.setItem(SCRAPER_GAMES_DISABLED_KEY, 'true');
-    const sourceState = readSourceState(SOURCE_AVAILABILITY_KEY, {});
-    sourceState[SOURCE_ONE] = 'blocked';
-    localStorage.setItem(SOURCE_AVAILABILITY_KEY, JSON.stringify(sourceState));
+    // Only removes this specific broken game from the current page — it does
+    // not touch any global "Source #1 is blocked" state, so one dead file on
+    // jsdelivr can no longer take every other Source #1 game down with it.
     const gamesToRemove = new Set();
 
     document.querySelectorAll('[data-scraper-game="true"]').forEach(element => {
@@ -174,7 +153,6 @@ async function fetchData(index) {
         }
 
         if (!item) throw new Error('Game not found');
-        await checkSourceAvailability(item);
         const name1 = item.name;
         const imgsrc = item.imgsrc;
         const src = getGameSource(item);
@@ -207,10 +185,6 @@ async function fetchData(index) {
         if (isScraperGame) {
             iframe.dataset.scraperGame = 'true';
             iframe.closest('.game-frame-wrap')?.setAttribute('data-scraper-game', 'true');
-            if (scraperGamesAreDisabled() && sourceIsBlocked(SOURCE_ONE)) {
-                removeScraperGames();
-                return;
-            }
             let iframeLoaded = false;
             let validationComplete = false;
             let validationValid = false;
@@ -327,10 +301,15 @@ function sourcePriority(game) {
             const containerWidth = recommendedGamesContainer.clientWidth;
             const cardsPerRow = Math.floor(containerWidth / cardWidth);
 
-            const availableGames = allGames.filter(game =>
-                !scraperGamesAreDisabled() || !isScraperGameEntry(game) || !game.foldername
-            );
-            const shuffledGames = preferMainSource(availableGames).sort(() => 0.5 - Math.random()).slice(0, cardsPerRow);
+            const availableGames = allGames.filter(game => {
+                const source = game.source || (isScraperGameEntry(game) ? SOURCE_ONE : 'Main');
+                return !sourceIsBlocked(source);
+            });
+            // Recommended Games shows on every game page, so only promote
+            // games with a real picture — not the generated placeholder used
+            // for EZClasswork games that have no artwork of their own.
+            const showcaseGames = preferMainSource(availableGames).filter(hasRealImage);
+            const shuffledGames = showcaseGames.sort(() => 0.5 - Math.random()).slice(0, cardsPerRow);
 
             shuffledGames.forEach(game => {
                 const gameCard = document.createElement('div');
@@ -339,8 +318,10 @@ function sourcePriority(game) {
                 if (isScraperGameEntry(game) && game.foldername) {
                     gameCard.dataset.scraperGame = 'true';
                 }
+                const srcLabel = sourceBadgeLabel(game);
                 gameCard.innerHTML = `
                     <a href="${isEzClassworkGameEntry(game) ? `/gxmes/ezclasswork/?game=${encodeURIComponent(game.slug)}` : `/gxmes/${game.foldername}/`}">
+                    ${srcLabel ? `<span class="game-badge badge-src">${srcLabel}</span>` : ''}
                     <img src="${game.imgsrc}" alt="${game.name}">
                     <p>${game.name}</p>
                     </a>
@@ -505,6 +486,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 text-align: center;
                 transition: transform 0.3s ease;
                 flex: 0 0 auto;
+                position: relative;
             }
             .game-card a {
                 text-decoration: none;
@@ -524,6 +506,23 @@ document.addEventListener("DOMContentLoaded", function () {
                 padding: 10px;
                 font-size: 0.9rem;
                 color: #eaeaea;
+            }
+
+            .game-badge {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                z-index: 1;
+                padding: 3px 9px;
+                border-radius: 20px;
+                font-size: 0.65rem;
+                font-weight: 700;
+                letter-spacing: 0.03em;
+                color: #fff;
+            }
+
+            .game-badge.badge-src {
+                background-color: #6c8ebf;
             }
 
             .keywords-section {

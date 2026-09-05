@@ -17,7 +17,16 @@ function showSection(id) {
     if (section) section.style.display = 'block';
 }
 
-function createCategorySection(category) {
+function addNavDivider(label) {
+    if (document.getElementById('nav-divider-alt')) return;
+    const li = document.createElement('li');
+    li.id = 'nav-divider-alt';
+    li.className = 'nav-divider';
+    li.textContent = label;
+    navTabs.insertBefore(li, document.getElementById('all-gxmes'));
+}
+
+function createCategorySection(category, isAltSource) {
     if (categorySections[category]) return;
 
     const section = document.createElement('section');
@@ -34,6 +43,7 @@ function createCategorySection(category) {
 
     const li = document.createElement('li');
     li.id = category.toLowerCase();
+    if (isAltSource) li.className = 'nav-alt-source';
     li.innerHTML = `<a>${category}</a>`;
     navTabs.insertBefore(li, document.getElementById('all-gxmes'));
 
@@ -59,6 +69,7 @@ function createSourceSection(source) {
 
     const li = document.createElement('li');
     li.id = source === 'Source #1' ? 'source-1' : 'source-2';
+    li.className = 'nav-alt-source';
     li.innerHTML = `<a>${source}</a>`;
     navTabs.insertBefore(li, document.getElementById('all-gxmes'));
     li.querySelector('a').addEventListener('click', () => showSection(sectionId));
@@ -71,73 +82,85 @@ function populategxmes(sectionId, gxmesList) {
 
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const grid = section.querySelector('.gxmes-grid');
-    grid.innerHTML = '';
 
-    gxmesList.forEach(gxme => {
+    // Build the whole grid's markup once and assign it in a single write —
+    // the old `grid.innerHTML += ...` inside the loop re-parsed the entire
+    // accumulated HTML on every iteration, which is O(n^2) and was a large
+    // part of why pages with hundreds of cards (all-games, EZClasswork) lagged.
+    grid.innerHTML = gxmesList.map(gxme => {
         const isFavorite = favorites.includes(gxme.name);
-        const gxmeHTML = `
-            <div class="gxme-card" data-game-source="${gxme.source || (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'Source #1' : 'Main')}" data-source-label="${gxme.source === 'Source #1' ? 'Source #1' : gxme.source === 'Source #2' ? 'Source #2' : 'Main'}" ${typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
-                <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-gxme='${JSON.stringify(gxme)}'>
+        const sourceGroup = gxme.source || (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'Source #1' : 'Main');
+        const srcLabel = sourceGroup === 'Source #1' ? 'SRC 1' : sourceGroup === 'Source #2' ? 'SRC 2' : null;
+        return `
+            <div class="gxme-card" data-game-source="${sourceGroup}" data-gxme-name="${gxme.name}" ${typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
+                ${srcLabel ? `<span class="game-badge badge-src">${srcLabel}</span>` : ''}
+                <button class="favorite-btn ${isFavorite ? 'active' : ''}">
                     <i class="fas fa-star"></i>
                 </button>
                 <img src="${gxme.imgsrc}" alt="${gxme.name}">
                 <h3>${gxme.name}</h3>
-                <a href="${typeof getGamePageUrl === 'function' ? getGamePageUrl(gxme) : `/gxmes/${gxme.foldername}/`}" class="play-link" data-gxme='${JSON.stringify(gxme)}'>Play Now</a>
+                <a href="${typeof getGamePageUrl === 'function' ? getGamePageUrl(gxme) : `/gxmes/${gxme.foldername}/`}" class="play-link">Play Now</a>
             </div>
         `;
-        grid.innerHTML += gxmeHTML;
-    });
+    }).join('');
 
-    if (sectionId === 'Favorites' || !defaultSections.includes(sectionId)) {
-        const favBtns = section.querySelectorAll('.favorite-btn');
-        favBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                onlyforstar(this);
-
-                if (sectionId === 'Favorites') {
-                    diffrentname();
-                }   
-            });
+    // Attach handlers by zipping with the source array (same order the markup
+    // was built in) instead of round-tripping every game through JSON in a
+    // data attribute — cheaper for hundreds of cards, and immune to names
+    // containing quotes.
+    grid.querySelectorAll('.gxme-card').forEach((card, i) => {
+        const gxme = gxmesList[i];
+        card.querySelector('.favorite-btn').addEventListener('click', function (e) {
+            e.stopPropagation();
+            onlyforstar(this, gxme);
+            if (sectionId === 'Favorites') diffrentname();
         });
-    }
+        card.querySelector('.play-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (typeof updateLastPlayed === 'function') updateLastPlayed(gxme);
+            window.location.href = e.currentTarget.href;
+        });
+    });
 }
 
-Promise.all([
-    fetch('../json/list.json').then(res => res.json()),
-    fetch('../json/ezclasswork.json').then(res => res.json())
-])
-    .then(async ([data, ezClassworkGames]) => {
-        const normalizedEzGames = typeof normalizeEzClassworkGames === 'function'
-            ? normalizeEzClassworkGames(ezClassworkGames)
-            : ezClassworkGames;
-        const allGames = data.concat(normalizedEzGames);
-        if (typeof checkSourceAvailability === 'function') {
-            await checkSourceAvailability(allGames);
-        }
-        gxmes = typeof filterAvailableGames === 'function' ? filterAvailableGames(allGames) : allGames;
+fetchgxmes().then(loadedGxmes => {
+    gxmes = loadedGxmes;
 
-        const categories = [...new Set(gxmes.map(g => g.category))];
-        categories.forEach(category => {
-            createCategorySection(category);
-            const catgxmes = gxmes.filter(g => g.category === category);
-            populategxmes(`${category.toLowerCase()}-gxmes`, catgxmes);
-        });
+    // Genre categories (Platformer, Action, Idle, ...) are the primary way to
+    // browse; EZClasswork and the jsdelivr-scraped "Source #1" catalog are
+    // alternate sources bolted on afterward. Keep them visually separated in
+    // the sidebar instead of mixed in as if they were just more genres.
+    const categories = [...new Set(gxmes.map(g => g.category))];
+    const genreCategories = categories.filter(c => c !== 'EZClasswork');
+    const altCategories = categories.filter(c => c === 'EZClasswork');
 
-        [ 'Source #1', 'Source #2' ].forEach(source => {
-            const sourceGames = gxmes.filter(game => getGameSourceGroup(game) === source);
-            if (sourceGames.length > 0) {
-                const sectionId = createSourceSection(source);
-                populategxmes(sectionId, sourceGames);
-            }
-        });
-
-        hideAllSections();
-        defaultSections.forEach(id => {
-            const section = document.getElementById(id);
-            if (section) section.style.display = 'block';
-        });
+    genreCategories.forEach(category => {
+        createCategorySection(category);
+        populategxmes(`${category.toLowerCase()}-gxmes`, gxmes.filter(g => g.category === category));
     });
+
+    const hasAltSources = altCategories.length > 0 || gxmes.some(g => getGameSourceGroup(g) !== 'Main');
+    if (hasAltSources) addNavDivider('Alt Sources');
+
+    altCategories.forEach(category => {
+        createCategorySection(category, true);
+        populategxmes(`${category.toLowerCase()}-gxmes`, gxmes.filter(g => g.category === category));
+    });
+
+    ['Source #1', 'Source #2'].forEach(source => {
+        const sourceGames = gxmes.filter(game => getGameSourceGroup(game) === source);
+        if (sourceGames.length > 0) {
+            const sectionId = createSourceSection(source);
+            populategxmes(sectionId, sourceGames);
+        }
+    });
+
+    hideAllSections();
+    defaultSections.forEach(id => {
+        const section = document.getElementById(id);
+        if (section) section.style.display = 'block';
+    });
+});
 
 navTabs.addEventListener('click', e => {
     if (e.target.tagName !== 'A') return;
@@ -162,8 +185,7 @@ navTabs.addEventListener('click', e => {
         showSection(`${tabId}-gxmes`);
     }
 });
-function onlyforstar(button) {
-    const gxme = JSON.parse(button.dataset.gxme);
+function onlyforstar(button, gxme) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const isFavorite = favorites.includes(gxme.name);
 
