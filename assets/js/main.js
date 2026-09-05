@@ -1,5 +1,3 @@
-const SOURCE_ONE = 'Source #1';
-const SOURCE_TWO = 'Source #2';
 const SOURCE_DISABLED_KEY = 'sourceDisabled';
 
 function ezClassworkPlaceholderImage(name) {
@@ -19,10 +17,10 @@ function readSourceState(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; }
 }
 
-// Same manual, per-browser toggle used on the games hub (Settings > Alternate
-// Game Sources) — no automatic reachability probing. Probing a single
-// representative game to decide a whole source's fate used to hang page load
-// for seconds and could wrongly hide an entire source over one broken file.
+// Same manual, per-browser toggle used on the games hub Settings modal — no
+// automatic reachability probing. Probing a single representative game to
+// decide a whole source's fate used to hang page load for seconds and could
+// wrongly hide an entire source over one broken file.
 function sourceIsEnabled(source) {
     return readSourceState(SOURCE_DISABLED_KEY, {})[source] !== true;
 }
@@ -61,13 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 gxmeCard.classList.add('gxme-card');
                 gxmeCard.dataset.gameSource = gxme.source || 'Main';
                 gxmeCard.style.cursor = 'pointer';
-
-                if (gxme.source === SOURCE_ONE || gxme.source === SOURCE_TWO) {
-                    let srcBadge = document.createElement('span');
-                    srcBadge.classList.add('game-badge', 'badge-src');
-                    srcBadge.textContent = gxme.source === SOURCE_ONE ? 'SRC 1' : 'SRC 2';
-                    gxmeCard.appendChild(srcBadge);
-                }
 
                 let img = document.createElement('img');
                 img.src = gxme.imgsrc;

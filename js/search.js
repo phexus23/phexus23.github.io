@@ -45,10 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme)) {
         card.dataset.scraperGame = "true";
       }
-      const srcLabel = typeof sourceBadgeLabel === 'function' ? sourceBadgeLabel(gxme) : null;
       card.innerHTML = `
         <a href="${typeof getGamePageUrl === 'function' ? getGamePageUrl(gxme) : `/gxmes/${gxme.foldername}/`}">
-          ${srcLabel ? `<span class="game-badge badge-src">${srcLabel}</span>` : ''}
           <img src="${gxme.imgsrc}" alt="${gxme.name}">
           <h3>${gxme.name}</h3>
         </a>

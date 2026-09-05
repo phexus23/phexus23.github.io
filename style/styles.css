@@ -25,8 +25,22 @@ body {
     flex-direction: column;
 }
 
+/* Fixed to the corner instead of sitting at the end of the nav list, so it
+   stays reachable no matter how many tabs (genres + alt sources) pile up
+   above it — a long list used to push it below the viewport entirely. */
 #open-modal {
-    margin-top: 15px;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 20;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2d2d2d;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .side-nav h2 {
@@ -39,6 +53,9 @@ body {
 .side-nav ul {
     list-style: none;
     padding: 0;
+    padding-bottom: 50px;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .side-nav ul li {
@@ -93,15 +110,13 @@ main {
         display: flex;
         flex-wrap: wrap;
         gap: 6px 18px;
+        flex: none;
+        overflow: visible;
+        padding-bottom: 0;
     }
 
     .side-nav ul li {
         margin: 0;
-    }
-
-    #open-modal {
-        margin-top: 0;
-        margin-left: auto;
     }
 
     main {
@@ -176,36 +191,6 @@ main {
 
 .game-badge.badge-new {
     background-color: #a0d1a4;
-}
-
-.game-badge.badge-src {
-    top: auto;
-    bottom: 10px;
-    left: 10px;
-    background-color: #6c8ebf;
-    color: #fff;
-}
-
-.side-nav ul li.nav-divider {
-    margin: 20px 0 6px;
-    padding-top: 10px;
-    border-top: 1px solid #555;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #8a8a8a;
-    font-weight: 700;
-    cursor: default;
-}
-
-.side-nav ul li.nav-alt-source a {
-    color: #9a9a9a;
-    font-weight: 500;
-    font-size: 0.92rem;
-}
-
-.side-nav ul li.nav-alt-source a:hover {
-    color: #a0d1a4;
 }
 
 #top-10 h2 {

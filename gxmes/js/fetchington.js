@@ -57,10 +57,6 @@ function hasRealImage(item) {
     return !(item.imgsrc || '').startsWith('data:image/svg+xml');
 }
 
-function sourceBadgeLabel(item) {
-    return item.source === SOURCE_ONE ? 'SRC 1' : item.source === SOURCE_TWO ? 'SRC 2' : null;
-}
-
 // A whole source is only hidden by an explicit, manual toggle in Settings —
 // never by an automatic reachability probe. Probing (or lazily flagging) one
 // game and using the result to hide an entire source is fragile: one broken
@@ -318,10 +314,8 @@ function sourcePriority(game) {
                 if (isScraperGameEntry(game) && game.foldername) {
                     gameCard.dataset.scraperGame = 'true';
                 }
-                const srcLabel = sourceBadgeLabel(game);
                 gameCard.innerHTML = `
                     <a href="${isEzClassworkGameEntry(game) ? `/gxmes/ezclasswork/?game=${encodeURIComponent(game.slug)}` : `/gxmes/${game.foldername}/`}">
-                    ${srcLabel ? `<span class="game-badge badge-src">${srcLabel}</span>` : ''}
                     <img src="${game.imgsrc}" alt="${game.name}">
                     <p>${game.name}</p>
                     </a>
@@ -506,23 +500,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 padding: 10px;
                 font-size: 0.9rem;
                 color: #eaeaea;
-            }
-
-            .game-badge {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                z-index: 1;
-                padding: 3px 9px;
-                border-radius: 20px;
-                font-size: 0.65rem;
-                font-weight: 700;
-                letter-spacing: 0.03em;
-                color: #fff;
-            }
-
-            .game-badge.badge-src {
-                background-color: #6c8ebf;
             }
 
             .keywords-section {

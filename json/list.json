@@ -240,7 +240,7 @@
     {
         "name": "Generic Fishing",
         "imgsrc": "/assets/img/fishing.png",
-        "linksrc": "/Vafor_IT/fishing_gxme/",
+        "linksrc": "/Vafor_IT/fishing_game/",
         "foldername": "generic-fishing",
         "category": "Adventure"
     },

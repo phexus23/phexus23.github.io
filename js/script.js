@@ -16,11 +16,6 @@ function hasRealImage(gxme) {
     return !(gxme.imgsrc || '').startsWith('data:image/svg+xml');
 }
 
-function sourceBadgeLabel(gxme) {
-    const source = getGameSourceGroup(gxme);
-    return source === SOURCE_ONE ? 'SRC 1' : source === SOURCE_TWO ? 'SRC 2' : null;
-}
-
 function readSourceState(key, fallback) {
     try {
         return JSON.parse(localStorage.getItem(key)) || fallback;
@@ -55,7 +50,10 @@ function addSourceSettingsToModal() {
         group = document.createElement('div');
         group.id = 'source-settings-group';
         group.className = 'modal-group';
-        group.innerHTML = `<h6>Alternate Game Sources</h6><p>Games tagged SRC 1 / SRC 2 come from an alternate source. Hide a whole source instantly if it's down or misbehaving.</p>${[SOURCE_ONE, SOURCE_TWO].map(source => `<div class="modal-item"><label><input type="checkbox" data-source-setting="${source}"> Hide ${source} games</label></div>`).join('')}`;
+        // Deliberately quiet and unlabeled with jargon — this is just a quick
+        // kill switch for troubleshooting, not something a visitor needs to
+        // understand or think about.
+        group.innerHTML = `<div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_ONE}"> Hide extra arcade games</label></div><div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_TWO}"> Hide classroom games</label></div>`;
         modalContent.appendChild(group);
     }
     if (group.dataset.sourceSettingsBound === 'true') return;
@@ -181,11 +179,9 @@ function rendergxmes(gxmes, containerId, badge) {
 
     container.innerHTML = gxmes.map(gxme => {
         const isFavorite = favorites.includes(gxme.name);
-        const srcLabel = sourceBadgeLabel(gxme);
         return `
             <div class="gxme-card" data-game-source="${getGameSourceGroup(gxme)}" data-gxme-name="${gxme.name}" ${isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
                 ${badgeHTML}
-                ${srcLabel ? `<span class="game-badge badge-src">${srcLabel}</span>` : ''}
                 <button class="favorite-btn ${isFavorite ? 'active' : ''}">
                     <i class="fas fa-star"></i>
                 </button>
