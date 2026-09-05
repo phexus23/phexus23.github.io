@@ -728,13 +728,6 @@
         "category": "Arcade"
     },
     {
-        "name": "Snake",
-        "imgsrc": "/assets/img/snake-game.png",
-        "linksrc": "/Vafor_IT/snake-game/",
-        "foldername": "snake",
-        "category": "Arcade"
-    },
-    {
         "name": "Minesweeper",
         "imgsrc": "/assets/img/emoji-minesweeper.png",
         "linksrc": "/Vafor_IT/minesweeper/",
