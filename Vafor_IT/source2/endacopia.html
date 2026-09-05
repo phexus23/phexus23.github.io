@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en-us"><!-- ######################### HEAD ############################# -->
+
+<head>
+    <base href="https://cdn.jsdelivr.net/gh/clever-portal/endacopia@main/">
+    <title>Adventure Game Studio</title>
+    <meta charset="utf-8">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="#000000" name="theme-color">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <style>
+        body {
+            font-family: arial;
+            margin: 0;
+            padding: none background-color: #000
+        }
+
+        .emscripten {
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            display: block
+        }
+
+        div.emscripten {
+            text-align: center
+        }
+
+        div.emscripten_border {
+            border: 1px solid #000
+        }
+
+        canvas.emscripten {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: block;
+            min-height: 180px;
+            min-width: 320px;
+            border: 0 none;
+            background-color: #000;
+            z-index: 1
+        }
+
+        #textmsgs {
+            font-family: 'Lucida Console', Monaco, monospace;
+            font-size: 200%;
+            left: 50%;
+            top: 50%;
+            -ms-transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            text-align: center;
+            margin: auto;
+            position: absolute;
+            overflow: hidden;
+            color: #787878;
+            z-index: 1000
+        }
+
+        @-webkit-keyframes levitate {
+            0% {
+                transform: translate(-50%, 0)
+            }
+
+            50% {
+                transform: translate(-50%, -50%)
+            }
+
+            100% {
+                transform: translate(-50%, 0)
+            }
+        }
+
+        @-moz-keyframes levitate {
+            0% {
+                transform: translate(-50%, 0)
+            }
+
+            50% {
+                transform: translate(-50%, -50%)
+            }
+
+            100% {
+                transform: translate(-50%, 0)
+            }
+        }
+
+        @-o-keyframes levitate {
+            0% {
+                transform: translate(-50%, 0)
+            }
+
+            50% {
+                transform: translate(-50%, -50%)
+            }
+
+            100% {
+                transform: translate(-50%, 0)
+            }
+        }
+
+        @keyframes levitate {
+            0% {
+                transform: translate(-50%, 0)
+            }
+
+            50% {
+                transform: translate(-50%, -50%)
+            }
+
+            100% {
+                transform: translate(-50%, 0)
+            }
+        }
+
+        @-webkit-keyframes rotation {
+            0% {
+                transform: rotate(-30deg)
+            }
+
+            50% {
+                transform: rotate(30deg)
+            }
+
+            100% {
+                transform: rotate(-30deg)
+            }
+        }
+
+        @-moz-keyframes rotation {
+            0% {
+                transform: rotate(-30deg)
+            }
+
+            50% {
+                transform: rotate(30deg)
+            }
+
+            100% {
+                transform: rotate(-30deg)
+            }
+        }
+
+        @-o-keyframes rotation {
+            0% {
+                transform: rotate(-30deg)
+            }
+
+            50% {
+                transform: rotate(30deg)
+            }
+
+            100% {
+                transform: rotate(-30deg)
+            }
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(-30deg)
+            }
+
+            50% {
+                transform: rotate(30deg)
+            }
+
+            100% {
+                transform: rotate(-30deg)
+            }
+        }
+
+        .bluecup {
+            background-image: url("data:image/svg+xml,%3Csvg width='96' height='64' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cg shape-rendering='crispEdges'%3E%3Crect style='fill:%23fff%3Bfill-rule:evenodd' width='10' height='7'/%3E%3Crect style='fill:%23fff' width='12' height='5' y='1'/%3E%3Crect style='fill:%23fff' width='8' height='8' x='1'/%3E%3Crect style='fill:%232a7fff' width='8' height='5' x='1' y='1'/%3E%3Crect style='fill:%232a7fff' width='6' height='1' x='2' y='6'/%3E%3Crect style='fill:%232a7fff' width='2' height='3' x='9' y='2'/%3E%3Crect style='fill:%23fff' width='1' height='1' x='9' y='3'/%3E%3Crect style='fill:%230000d4' width='6' height='3' x='2' y='2'/%3E%3Crect style='fill:%230000d4' width='4' height='1' x='3' y='5'/%3E%3Crect style='fill:%23fff' width='6' height='1' x='2' y='1'/%3E%3C/g%3E%3C/svg%3E");
+            left: 50%;
+            top: 64%;
+            width: 96px;
+            height: 64px;
+            margin: 0 auto;
+            position: absolute;
+            z-index: 1000;
+            transform: translate(-50%, 0)
+        }
+
+        .bluecup.rotate {
+            -webkit-animation: rotation 1s ease-in-out infinite;
+            -moz-animation: rotation 1s ease-in-out infinite;
+            -o-animation: rotation 1s ease-in-out infinite;
+            animation: rotation 1s ease-in-out infinite
+        }
+
+        .bluecup.levitate {
+            -webkit-animation: levitate 4s ease-in-out infinite;
+            -moz-animation: levitate 4s ease-in-out infinite;
+            -o-animation: levitate 4s ease-in-out infinite;
+            animation: levitate 4s ease-in-out infinite
+        }
+
+        #status {
+            display: inline-block;
+            vertical-align: top;
+            margin-top: 30px;
+            margin-left: 20px;
+            font-weight: 700;
+            color: #787878
+        }
+    </style>
+</head><!-- ######################### BODY ############################# -->
+
+<body>
+    <div class="bluecup rotate" id="bcup"></div>
+    <div class="emscripten" id="status">Downloading...</div>
+    <div class="emscripten"></div>
+    <div class="emscripten_border"><canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas></div>
+    <div id="textmsgs"></div>
+    <script src="my_game_files.js"></script>
+    <script>
+        window.onload = function() {
+            window.focus()
+        }, window.onclick = function() {
+            window.focus()
+        };
+
+        function writeMsgOnCanvas(e) {
+            document.getElementById("textmsgs").innerHTML = e
+        }
+
+        function hideAll() {
+            bcupElement.hidden = !0, bcupElement.style.display = "none", writeMsgOnCanvas("")
+        }
+        var file_being_loaded = "",
+            file_read_count = 0,
+            file_total_count = 1,
+            game_file = "";
+
+        function doPostRun() {
+            if ("undefined" != typeof gamefiles) {
+                file_total_count = gamefiles.length;
+                for (var e = 0; e < file_total_count; e++)
+                    if ("winsetup.exe" != gamefiles[e] && (gamefiles[e].endsWith(".exe") || gamefiles[e].endsWith(".ags"))) {
+                        game_file = gamefiles[e];
+                        break
+                    } bcupElement.className = "bluecup levitate", bcupElement.hidden = !1,
+                    function e(n) {
+                        file_being_loaded = n, writeMsgOnCanvas("loading " + n + "...");
+                        var l = new XMLHttpRequest;
+                        l.open("GET", n, !0), l.responseType = "arraybuffer", l.onprogress = function(e) {
+                            e.lengthComputable && writeMsgOnCanvas("loading " + file_being_loaded + " " + Math.round(e.loaded / e.total * 100) + "% ...")
+                        }, l.onload = function(n) {
+                            var i = l.response;
+                            if (i) {
+                                var t = new Uint8Array(i);
+                                Module.FS_createDataFile("/", gamefiles[file_read_count], t, !0, !0, !0), (file_read_count += 1) == file_total_count ? (hideAll(), Module.callMain(["/" + game_file, "--windowed"])) : e(gamefiles[file_read_count])
+                            }
+                        }, l.send(null)
+                    }(gamefiles[0])
+            }
+        }
+        file_read_count = 0, window.addEventListener("orientationchange", (function() {
+            window.dispatchEvent(new Event("resize"))
+        }), !1)
+    </script>
+    <script>
+        function getPrettyTime() {
+            var t = new Date;
+
+            function e(t, e) {
+                for (; t.toString().length < e;) t = "0" + t;
+                return t
+            }
+            return e(t.getHours(), 2) + ":" + e(t.getMinutes(), 2) + ":" + e(t.getSeconds(), 2) + ":" + e(t.getMilliseconds(), 3)
+        }
+        var statusElement = document.getElementById("status"),
+            bcupElement = document.getElementById("bcup"),
+            Module = {
+                arguments: [],
+                preRun: [],
+                postRun: [doPostRun],
+                print: function(t) {
+                    arguments.length > 1 && (t = Array.prototype.slice.call(arguments).join(" "));
+                    var e = getPrettyTime() + ": " + t;
+                    console.log(e)
+                },
+                printErr: function(t) {
+                    arguments.length > 1 && (t = Array.prototype.slice.call(arguments).join(" ")), console.error(t)
+                },
+                canvas: function() {
+                    var t = document.getElementById("canvas");
+                    return window.addEventListener("resize", (function(t) {}), !0), t.addEventListener("webglcontextlost", (function(t) {
+                        alert("WebGL context lost. You will need to reload the page."), t.preventDefault()
+                    }), !1), t
+                }(),
+                setStatus: function(t) {
+                    if (Module.setStatus.last || (Module.setStatus.last = {
+                            time: Date.now(),
+                            text: ""
+                        }), t !== Module.setStatus.last.text) {
+                        var e = t.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/),
+                            n = Date.now();
+                        writeMsgOnCanvas(t), e && n - Module.setStatus.last.time < 30 || (Module.setStatus.last.time = n, Module.setStatus.last.text = t, e && (t = e[1]), statusElement.innerHTML = t)
+                    }
+                },
+                totalDependencies: 0,
+                monitorRunDependencies: function(t) {
+                    bcupElement.hidden = !t, this.totalDependencies = Math.max(this.totalDependencies, t), Module.setStatus(t ? "Preparing... (" + (this.totalDependencies - t) + "/" + this.totalDependencies + ")" : "All downloads complete.")
+                }
+            };
+        Module.setStatus("Downloading..."), window.onerror = function(t) {
+            statusElement.style["z-index"] = 1001, Module.setStatus("Exception thrown, see JavaScript console"), bcupElement.style.display = "none", Module.setStatus = function(t) {
+                t && Module.printErr("[post-exception status] " + t)
+            }
+        }
+    </script>
+    <script>
+var loadingText = document.querySelector("#textmsgs");
+    let totalBytes = 0;
+    let loadedBytes = 0;
+
+    async function fetchWithProgress(url) {
+      const response = await fetch(url);
+      const reader = response.body.getReader();
+      let chunks = [];
+      let received = 0;
+      while (true) {
+        const {
+          done,
+          value
+        } = await reader.read();
+        if (done) break;
+        received += value.length;
+        loadedBytes += value.length;
+        chunks.push(value);
+        let mbDone = (loadedBytes / (1024 * 1024)).toFixed(2);
+        let mbTotal = '000.00';
+        loadingText.textContent = `LOADING... ${mbDone} MB / ${mbTotal} MB`;
+      }
+      let fullBuffer = new Uint8Array(received);
+      let offset = 0;
+      for (let chunk of chunks) {
+        fullBuffer.set(chunk, offset);
+        offset += chunk.length;
+      }
+      return fullBuffer.buffer;
+    }
+
+    async function mergeFiles(fileParts, cacheKey) {
+      const cache = await caches.open("endacopia-cache");
+      const cachedResponse = await cache.match(cacheKey);
+      if (cachedResponse) {
+        const blob = await cachedResponse.blob();
+        return URL.createObjectURL(blob);
+      }
+      const buffers = await Promise.all(
+        fileParts.map(part => fetchWithProgress(part))
+      );
+      const mergedBlob = new Blob(buffers);
+      const response = new Response(mergedBlob);
+      await cache.put(cacheKey, response);
+      return URL.createObjectURL(mergedBlob);
+    }
+
+    function getParts(file, start, end) {
+      let parts = [];
+      for (let i = start; i <= end; i++) {
+        parts.push(file + ".part" + i);
+      }
+      return parts;
+    }
+    (async () => {
+      const [gameUrl] = await Promise.all([
+        mergeFiles(getParts("Endacopia.ags", 1, 5), "Endacopia.ags"),
+      ]);
+      const originalOpen = XMLHttpRequest.prototype.open;
+      XMLHttpRequest.prototype.open = function (method, url, ...rest) {
+        this._requestUrl = url;
+        if (url.includes("Endacopia.ags")) {
+          url = gameUrl;
+        }
+        this._modifiedUrl = url;
+        return originalOpen.call(this, method, url, ...rest);
+      };
+      loadingText.textContent = "";
+      var agsScript = document.createElement("script");
+      agsScript.src = "ags.js";
+      agsScript.async = true;
+      document.body.appendChild(agsScript);
+    })();
+    </script>
+</body>
+
+</html>

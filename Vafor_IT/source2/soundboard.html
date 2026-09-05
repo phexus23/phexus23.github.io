@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="https://cdn.jsdelivr.net/gh/genizymath/soundboard@main/">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5521219086088837" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WX5VS54ZDW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-WX5VS54ZDW');
+    </script>
+    <meta charset="UTF-8">
+    <title>Soundboard</title>
+    <script src="sounds.js" type="module"></script>
+    <script src="main.js" type="module"></script>
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="controls">
+        <button id="toggleFavorites" class="control-button favorites-toggle">⭐ Favorites: OFF</button>
+        <button id="toggleButton" class="control-button overlap-toggle">🔇 Overlap: OFF</button>
+        <button id="stopButton" class="control-button stop-button">⏹️ Stop All Sounds</button>
+        <input id="searchInput" type="text" placeholder="Search sounds...">
+        <button id="ttsToggle" class="control-button tts-toggle">🗣️ Text-to-Speech</button>
+    </div>
+    <div id="ttsPanel" class="tts-panel hidden">
+        <div class="tts-panel-header">
+            <span class="tts-title">🎙️ Text-to-Speech</span>
+            <button id="ttsClose" class="tts-close">✕</button>
+        </div>
+        <textarea id="ttsText" class="tts-textarea" placeholder="Type something to speak..."></textarea>
+        <div class="tts-controls-grid">
+            <div class="tts-control-group full-width">
+                <label class="tts-label">Voice</label>
+                <select id="ttsVoice" class="tts-select"></select>
+            </div>
+            <div class="tts-control-group">
+                <label class="tts-label">Volume <span id="ttsVolumeVal" class="tts-val">1.0</span></label>
+                <input type="range" id="ttsVolume" class="tts-slider" min="0" max="1" step="0.05" value="1">
+            </div>
+            <div class="tts-control-group">
+                <label class="tts-label">Rate <span id="ttsRateVal" class="tts-val">1.0</span></label>
+                <input type="range" id="ttsRate" class="tts-slider" min="0.1" max="10" step="0.1" value="1">
+            </div>
+            <div class="tts-control-group">
+                <label class="tts-label">Pitch <span id="ttsPitchVal" class="tts-val">1.0</span></label>
+                <input type="range" id="ttsPitch" class="tts-slider" min="0" max="2" step="0.05" value="1">
+            </div>
+            <div class="tts-control-group">
+                <label class="tts-label">Filter by Lang</label>
+                <select id="ttsLangFilter" class="tts-select"></select>
+            </div>
+
+        </div>
+        
+        <div id="ttsStatus" class="tts-status">Ready</div>
+
+        <div class="tts-actions">
+            <button id="ttsSpeak" class="tts-btn tts-btn-speak">▶ Speak</button>
+            <button id="ttsPause" class="tts-btn tts-btn-pause" disabled>⏸ Pause</button>
+            <button id="ttsResume" class="tts-btn tts-btn-resume" disabled>▶ Resume</button>
+            <button id="ttsStop" class="tts-btn tts-btn-stop" disabled>⏹ Stop</button>
+            <button id="ttsReset" class="tts-btn tts-btn-reset">↺ Reset</button>
+        </div>
+
+        <div id="ttsSpeaking" class="tts-speaking-display hidden">
+            <span class="tts-speaking-label">Now speaking:</span>
+            <span id="ttsCurrentWord" class="tts-current-word"></span>
+        </div>
+    </div>
+
+    <div id="soundboard"></div>
+</body>
+
+</html>

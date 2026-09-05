@@ -1,0 +1,163 @@
+<!-- This is an Ultimate game stash file -->
+<!-- for regular updating go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/edit?usp=sharing -->
+
+<!doctype html>
+<html lang="en">
+<head>
+    <base href="https://cdn.jsdelivr.net/gh/larpinguser/HelloWorldScriptBasicFunctionCSharpIsCool@main/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GTA III</title>
+<style>
+  body {
+    margin: 0;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  canvas.emscripten {
+    display: block;
+    width: min(100vw, calc(100vh * 16 / 9));
+    height: min(100vh, calc(100vw * 9 / 16));
+    image-rendering: auto;
+  }
+  #loading {
+    color: #fff;
+    font: 14px monospace;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+</style>
+</head>
+<body>
+<div id="loading">Loading GTA III...</div>
+<script>
+  window.addEventListener('unhandledrejection', function(e) {
+    if (e.reason && e.reason.name && e.reason.name.indexOf('DocumentError') !== -1) {
+      e.preventDefault();
+      return;
+    }
+    document.getElementById('loading').textContent = 'ERR: ' + (e.reason && e.reason.message ? e.reason.message : e.reason);
+  });
+  (function() {
+    var _rpl = Element.prototype.requestPointerLock;
+    if (_rpl) Element.prototype.requestPointerLock = function() {
+      try { var p = _rpl.call(this); if (p && p.catch) p.catch(function(){}); return p; }
+      catch(e) {}
+    };
+  })();
+</script>
+<script>
+  (function() {
+    var ORIG_FETCH = window.fetch;
+    window.fetch = function(url, opts) {
+      if (typeof url === 'string' && /re3\.data$/i.test(url) && !/\.(chunk|part)/.test(url)) {
+        return loadDataParts();
+      }
+      return ORIG_FETCH.call(this, url, opts);
+    };
+    async function loadDataParts() {
+      var parts = [];
+      for (var i = 0; ; i++) {
+        var resp = await ORIG_FETCH.call(window, 're3.chunk.' + i);
+        if (!resp.ok) break;
+        parts.push(await resp.arrayBuffer());
+      }
+      var total = parts.reduce(function(s, p) { return s + p.byteLength; }, 0);
+      var combined = new Uint8Array(total);
+      var offset = 0;
+      for (var pi = 0; pi < parts.length; pi++) {
+        combined.set(new Uint8Array(parts[pi]), offset);
+        offset += parts[pi].byteLength;
+      }
+      return new Response(combined, {
+        status: 200,
+        headers: { 'Content-Type': 'application/octet-stream' }
+      });
+    }
+    var origGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function(type, attrs) {
+      if (type.indexOf('webgl') === 0 || type.indexOf('experimental-webgl') === 0) {
+        attrs = Object.assign({}, attrs || {}, { preserveDrawingBuffer: true });
+      }
+      return origGetContext.call(this, type, attrs);
+    };
+  })();
+
+  Element.prototype.requestFullscreen =
+  Element.prototype.webkitRequestFullscreen = function() {
+    return Promise.reject(new DOMException("blocked"));
+  };
+  document.exitFullscreen =
+  document.webkitExitFullscreen = function() {};
+  Object.defineProperty(document, 'fullscreenElement', {
+    get: function() { return null; }
+  });
+  Object.defineProperty(document, 'webkitFullscreenElement', {
+    get: function() { return null; }
+  });
+  Object.defineProperty(document, 'fullscreenEnabled', {
+    get: function() { return false; }
+  });
+  Object.defineProperty(document, 'webkitFullscreenEnabled', {
+    get: function() { return false; }
+  });
+
+  (function() {
+    var RealAC = window.AudioContext || window.webkitAudioContext;
+    if (!RealAC) return;
+    var contexts = [];
+    function resumeAll() {
+      for (var i = 0; i < contexts.length; i++) {
+        var ctx = contexts[i];
+        if (ctx.state === 'suspended') ctx.resume();
+      }
+    }
+    document.addEventListener('click', resumeAll);
+    document.addEventListener('touchstart', resumeAll);
+    document.addEventListener('keydown', resumeAll);
+    var Wrapper = function(options) {
+      var ctx = new RealAC(options);
+      contexts.push(ctx);
+      if (ctx.state === 'suspended') ctx.resume().catch(function(){});
+      return ctx;
+    };
+    Wrapper.prototype = RealAC.prototype;
+    window.AudioContext = Wrapper;
+    if (window.webkitAudioContext) window.webkitAudioContext = Wrapper;
+  })();
+</script>
+<script>
+  var Module = {
+    preRun: [],
+    postRun: [],
+    canvas: (function() {
+      var canvas = document.getElementById('canvas');
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = 'canvas';
+        canvas.className = 'emscripten';
+        document.body.appendChild(canvas);
+      }
+      return canvas;
+    })(),
+    setStatus: function(text) {
+      var loading = document.getElementById('loading');
+      if (loading) loading.textContent = text;
+    },
+    totalDependencies: 0,
+    monitorRunDependencies: function(left) {
+      this.totalDependencies = Math.max(this.totalDependencies, left);
+      Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')' : '');
+    }
+  };
+  Module.setStatus('Loading...');
+</script>
+<script src="re3.js"></script>
+</body>
+</html>

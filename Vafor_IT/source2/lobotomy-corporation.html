@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Lobotomy Corporation</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #08080a;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #unityContainer {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #08080a;
+        }
+
+        #loader-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #12131a 0%, #08080a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .loader-content {
+            text-align: center;
+            width: 80%;
+            max-width: 450px;
+        }
+
+        .game-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            color: #ffffff;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1.2rem;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            box-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+            border-radius: 2px;
+            transition: width 0.15s ease-out;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        #fullscreen-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 5;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s ease;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+        }
+
+        #fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+<div id="unityContainer"></div>
+<div id="loader-overlay">
+    <div class="loader-content">
+        <div class="game-title">LOBOTOMY CORPORATION</div>
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <div id="progress-text" class="progress-text">Loading Assets... 0%</div>
+    </div>
+</div>
+<button id="fullscreen-btn">
+    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"
+         stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: middle;">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+    </svg>
+    <span style="vertical-align: middle;">FULLSCREEN</span>
+</button>
+<script src="https://cdn.jsdelivr.net/gh/Reeyuki/lobcorp@main/Build/UnityLoader.js"></script>
+<script>
+    (function () {
+        const cdn = 'https://cdn.jsdelivr.net/gh/Reeyuki/lobcorp@main/Build/';
+        const tasks = [
+            { name: 'web.json', size: 501, type: 'text' },
+            { name: 'web.wasm.framework.unityweb', size: 95575, type: 'blob' },
+            { name: 'web.wasm.code.unityweb', size: 8211250, type: 'blob' }
+        ];
+        const dataCount = 58;
+        for (let i = 0; i < dataCount; i++) {
+            tasks.push({
+                name: 'web.data.unityweb' + String(i).padStart(2, '0'),
+                size: i === dataCount - 1 ? 11890053 : 20971520,
+                type: 'blob'
+            });
+        }
+
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+        const loaderOverlay = document.getElementById('loader-overlay');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+        let loadedBytes = 0;
+        const totalBytes = tasks.reduce((sum, t) => sum + t.size, 0);
+
+        const promises = tasks.map(task => {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', cdn + task.name);
+                xhr.responseType = task.type;
+                let lastLoaded = 0;
+                xhr.onprogress = (e) => {
+                    const loaded = e.loaded || 0;
+                    loadedBytes += (loaded - lastLoaded);
+                    lastLoaded = loaded;
+                    const pct = Math.min(100, Math.round((loadedBytes / totalBytes) * 100));
+                    progressText.textContent = 'Loading Assets... ' + pct + '%';
+                    progressBar.style.width = pct + '%';
+                };
+                xhr.onload = () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        loadedBytes += (task.size - lastLoaded);
+                        const pct = Math.min(100, Math.round((loadedBytes / totalBytes) * 100));
+                        progressText.textContent = 'Loading Assets... ' + pct + '%';
+                        progressBar.style.width = pct + '%';
+                        resolve(xhr.response);
+                    } else {
+                        reject(new Error(task.name));
+                    }
+                };
+                xhr.onerror = () => reject(new Error(task.name));
+                xhr.send();
+            });
+        });
+
+        Promise.all(promises).then(results => {
+            const jsonContent = results[0];
+            const frameworkBlob = results[1];
+            const codeBlob = results[2];
+            const dataChunks = results.slice(3);
+
+            const dataBlob = new Blob(dataChunks, { type: 'application/octet-stream' });
+            const dataBlobUrl = URL.createObjectURL(dataBlob);
+            const frameworkBlobUrl = URL.createObjectURL(frameworkBlob);
+            const codeBlobUrl = URL.createObjectURL(codeBlob);
+
+            const jsonBlob = new Blob([jsonContent], { type: 'application/json' });
+            const jsonBlobUrl = URL.createObjectURL(jsonBlob);
+
+            const originalOpen = XMLHttpRequest.prototype.open;
+            XMLHttpRequest.prototype.open = function (method, url, ...args) {
+                if (typeof url === 'string') {
+                    if (url.endsWith('web.json')) {
+                        url = jsonBlobUrl;
+                    } else if (url.endsWith('web.data.unityweb')) {
+                        url = dataBlobUrl;
+                    } else if (url.endsWith('web.wasm.code.unityweb')) {
+                        url = codeBlobUrl;
+                    } else if (url.endsWith('web.wasm.framework.unityweb')) {
+                        url = frameworkBlobUrl;
+                    }
+                }
+                return originalOpen.apply(this, [method, url, ...args]);
+            };
+
+            const originalFetch = window.fetch;
+            window.fetch = function (input, init) {
+                let url = typeof input === 'string' ? input : (input instanceof Request ? input.url : '');
+                if (typeof url === 'string') {
+                    let redirected = null;
+                    if (url.endsWith('web.json')) {
+                        redirected = jsonBlobUrl;
+                    } else if (url.endsWith('web.data.unityweb')) {
+                        redirected = dataBlobUrl;
+                    } else if (url.endsWith('web.wasm.code.unityweb')) {
+                        redirected = codeBlobUrl;
+                    } else if (url.endsWith('web.wasm.framework.unityweb')) {
+                        redirected = frameworkBlobUrl;
+                    }
+                    if (redirected) {
+                        if (input instanceof Request) {
+                            input = new Request(redirected, input);
+                        } else {
+                            input = redirected;
+                        }
+                    }
+                }
+                return originalFetch.call(this, input, init);
+            };
+
+            progressText.textContent = 'Initializing Game...';
+            const unityInstance = UnityLoader.instantiate('unityContainer', 'Build/web.json', {
+                onProgress: function (instance, progress) {
+                    if (progress === 1) {
+                        loaderOverlay.style.opacity = 0;
+                        setTimeout(() => {
+                            loaderOverlay.style.display = 'none';
+                            fullscreenBtn.style.display = 'flex';
+                        }, 500);
+                    }
+                }
+            });
+
+            fullscreenBtn.onclick = () => {
+                unityInstance.SetFullscreen(1);
+            };
+        }).catch(err => {
+            progressText.textContent = 'Error: ' + err.message;
+            progressText.style.color = '#ef4444';
+        });
+    })();
+</script>
+</body>
+
+</html>

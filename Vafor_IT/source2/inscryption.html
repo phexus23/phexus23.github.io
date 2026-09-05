@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Inscryption Webport</title>
+    <base href="https://cdn.jsdelivr.net/gh/Reeyuki/InscryptionWebport@main/" />
+    <style>
+      body {
+        margin: 0;
+        background: #0f0f10;
+        color: #e6e6e6;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+      }
+
+      #unity-canvas {
+        width: 960px;
+        height: 600px;
+        display: block;
+        margin: auto;
+        background: #231f20;
+      }
+
+      #loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        background: #0b0b0c;
+      }
+
+      #text {
+        font-size: 13px;
+        text-align: center;
+      }
+
+      #slider {
+        width: 420px;
+        accent-color: #7c5cff;
+      }
+
+      #fsBtn {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 10;
+        background: #1a1a1d;
+        color: #e6e6e6;
+        border: 1px solid #333;
+        padding: 8px 10px;
+        cursor: pointer;
+        border-radius: 6px;
+      }
+
+      #fsBtn:hover {
+        background: #242428;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button id="fsBtn">Fullscreen</button>
+
+    <div id="loader">
+      <div id="text">Downloading...</div>
+      <input id="slider" type="range" min="0" max="100" value="0" disabled />
+    </div>
+
+    <canvas id="unity-canvas"></canvas>
+
+    <script src="Build/7a2dbded24d57e056180125b1583e7c4.loader.js"></script>
+
+    <script>
+      const MAX_RETRIES = 3;
+      const RETRY_DELAY_MS = 1000;
+
+      const state = {
+        total: 0,
+        loaded: 0,
+        done: false
+      };
+      const EXPECTED_DATA_TOTAL_BYTES = 1448 * 1048576;
+      const DATA_DOWNLOAD_CONCURRENCY = 8;
+
+      function mb(v) {
+        return v / 1048576;
+      }
+
+      function render() {
+        const percent = state.total ? (state.loaded / state.total) * 100 : 0;
+        document.getElementById("slider").value = percent;
+        const text = document.getElementById("text");
+        if (state.done) {
+          text.textContent = "Download complete (" + mb(state.total).toFixed(2) + " MB)";
+          return;
+        }
+        text.textContent =
+          "Downloading: " +
+          mb(state.loaded).toFixed(2) +
+          " MB of " +
+          mb(state.total || state.loaded).toFixed(2) +
+          " MB (" +
+          percent.toFixed(1) +
+          "%)";
+      }
+
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      const nativeFetch = window.fetch;
+
+      // Generic fetch-with-retry (no progress tracking — used for small/wasm parts)
+      async function fetchBufferWithRetry(url, retries = MAX_RETRIES) {
+        for (let attempt = 0; attempt <= retries; attempt++) {
+          try {
+            const res = await nativeFetch(url);
+            if (!res.ok) throw new Error("HTTP " + res.status + " for " + url);
+            return res.arrayBuffer();
+          } catch (err) {
+            if (attempt < retries) {
+              console.warn(`Retry ${attempt + 1}/${retries} for ${url}:`, err.message);
+              await sleep(RETRY_DELAY_MS * (attempt + 1));
+            } else {
+              throw new Error("Failed after " + (retries + 1) + " attempts: " + url);
+            }
+          }
+        }
+      }
+
+      // Fetch known parts in parallel (used for wasm)
+      async function fetchByKnownParts(partUrls, contentType, trackProgress) {
+        if (trackProgress) {
+          state.total = 0;
+          state.loaded = 0;
+          state.done = false;
+          render();
+        }
+
+        // All wasm parts fetched in parallel with retry
+        const buffers = await Promise.all(partUrls.map((url) => fetchBufferWithRetry(url)));
+
+        if (trackProgress) {
+          let size = 0;
+          for (const b of buffers) size += b.byteLength;
+          state.total = size;
+          state.loaded = size;
+          state.done = true;
+          render();
+        }
+
+        const blob = new Blob(buffers, contentType ? { type: contentType } : {});
+        return new Response(blob, {
+          status: 200,
+          headers: contentType ? { "Content-Type": contentType } : {}
+        });
+      }
+
+      function suffixFromIndex(index) {
+        const alphabet = "abcdefghijklmnopqrstuvwxyz";
+        const first = Math.floor(index / alphabet.length);
+        const second = index % alphabet.length;
+        return alphabet[first] + alphabet[second];
+      }
+
+      // Per-part progress map for data chunks
+      const chunkProgress = new Map();
+
+      async function fetchDataPartWithRetry(url, index, retries = MAX_RETRIES) {
+        for (let attempt = 0; attempt <= retries; attempt++) {
+          try {
+            const res = await nativeFetch(url);
+            if (!res.ok) throw new Error("HTTP " + res.status + " for " + url);
+
+            // Reset this chunk's contribution on retry
+            if (attempt > 0) {
+              chunkProgress.set(index, 0);
+              state.loaded = 0;
+              for (const v of chunkProgress.values()) state.loaded += v;
+              render();
+            }
+
+            const reader = res.body.getReader();
+            const chunks = [];
+            let received = 0;
+
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              chunks.push(value);
+              received += value.byteLength;
+              chunkProgress.set(index, received);
+              state.loaded = 0;
+              for (const v of chunkProgress.values()) state.loaded += v;
+              state.loaded = Math.min(EXPECTED_DATA_TOTAL_BYTES, state.loaded);
+              render();
+            }
+
+            const out = new Uint8Array(received);
+            let off = 0;
+            for (const c of chunks) {
+              out.set(c, off);
+              off += c.byteLength;
+            }
+            return out.buffer;
+          } catch (err) {
+            if (attempt < retries) {
+              console.warn(`Retry ${attempt + 1}/${retries} for ${url}:`, err.message);
+              await sleep(RETRY_DELAY_MS * (attempt + 1));
+            } else {
+              throw new Error("Failed after " + (retries + 1) + " attempts: " + url);
+            }
+          }
+        }
+      }
+
+      async function fetchByAlphabetParts(base, trackProgress) {
+        const alphabet = "abcdefghijklmnopqrstuvwxyz";
+        const maxParts = alphabet.length * alphabet.length;
+
+        if (trackProgress) {
+          state.total = EXPECTED_DATA_TOTAL_BYTES;
+          state.loaded = 0;
+          state.done = false;
+          render();
+        }
+
+        // Probe phase: discover how many parts exist by fetching the first part
+        // and using a concurrent worker pool (same as original but with retry)
+        const chunks = new Array(maxParts);
+        let nextIndex = 0;
+        let stopIndex = maxParts;
+
+        async function worker() {
+          while (true) {
+            const partIndex = nextIndex;
+            nextIndex += 1;
+            if (partIndex >= stopIndex) return;
+
+            const suffix = suffixFromIndex(partIndex);
+            const partUrl = base + suffix;
+
+            try {
+              const buf = await fetchDataPartWithRetry(partUrl, partIndex);
+              chunks[partIndex] = buf;
+            } catch (err) {
+              // Part missing → mark as end boundary
+              if (partIndex < stopIndex) stopIndex = partIndex;
+            }
+          }
+        }
+
+        const workerCount = Math.min(DATA_DOWNLOAD_CONCURRENCY, maxParts);
+        await Promise.all(Array.from({ length: workerCount }, () => worker()));
+
+        const orderedChunks = [];
+        for (let i = 0; i < stopIndex; i++) {
+          if (!chunks[i]) throw new Error("Missing data chunk at index " + i);
+          orderedChunks.push(chunks[i]);
+        }
+
+        if (trackProgress) {
+          state.total = EXPECTED_DATA_TOTAL_BYTES;
+          state.loaded = EXPECTED_DATA_TOTAL_BYTES;
+          state.done = true;
+          render();
+        }
+
+        const blob = new Blob(orderedChunks);
+        return new Response(blob, { status: 200 });
+      }
+
+      window.fetch = async function (input, init) {
+        const url = typeof input === "string" ? input : input.url;
+
+        if (url.includes("473b9593aa93436d0dfd3c30217f126b.data")) {
+          return fetchByAlphabetParts("Build/473b9593aa93436d0dfd3c30217f126b.data.part_", true);
+        }
+
+        if (url.includes("2a21aa2df9743ada0aa5cac7d789934d.wasm")) {
+          return fetchByKnownParts(
+            [
+              "Build/2a21aa2df9743ada0aa5cac7d789934d.wasm.part_00",
+              "Build/2a21aa2df9743ada0aa5cac7d789934d.wasm.part_01",
+              "Build/2a21aa2df9743ada0aa5cac7d789934d.wasm.part_02",
+              "Build/2a21aa2df9743ada0aa5cac7d789934d.wasm.part_03",
+              "Build/2a21aa2df9743ada0aa5cac7d789934d.wasm.part_04"
+            ],
+            "application/wasm",
+            false
+          );
+        }
+
+        return nativeFetch(input, init);
+      };
+
+      const canvas = document.getElementById("unity-canvas");
+
+      document.getElementById("fsBtn").onclick = function () {
+        if (canvas.requestFullscreen) canvas.requestFullscreen();
+        else if (canvas.webkitRequestFullscreen) canvas.webkitRequestFullscreen();
+        else if (canvas.mozRequestFullScreen) canvas.mozRequestFullScreen();
+        else if (canvas.msRequestFullscreen) canvas.msRequestFullscreen();
+      };
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        const meta = document.createElement("meta");
+        meta.name = "viewport";
+        meta.content = "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no";
+        document.head.appendChild(meta);
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
+      }
+
+      createUnityInstance(canvas, {
+        dataUrl: "Build/473b9593aa93436d0dfd3c30217f126b.data",
+        frameworkUrl: "Build/7492dd364cd7595cfa9d018ad373b295.framework.js",
+        codeUrl: "Build/2a21aa2df9743ada0aa5cac7d789934d.wasm",
+        streamingAssetsUrl: "https://cdn.jsdelivr.net/gh/Reeyuki/InscryptionWebport@main/StreamingAssets",
+        companyName: "Daniel Mullins Games",
+        productName: "Inscryption",
+        productVersion: "Release"
+      }).then(() => {
+        document.getElementById("loader").style.display = "none";
+      });
+    </script>
+  </body>
+</html>

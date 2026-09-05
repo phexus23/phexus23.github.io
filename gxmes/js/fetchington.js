@@ -25,6 +25,11 @@ function normalizeEzClassworkGame(item) {
     };
 }
 
+function isAvailableSourceTwoGame(item) {
+    // Source #2 catalog entries whose wrapper file failed to download ("missing") are broken; skip them.
+    return !(item && item.missing);
+}
+
 function isScraperGameEntry(item) {
     if (isEzClassworkGameEntry(item) || typeof item.linksrc !== 'string' || !item.linksrc.startsWith('/gxmes/')) {
         return false;
@@ -37,7 +42,10 @@ function isScraperGameEntry(item) {
 }
 
 function getGameSource(item) {
-    if (isEzClassworkGameEntry(item)) return item.embedUrl || item.gameUrl;
+    // Source #2 games are self-hosted: prefer the downloaded wrapper file we
+    // host ourselves over the third-party embed URL (its assets still stream
+    // from the jsdelivr CDN via the wrapper's <base href>).
+    if (isEzClassworkGameEntry(item)) return item.file || item.embedUrl || item.gameUrl;
     // cdnfile is only set when our own URL slug (foldername) was cleaned up
     // (e.g. to drop "game"/"unblocked") and no longer matches the filename
     // the upstream freebuisness/html CDN actually hosts the game under.
@@ -141,10 +149,10 @@ async function fetchData(index) {
         let item;
 
         if (ezClassworkSlug) {
-            const response = await fetch('../../json/ezclasswork.json');
+            const response = await fetch('../../json/source2.json');
             const data = await response.json();
             const sourceItem = data.find(game => game.slug === ezClassworkSlug);
-            if (!sourceItem) throw new Error('EZClasswork game not found');
+            if (!sourceItem || sourceItem.missing) throw new Error('Classroom game not found');
             item = normalizeEzClassworkGame(sourceItem);
         } else {
             const response = await fetch('../../json/list.json');
@@ -287,13 +295,13 @@ function sourcePriority(game) {
         try {
             const [gamesResponse, ezClassworkResponse] = await Promise.all([
                 fetch('../../json/list.json'),
-                fetch('../../json/ezclasswork.json')
+                fetch('../../json/source2.json')
             ]);
             const [data, ezClassworkGames] = await Promise.all([
                 gamesResponse.json(),
                 ezClassworkResponse.json()
             ]);
-            const allGames = data.concat(ezClassworkGames.map(normalizeEzClassworkGame));
+            const allGames = data.concat(ezClassworkGames.filter(isAvailableSourceTwoGame).map(normalizeEzClassworkGame));
             const recommendedGamesContainer = document.getElementById('recommendedGames');
             recommendedGamesContainer.innerHTML = ''; 
 

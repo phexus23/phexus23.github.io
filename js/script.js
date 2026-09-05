@@ -114,7 +114,8 @@ function preferMainSource(gxmes) {
 }
 
 function normalizeEzClassworkGames(gxmes) {
-    return gxmes.map(gxme => ({
+    // Skip entries whose wrapper file failed to download ("missing") — they're broken on the source site too.
+    return gxmes.filter(gxme => !gxme.missing).map(gxme => ({
         ...gxme,
         imgsrc: ezClassworkPlaceholderImage(gxme.name),
         linksrc: '/gxmes/ezclasswork/',
@@ -142,7 +143,7 @@ async function fetchgxmes() {
     catalogPromise = (async () => {
         const [gamesResponse, ezClassworkResponse] = await Promise.all([
             fetch('../json/list.json'),
-            fetch('../json/ezclasswork.json')
+            fetch('../json/source2.json')
         ]);
         const [gxmes, ezClassworkGames] = await Promise.all([
             gamesResponse.json(),

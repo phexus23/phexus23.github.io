@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let gxmes = [];
 
   // Reuses script.js's memoized catalog fetch instead of re-fetching and
-  // re-normalizing list.json + ezclasswork.json a third time on this page.
+  // re-normalizing list.json + source2.json a third time on this page.
   fetchgxmes().then(loadedGxmes => {
     gxmes = loadedGxmes;
   });

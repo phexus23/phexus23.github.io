@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+		    <title>Frickbears 3</title>
+
+	    <style>
+      @-webkit-keyframes rotation {
+        from {
+          -webkit-transform: rotate(0deg);
+        }
+
+        to {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @-moz-keyframes rotation {
+        from {
+          -moz-transform: rotate(0deg);
+        }
+
+        to {
+          -moz-transform: rotate(360deg);
+        }
+      }
+
+      @-o-keyframes rotation {
+        from {
+          -o-transform: rotate(0deg);
+        }
+
+        to {
+          -o-transform: rotate(360deg);
+        }
+      }
+
+      @keyframes rotation {
+        from {
+          transform: rotate(0deg);
+        }
+
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      html {
+        background: #060612;
+      }
+
+      body {
+        font-family: arial;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+        min-height: fill-available;
+        min-height: 100svh; /* Otherwise contents can be covered by an address bar in Safari on iOS 15 */
+        min-width: 100vw;
+        background:radial-gradient( 56.63% 56.63% at 50% 43.37%, #1c1726 0%, #060612 100%);
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        place-items: center;
+      }
+
+      body.scrollingDisabled {
+        overflow: hidden;
+      }
+
+      .emscripten {
+        padding-right: 0;
+        display: block;
+      }
+
+      div.emscripten {
+        text-align: center;
+      }
+
+      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+      canvas.emscripten {
+        display: none;
+        border: 0px none;
+        background-color: black;
+        position: relative;
+        transition: opacity 5s ease-in;
+		-webkit-transition: opacity 5s ease-in;
+        opacity: 0;
+        filter: blur(0) grayscale(0);
+        margin-top: auto;
+        margin-bottom: auto;
+        image-rendering: optimizeQuality;           /* Older versions of FF          */
+        image-rendering: auto;                      /* Awesome future-browsers       */
+        -ms-interpolation-mode: bicubic;            /* IE                            */        
+      }
+
+      canvas.active {
+        animation-name: fadeIn;
+        animation-duration: 2s;
+        opacity: 1;
+      }
+
+      canvas.paused {
+        animation-name: blur;
+        animation-duration: 0.5s;
+        filter: blur(2px) grayscale(1);
+      }
+
+      canvas.unpaused {
+        animation-name: none;
+      }
+
+      canvas.animatedSizeTransitions {
+        transition: width 0.3s ease, height 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes blur {
+        0% {
+          filter: blur(0) grayscale(0);
+        }
+
+        100% {
+          filter: blur(2px) grayscale(1);
+        }
+      }
+
+      .spinner {
+        height: 30px;
+        width: 30px;
+
+        -webkit-animation: rotation 0.8s linear infinite;
+        -moz-animation: rotation 0.8s linear infinite;
+        -o-animation: rotation 0.8s linear infinite;
+        animation: rotation 0.8s linear infinite;
+
+        border: 5px solid #bdff00;
+        border-top: 5px solid #719900;
+        border-radius: 100%;
+      }
+
+      .floating-control {
+        position: absolute;
+        display: none;
+        border: none;
+
+        left: 0px;
+        top: 0px;
+        width: 400px;
+        height: 100%;
+        padding: 10px;
+
+        font-family: monospace;
+        font-size: 8;
+        color: white;
+        background: rgba(53, 18, 84, 0.8);
+        box-shadow: rgb(9 8 13 / 20%) -2px 2px 4px, rgb(9 8 13 / 40%) -4px 4px 16px;
+      }
+
+      #status {
+        display: inline-block;
+        vertical-align: top;
+        font-weight: bold;
+        color: white;
+      }
+
+      #progress {
+        width: 250px;
+        height: 10px;
+        -webkit-appearance: none;
+        appearance: none;
+        padding: 5px;
+      }
+
+      /* Determines the style of the background of the progress bar */
+      progress[value]::-webkit-progress-bar {
+        background-color: #8492a6;
+        height: 10px;
+        border-radius: 15px;
+      }
+      /* Determines the style of the completed part of the progress bar */
+      progress[value]::-webkit-progress-value {
+        background-image: -webkit-linear-gradient(left, #719900, #bdff00);
+        height: 10px;
+        border-radius: 15px;
+      }
+
+      div.loading {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+      }
+      div.loading > * {
+        padding: 10px;
+        margin: 10px;
+      }
+
+      .output-container {
+        text-align: center;
+        margin-top: auto;
+      }
+      .output-button {
+        border: none;
+        width: 200px;
+        height: 25px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: black;
+        color: #20c20e;
+        font-family: "Lucida Console", Monaco, monospace;
+      }
+
+      #output {
+        display: none;
+        height: 200px;
+        background-color: black;
+        color: white;
+        font-family: "Lucida Console", Monaco, monospace;
+        outline: none;
+        border: none;
+        padding: 0;
+        width: 100%;
+      }
+
+      #message-container {
+        display: none;
+        min-height: 50px;
+        background-color: rgba(20, 20, 20, 0.5);
+        outline: none;
+        border: none;
+        padding: 0;
+        width: 100%;
+        position: absolute;
+        top: 0;
+      }
+
+      #messages {
+        margin-left: 50px;
+        color: white;
+        font-family: "Lucida Console", Monaco, monospace;
+        outline: none;
+        border: none;
+        padding: 0;
+      }
+
+      img.qrCode {
+         opacity: 1.0;
+         width: 50%;
+         height: 50%;
+      }
+
+      #pauseMenuContainer {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #pauseMenuContainer[hidden] {
+        display: none !important;
+        opacity: 0;
+      }
+
+      #pauseMenuBorder {
+        background: linear-gradient(135deg, #FA1E4E, transparent 40%);
+        padding: 1px;
+        border-radius: 4px;
+        clip-path: polygon(10.5px 0, 100% 0, 100% 100%, 0 100%, 0 10.5px);
+        width: 70vw;
+        max-width: 400px;
+      }
+
+      #pauseMenu {
+        display: flex;
+        flex-direction: column;
+        padding: 60px 30px 60px 30px;
+        background: linear-gradient(180deg, #2E273F 16.15%, rgba(46, 39, 63, 0.79) 56.25%, #2E273F 91.15%);
+        border-radius: 4px;
+        clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+        animation-name: fadeIn;
+        animation-duration: 0.5s;
+        opacity: 1;
+      }
+
+      #pauseMenu button {
+        font-weight: 500;
+        font-size: 17px;
+        color: white;
+        background: #FA1E4E;
+        border: 1px solid #FA1E4E;
+        border-radius: 6px;
+        padding: 12px 24px;
+        margin: 5px 0;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      #pauseMenu button#quitButton {
+        background: #FA1E4E40;
+      }
+
+      #pauseMenu button:hover {
+        filter: brightness(1.15);
+      }
+
+      #pauseMenu button:active {
+        filter: brightness(0.85);
+      }
+
+      #pauseMenu button[hidden] {
+        display: none;
+      }
+
+      .graph .labels.x-labels {
+        background-color: white;
+        text-anchor: middle;
+      }
+
+      .graph .labels.y-labels {
+        text-anchor: end;
+      }
+
+      .graph {
+        font-family: Averta, -apple-system, "Segoe UI", system-ui, sans-serif;
+        font-feature-settings: "tnum", "lnum";
+        font-style: normal;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 21px;
+        text-decoration-line: none;
+        letter-spacing: 0.25px;
+        background-color: transparent;
+        fill: #ccc;
+      }
+
+      .graph .grid {
+        stroke: #ccc;
+        stroke-dasharray: 0;
+        stroke-width: 1;
+      }
+
+      .labels {
+        font-size: 4px;
+      }
+
+      .label-title {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 4px;
+      }
+
+      .peer0 {
+        fill: #fa1f4e;
+        stroke: #fa1f4e;
+      }
+      .peer1 {
+        fill: #a970ff;
+        stroke: #a970ff;
+      }
+      .peer2 {
+        fill: #4574ee;
+        stroke: #4574ee;
+      }
+      .peer3 {
+        fill: #c3ff6f;
+        stroke: #c3ff6f;
+      }
+
+      .peer {
+        stroke-width: 0;
+      }
+
+      .peer-frame-delay {
+        fill: none;
+        stroke-width: 1;
+      }
+
+      .acceptable-rollback-button {
+        border: none;
+        width: 50px;
+        height: 25px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: black;
+        color: #20c20e;
+        font-family: "Lucida Console", Monaco, monospace;
+      }
+
+      .peer-acceptable-rollback {
+        fill: none;
+        stroke-width: 1;
+        opacity: 0.3;
+      }
+
+      .relay-rtt {
+        stroke-width: 2;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <canvas
+      class="emscripten"
+      id="canvas"
+      oncontextmenu="event.preventDefault()"
+      tabindex="-1"
+    >    
+    </canvas>
+
+    <div id="pauseMenuContainer" hidden>
+      <div id="pauseMenuBorder">
+        <div id="pauseMenu">
+          <button id="resumeButton" onclick="resume()">
+            Resume
+          </button>
+          <button id="quitButton" onclick="quitIfSupported()">
+            Quit
+          </button>
+        </div>
+        </div>
+    </div>
+    <div class="loading">
+      <div class="spinner" id="spinner"></div>
+      <div class="emscripten" id="status">Downloading...</div>
+
+      <progress value="0" max="100" id="progress" hidden="1"></progress>
+      <img id="QRCode" class="qrCode" src="runner.svg" alt="URL QR Code" hidden="1"></img>
+      <img id="QR2Code" class="qrCode" src="runnerLocal.svg" alt="URL QR2 Code" hidden="1"></img>
+    </div>
+
+    <div class="floating-control" id="multiplayer-stats-container">
+      <div class="multiplayer-stats-network" id="multiplayer-stats-network">
+        <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="graph" aria-labelledby="title" role="img" viewbox="-20 -10 130 140">
+          <title id="title">Network stats</title>
+          <g class="grid x-grid" id="xGrid">
+            <line x1="0" y1="100" x2="100" y2="100"></line>
+
+            <line x1="12.25" y1="99" x2="12.25" y2="101"></line>
+            <line x1="25" y1="98" x2="25" y2="102"></line>
+            <line x1="37.5" y1="99" x2="37.5" y2="101"></line>
+            <line x1="50" y1="98" x2="50" y2="102"></line>
+            <line x1="62.5" y1="99" x2="62.5" y2="101"></line>
+            <line x1="75" y1="98" x2="75" y2="102"></line>
+            <line x1="87.5" y1="99" x2="87.5" y2="101"></line>
+            <line x1="100" y1="98" x2="100" y2="102"></line>
+          </g>
+          <g class="grid y-grid" id="yGrid">
+            <line x1="0" y1="0" x2="0" y2="100"></line>
+
+            <line x1="-2" y1="0" x2="2" y2="0"></line>
+            <line x1="-1" y1="12.5" x2="1" y2="12.50"></line>
+            <line x1="-2" y1="25" x2="2" y2="25"></line>
+            <line x1="-1" y1="37.5" x2="1" y2="37.5"></line>
+            <line x1="-2" y1="50" x2="2" y2="50"></line>
+            <line x1="-1" y1="62.5" x2="1" y2="62.5"></line>
+            <line x1="-2" y1="75" x2="2" y2="75"></line>
+            <line x1="-1" y1="87.5" x2="1" y2="87.5"></line>
+          </g>
+          <g class="labels x-labels">
+            <text x="0" y="110">-8</text>
+            <text x="25" y="110">-4</text>
+            <text x="50" y="110">0</text>
+            <text x="75" y="110">4</text>
+            <text x="100" y="110">8</text>
+            <text x="50" y="115" class="label-title">Time shift</text>
+          </g>
+          <g class="labels y-labels">
+            <text x="-4" y="0" alignment-baseline="middle">16</text>
+            <text x="-4" y="25" alignment-baseline="middle">12</text>
+            <text x="-4" y="50" alignment-baseline="middle">8</text>
+            <text x="-4" y="75" alignment-baseline="middle">4</text>
+            <text x="-4" y="100" alignment-baseline="middle">0</text>
+            <text x="-10" y="50" class="label-title" alignment-baseline="middle">RTT</text>
+          </g>
+
+          <g id="stats-network-peers">
+          </g>
+
+          <g id="stats-network-peer-frame-delays">
+          </g>
+
+          <g id="stats-network-relay-rtt">
+          </g>
+        </svg>
+      </div>
+      <div>
+        <b>Acceptable rollback frames marker:</b>
+        <div>
+          <button class="acceptable-rollback-button" onclick="set_acceptable_rollback(0)">Off</button>
+          <button class="acceptable-rollback-button" onclick="set_acceptable_rollback(1)">+1</button>
+          <button class="acceptable-rollback-button" onclick="set_acceptable_rollback(2)">+2</button>
+          <button class="acceptable-rollback-button" onclick="set_acceptable_rollback(4)">+4</button>
+        </div>
+      </div>
+      <div id="multiplayer-stats">
+        [no stats available]
+      </div>
+    </div>
+    <div class="output-container" id="output-container" >
+      <button class="output-button" id="stats-button" style="visibility: hidden" onclick="toggleElement('multiplayer-stats-container')">
+        Toggle Stats
+      </button>
+      <button class="output-button" id="share-button" style="visibility: hidden" onclick="navigator.clipboard.writeText(window.shareUrl)">
+        Copy Share Url
+      </button>
+      <button class="output-button" id="log-state-button" onclick="log_next_game_state()" style="visibility: hidden">
+        Log State
+      </button>
+      <textarea id="output" rows="8"></textarea>
+    </div>
+
+    <div class="wallpaper-container" id="wallpaper-container" style="display: none">
+      <button class="output-button" onclick="toggleElement('wallpaper-config-iframe')">
+        Toggle configurator
+      </button>
+    </div>
+	    <iframe class="floating-control" id="wallpaper-config-iframe" src="about:blank"></iframe>
+
+    <div id="message-container">
+      <div id="messages">
+      </div>
+    </div>
+
+   <script async
+     data-ad-client="ca-pub-123"
+     data-ad-frequency-hint="30s"
+     data-adbreak-test="on"
+     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+   </script>
+
+   <script>
+     window.adsbygoogle = window.adsbygoogle || [];
+     const adBreak =  adConfig = function(o) {adsbygoogle.push(o);}
+   </script>
+
+    <script id="tick-worker" type="javascript/worker">
+      let running = false;
+      let stop_called = false;
+
+      let intervalMs = 16;
+
+      onmessage = (e) => {
+        if (e.data.run) {
+          intervalMs = Math.floor(1000 / e.data.fps);
+
+          if (!running) {
+            running = true;
+            setTimeout(tick, intervalMs);
+          }
+        } else {
+          stop_called = true;
+        }
+      }
+
+      const tick = () => {
+        if (stop_called) {
+          stop_called = false;
+          running = false;
+
+          return;
+        }
+
+        const start = new Date().getTime();
+        postMessage('');
+        const end = new Date().getTime();
+
+        let next_update = start + intervalMs - end;
+        next_update = Math.max(next_update, 0);
+        setTimeout(tick, next_update);
+      }
+    </script>
+
+    <script type="text/javascript">
+      const blob = new Blob([document.querySelector('#tick-worker').textContent]);
+      const worker = new Worker(window.URL.createObjectURL(blob));
+
+      worker.onmessage = function () {
+        GM_tick(performance.now());
+      }
+
+      const isMultiplayer = function () {
+        if (typeof GM_is_multiplayer !== 'function') {
+          return false;
+        }
+
+        return GM_is_multiplayer() !== 0;
+      }
+
+      document.addEventListener('visibilitychange', function () {
+        if (!isMultiplayer()) {
+          return;
+        }
+
+        if (document.visibilityState === 'hidden') {
+          worker.postMessage({run: true, fps: 60});
+        } else {
+          worker.postMessage({run: false});
+        }
+      });
+    </script>
+
+	    <script type="text/javascript">
+		      (function () {
+		        const ASSET_BASE = "https://cdn.jsdelivr.net/gh/reeyuki/frickbears3port@664d858164fd6ce6302002b2196f2c3be02656af/";
+		        const SPLIT_SPEC = [["game.unx", 2], ["music.dat", 5], ["voicelines_ingame.dat", 2]];
+		        const SPLITS = Object.fromEntries(SPLIT_SPEC);
+		        const ALIASES = { "game.unc": "game.unx" };
+		        const splitCache = new Map();
+		        const nativeFetch = window.fetch ? window.fetch.bind(window) : null;
+		        const NativeXMLHttpRequest = window.XMLHttpRequest;
+		        const pad2 = function (n) { return String(n).padStart(2, "0"); };
+		        const normalizePath = function (path) {
+		          let p = String(path || "").split("?")[0].split("#")[0].replace(/^\/+/, "");
+		          const locDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1).replace(/^\/+/, "");
+		          if (locDir && p.startsWith(locDir)) p = p.slice(locDir.length).replace(/^\/+/, "");
+		          const filename = p.split("/").pop();
+		          if (SPLITS[filename] || ALIASES[filename]) return ALIASES[filename] || filename;
+		          return ALIASES[p] || p;
+		        };
+		        const urlInfo = function (input) {
+		          if (typeof input === "string") {
+		            try {
+		              const u = new URL(input, window.location.href);
+		              const base = new URL(ASSET_BASE, window.location.href);
+		              if (u.href.startsWith(base.href)) return { rewrite: true, path: normalizePath(u.href.slice(base.href.length)) };
+		              if (u.origin === window.location.origin) return { rewrite: true, path: normalizePath(u.pathname) };
+		              return { rewrite: false, url: input };
+		            } catch (e) {
+		              return { rewrite: true, path: normalizePath(input) };
+		            }
+		          }
+		          if (input && typeof input.url === "string") return urlInfo(input.url);
+		          return { rewrite: false, url: "" };
+		        };
+	        const toCdnUrl = function (path) { return ASSET_BASE + path; };
+	        const concatArrayBuffers = function (buffers) {
+	          let total = 0;
+	          for (let i = 0; i < buffers.length; i++) total += buffers[i].byteLength;
+	          const out = new Uint8Array(total);
+	          let off = 0;
+	          for (let i = 0; i < buffers.length; i++) { out.set(new Uint8Array(buffers[i]), off); off += buffers[i].byteLength; }
+	          return out.buffer;
+	        };
+		        const fetchSplitArrayBuffer = async function (path, count) {
+		          const p = normalizePath(path);
+		          if (splitCache.has(p)) return splitCache.get(p);
+		          const parts = await Promise.all(Array.from({ length: count }, function (_, i) { return nativeFetch(toCdnUrl(p + pad2(i))).then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.arrayBuffer(); }); }));
+		          const ab = concatArrayBuffers(parts);
+		          splitCache.set(p, ab);
+		          return ab;
+		        };
+		        window.__SPLIT_PREFETCH__ = Promise.all(SPLIT_SPEC.map(function (x) { return fetchSplitArrayBuffer(x[0], x[1]); }));
+	        if (nativeFetch) {
+	          window.fetch = function (resource, init) {
+	            const info = urlInfo(resource);
+	            if (!info.rewrite) return nativeFetch(resource, init);
+	            const count = SPLITS[info.path];
+	            if (count) {
+	              return fetchSplitArrayBuffer(info.path, count).then(function (ab) { return new Response(ab); });
+	            }
+	            if (resource && typeof Request === "function" && resource instanceof Request) {
+	              const method = resource.method || "GET";
+	              const reqInit = { method: method, headers: resource.headers, mode: resource.mode, credentials: resource.credentials, cache: resource.cache, redirect: resource.redirect, referrer: resource.referrer, referrerPolicy: resource.referrerPolicy, integrity: resource.integrity, keepalive: resource.keepalive, signal: resource.signal };
+	              if (method !== "GET" && method !== "HEAD") reqInit.body = resource.body;
+	              return nativeFetch(new Request(toCdnUrl(info.path), reqInit));
+	            }
+	            return nativeFetch(toCdnUrl(info.path), init);
+	          };
+	        }
+	        if (NativeXMLHttpRequest) {
+		          function SplitAwareXMLHttpRequest() {
+		            this._native = new NativeXMLHttpRequest();
+		            this._useNative = true;
+		            this._listeners = {};
+		            this._method = "";
+		            this._url = "";
+		            this._async = true;
+		            this._body = null;
+		            this._responseType = "";
+		            this.readyState = 0;
+		            this.status = 0;
+		            this.statusText = "";
+		            this.responseURL = "";
+		            this.response = null;
+		            this.responseText = "";
+		            this.onreadystatechange = null;
+		            this.onload = null;
+		            this.onerror = null;
+		            this.onprogress = null;
+		            Object.defineProperty(this, "responseType", { configurable: true, enumerable: true, get: function () { return this._responseType; }, set: function (v) { this._responseType = v == null ? "" : String(v); try { this._native.responseType = this._responseType; } catch (e) {} } });
+		            const self = this;
+		            const forwardEvent = function (type) {
+	              const list = self._listeners[type];
+	              if (list) for (let i = 0; i < list.length; i++) { try { list[i].call(self); } catch (e) {} }
+	              const h = self["on" + type];
+	              if (typeof h === "function") { try { h.call(self); } catch (e) {} }
+	            };
+	            this._native.onreadystatechange = function () {
+	              self.readyState = self._native.readyState;
+	              self.status = self._native.status;
+	              self.statusText = self._native.statusText;
+	              try { self.responseURL = self._native.responseURL || self._url; } catch (e) { self.responseURL = self._url; }
+	              try { self.response = self._native.response; } catch (e) { self.response = null; }
+	              try { self.responseText = self._native.responseText || ""; } catch (e) { self.responseText = ""; }
+	              forwardEvent("readystatechange");
+	              if (self.readyState === 4) {
+	                if (self.status >= 200 && self.status < 300) forwardEvent("load"); else forwardEvent("error");
+	              }
+	            };
+	            this._native.onprogress = function () { forwardEvent("progress"); };
+	          }
+	          SplitAwareXMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+	            this._method = method;
+	            this._url = url;
+	            this._async = async !== false;
+	            const info = urlInfo(url);
+	            const count = info.rewrite ? SPLITS[info.path] : 0;
+	            this._useNative = !info.rewrite || !count;
+	            this.readyState = 1;
+	            if (this._useNative) {
+	              this._native.open(method, info.rewrite ? toCdnUrl(info.path) : url, this._async, user, password);
+	              try { this._native.responseType = this.responseType; } catch (e) {}
+	            }
+	            if (typeof this.onreadystatechange === "function") try { this.onreadystatechange(); } catch (e) {}
+	          };
+	          SplitAwareXMLHttpRequest.prototype.send = function (body) {
+	            this._body = body;
+	            if (this._useNative) return this._native.send(body);
+	            const self = this;
+	            const info = urlInfo(this._url);
+	            const count = SPLITS[info.path];
+	            this.readyState = 2;
+	            if (typeof this.onreadystatechange === "function") try { this.onreadystatechange(); } catch (e) {}
+	            fetchSplitArrayBuffer(info.path, count).then(function (ab) {
+	              self.status = 200;
+	              self.statusText = "OK";
+	              self.responseURL = toCdnUrl(info.path);
+	              self.readyState = 4;
+	              if (self.responseType === "arraybuffer") {
+	                self.response = ab;
+	                self.responseText = "";
+	              } else if (self.responseType === "blob") {
+	                self.response = new Blob([ab]);
+	                self.responseText = "";
+	              } else {
+	                const text = new TextDecoder("utf-8").decode(new Uint8Array(ab));
+	                self.responseText = text;
+	                self.response = self.responseType === "json" ? JSON.parse(text) : text;
+	              }
+	              if (typeof self.onreadystatechange === "function") try { self.onreadystatechange(); } catch (e) {}
+	              if (typeof self.onload === "function") try { self.onload(); } catch (e) {}
+	              const list = self._listeners.load;
+	              if (list) for (let i = 0; i < list.length; i++) { try { list[i].call(self); } catch (e) {} }
+	            }).catch(function () {
+	              self.status = 404;
+	              self.statusText = "Not Found";
+	              self.readyState = 4;
+	              if (typeof self.onreadystatechange === "function") try { self.onreadystatechange(); } catch (e) {}
+	              if (typeof self.onerror === "function") try { self.onerror(); } catch (e) {}
+	              const list = self._listeners.error;
+	              if (list) for (let i = 0; i < list.length; i++) { try { list[i].call(self); } catch (e) {} }
+	            });
+	          };
+	          SplitAwareXMLHttpRequest.prototype.abort = function () { if (this._useNative) this._native.abort(); };
+	          SplitAwareXMLHttpRequest.prototype.setRequestHeader = function (h, v) { if (this._useNative) this._native.setRequestHeader(h, v); };
+	          SplitAwareXMLHttpRequest.prototype.getResponseHeader = function (h) { return this._useNative ? this._native.getResponseHeader(h) : null; };
+	          SplitAwareXMLHttpRequest.prototype.getAllResponseHeaders = function () { return this._useNative ? this._native.getAllResponseHeaders() : ""; };
+	          SplitAwareXMLHttpRequest.prototype.overrideMimeType = function (t) { if (this._useNative) this._native.overrideMimeType(t); };
+	          SplitAwareXMLHttpRequest.prototype.addEventListener = function (type, cb) { (this._listeners[type] = this._listeners[type] || []).push(cb); };
+	          SplitAwareXMLHttpRequest.prototype.removeEventListener = function (type, cb) { const a = this._listeners[type]; if (!a) return; const i = a.indexOf(cb); if (i >= 0) a.splice(i, 1); };
+	          window.XMLHttpRequest = SplitAwareXMLHttpRequest;
+	        }
+	        window.__ASSET_BASE__ = ASSET_BASE;
+	        window.__NORMALIZE_PATH__ = normalizePath;
+	      })();
+	      const CHANGE_ASPECT_RATIO = true;
+
+      var bodyElement = document.getElementsByTagName("body")[0];
+      var statusElement = document.getElementById("status");
+      var progressElement = document.getElementById("progress");
+      var spinnerElement = document.getElementById("spinner");
+      var canvasElement = document.getElementById("canvas");
+      var outputElement = document.getElementById("output");
+      var outputContainerElement = document.getElementById("output-container");
+      var pauseMenu = document.getElementById("pauseMenuContainer");
+      var resumeButton = document.getElementById("resumeButton");
+      var quitButton = document.getElementById("quitButton");
+      canvasElement.addEventListener("click", function() { canvasElement.focus(); });
+      
+      const messageContainerElement = document.getElementById("message-container");
+      const messagesElement = document.getElementById("messages");
+      let rollbackMessages = [];
+
+      let clearRollbackMessagesTimeoutId = -1;
+      const showRollbackMessage = function (message) {
+        let messages = "";
+        rollbackMessages.push(message);
+        rollbackMessages.forEach(m => messages += "<p>" + m + "<\/p>");
+
+        messagesElement.innerHTML = messages;
+        messageContainerElement.style.display = 'block';
+
+        if (clearRollbackMessagesTimeoutId === -1) {
+          clearTimeout(clearRollbackMessagesTimeoutId);
+        }
+        clearRollbackMessagesTimeoutId = setTimeout(clearRollbackMessages, 5000);
+      };
+
+      const clearRollbackMessages = function () {
+        clearRollbackMessagesTimeoutId = -1;
+        rollbackMessages = [];
+        messageContainerElement.style.display = 'none';
+      };
+
+      var startingHeight, startingWidth;
+      var startingAspect;
+	      var Module = {
+	        preRun: [],
+	        postRun: [],
+	        locateFile: function (path, prefix) {
+	          const p = String(path).replace(/^\/+/, "");
+	          const normalized = window.__NORMALIZE_PATH__ ? window.__NORMALIZE_PATH__(p) : p;
+	          return window.__ASSET_BASE__ + normalized;
+	        },
+	        print: (function () {
+	          var element = document.getElementById("output");
+	          if (element) element.value = ""; // clear browser cache
+	          return function (text) {
+            if (arguments.length > 1)
+              text = Array.prototype.slice.call(arguments).join(" ");
+            // These replacements are necessary if you render to raw HTML
+            console.log(text);
+            if (text === "Entering main loop.") {
+              // It seems that this text ensures game is loaded.
+              ensureAspectRatio();
+            }
+            if (element) {
+              element.value += text + "\n";
+              element.scrollTop = element.scrollHeight; // focus on bottom
+            }
+          };
+        })(),
+        printErr: function (text) {
+          if (arguments.length > 1)
+            text = Array.prototype.slice.call(arguments).join(" ");
+          console.error(text);
+        },
+        canvas: (function () {
+          var canvas = document.getElementById("canvas");
+
+          return canvas;
+        })(),
+        setStatus: function (text) {
+          if (!Module.setStatus.last)
+            Module.setStatus.last = { time: Date.now(), text: "" };
+          if (text === Module.setStatus.last.text) return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+          Module.setStatus.last.time = now;
+          Module.setStatus.last.text = text;
+          if (m) {
+            text = m[1];
+            progressElement.value = parseInt(m[2]) * 100;
+            progressElement.max = parseInt(m[4]) * 100;
+            progressElement.hidden = false;
+            spinnerElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+
+            // If there are no status text, we are finished and can display
+            // the canvas and hide the spinner
+            if (!text) {
+              spinnerElement.style.display = "none";
+              canvasElement.style.display = "block";
+            }
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function (left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(
+            left
+              ? "Preparing... (" +
+                  (this.totalDependencies - left) +
+                  "/" +
+                  this.totalDependencies +
+                  ")"
+              : "All downloads complete."
+          );
+        },
+      };
+      Module.setStatus("Downloading...");
+      window.onerror = function (event) {
+        // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+        Module.setStatus("Exception thrown, see JavaScript console");
+        spinnerElement.style.display = "none";
+        Module.setStatus = function (text) {
+          if (text) Module.printErr("[post-exception status] " + text);
+        };
+      };
+
+      // Route URL GET parameters to argc+argv
+      if (typeof window === "object") {
+        Module['arguments'] = window.location.search.substr(1).trim().split('&');
+        // If no args were passed arguments = [''], in which case kill the single empty string.
+        if (!Module['arguments'][0]) {
+          Module['arguments'] = [];
+        }
+      }
+
+      // add in the script code
+      
+
+      function toggleElement(id) {
+        var elem = document.getElementById(id);
+        if (elem) {
+          elem.style.display = elem.style.display == 'block' ? 'none' : 'block';
+        }
+      }
+
+      var g_pWadLoadCallback = undefined;
+      function setWadLoadCallback( _wadLoadCallback ) 
+      {
+        g_pWadLoadCallback = _wadLoadCallback;
+      }
+
+      var g_pAddAsyncMethod = -1;
+
+      function setAddAsyncMethod( asyncMethod )
+      {
+        g_pAddAsyncMethod = asyncMethod;
+      }
+
+      var g_pJSExceptionHandler = undefined;
+
+      function setJSExceptionHandler( exceptionHandler )
+      {
+        if (typeof exceptionHandler == "function") {
+            g_pJSExceptionHandler = exceptionHandler;
+        } // end if
+      } // end setJSExceptionHandler
+
+      function hasJSExceptionHandler()
+      {
+        return (g_pJSExceptionHandler != undefined) && (typeof g_pJSExceptionHandler == "function");
+      } // end hasJSExceptionHandler
+
+      function doJSExceptionHandler( exceptionJSON )
+      {
+        if (typeof g_pJSExceptionHandler == "function") {
+          var exception = JSON.parse( exceptionJSON );
+          g_pJSExceptionHandler( exception );
+        } // end if
+      } // end doJSExceptionHandler
+
+      function manifestFiles()
+      {
+        return [ "runner.data",
+"runner.js",
+"runner.wasm",
+"audio-worklet.js",
+"game.unx",
+"jumpscreams.dat",
+"music.dat",
+"soundeffects.dat",
+"voicelines_death.dat",
+"voicelines_deathcoin.dat",
+"voicelines_ingame.dat",
+"voicelines_selection.dat",
+"texgroup_buildingtextures/buildingtextures_0.yytex",
+"texgroup_buildingtextures/buildingtextures_1.yytex",
+"texgroup_buildingtextures/buildingtextures_10.yytex",
+"texgroup_buildingtextures/buildingtextures_11.yytex",
+"texgroup_buildingtextures/buildingtextures_12.yytex",
+"texgroup_buildingtextures/buildingtextures_13.yytex",
+"texgroup_buildingtextures/buildingtextures_14.yytex",
+"texgroup_buildingtextures/buildingtextures_15.yytex",
+"texgroup_buildingtextures/buildingtextures_16.yytex",
+"texgroup_buildingtextures/buildingtextures_17.yytex",
+"texgroup_buildingtextures/buildingtextures_18.yytex",
+"texgroup_buildingtextures/buildingtextures_19.yytex",
+"texgroup_buildingtextures/buildingtextures_2.yytex",
+"texgroup_buildingtextures/buildingtextures_20.yytex",
+"texgroup_buildingtextures/buildingtextures_21.yytex",
+"texgroup_buildingtextures/buildingtextures_22.yytex",
+"texgroup_buildingtextures/buildingtextures_23.yytex",
+"texgroup_buildingtextures/buildingtextures_24.yytex",
+"texgroup_buildingtextures/buildingtextures_25.yytex",
+"texgroup_buildingtextures/buildingtextures_26.yytex",
+"texgroup_buildingtextures/buildingtextures_27.yytex",
+"texgroup_buildingtextures/buildingtextures_28.yytex",
+"texgroup_buildingtextures/buildingtextures_29.yytex",
+"texgroup_buildingtextures/buildingtextures_3.yytex",
+"texgroup_buildingtextures/buildingtextures_30.yytex",
+"texgroup_buildingtextures/buildingtextures_31.yytex",
+"texgroup_buildingtextures/buildingtextures_32.yytex",
+"texgroup_buildingtextures/buildingtextures_33.yytex",
+"texgroup_buildingtextures/buildingtextures_34.yytex",
+"texgroup_buildingtextures/buildingtextures_35.yytex",
+"texgroup_buildingtextures/buildingtextures_36.yytex",
+"texgroup_buildingtextures/buildingtextures_37.yytex",
+"texgroup_buildingtextures/buildingtextures_38.yytex",
+"texgroup_buildingtextures/buildingtextures_39.yytex",
+"texgroup_buildingtextures/buildingtextures_4.yytex",
+"texgroup_buildingtextures/buildingtextures_40.yytex",
+"texgroup_buildingtextures/buildingtextures_41.yytex",
+"texgroup_buildingtextures/buildingtextures_42.yytex",
+"texgroup_buildingtextures/buildingtextures_43.yytex",
+"texgroup_buildingtextures/buildingtextures_44.yytex",
+"texgroup_buildingtextures/buildingtextures_45.yytex",
+"texgroup_buildingtextures/buildingtextures_46.yytex",
+"texgroup_buildingtextures/buildingtextures_47.yytex",
+"texgroup_buildingtextures/buildingtextures_48.yytex",
+"texgroup_buildingtextures/buildingtextures_49.yytex",
+"texgroup_buildingtextures/buildingtextures_5.yytex",
+"texgroup_buildingtextures/buildingtextures_50.yytex",
+"texgroup_buildingtextures/buildingtextures_51.yytex",
+"texgroup_buildingtextures/buildingtextures_52.yytex",
+"texgroup_buildingtextures/buildingtextures_53.yytex",
+"texgroup_buildingtextures/buildingtextures_54.yytex",
+"texgroup_buildingtextures/buildingtextures_55.yytex",
+"texgroup_buildingtextures/buildingtextures_56.yytex",
+"texgroup_buildingtextures/buildingtextures_57.yytex",
+"texgroup_buildingtextures/buildingtextures_58.yytex",
+"texgroup_buildingtextures/buildingtextures_59.yytex",
+"texgroup_buildingtextures/buildingtextures_6.yytex",
+"texgroup_buildingtextures/buildingtextures_60.yytex",
+"texgroup_buildingtextures/buildingtextures_61.yytex",
+"texgroup_buildingtextures/buildingtextures_62.yytex",
+"texgroup_buildingtextures/buildingtextures_63.yytex",
+"texgroup_buildingtextures/buildingtextures_64.yytex",
+"texgroup_buildingtextures/buildingtextures_65.yytex",
+"texgroup_buildingtextures/buildingtextures_66.yytex",
+"texgroup_buildingtextures/buildingtextures_67.yytex",
+"texgroup_buildingtextures/buildingtextures_68.yytex",
+"texgroup_buildingtextures/buildingtextures_69.yytex",
+"texgroup_buildingtextures/buildingtextures_7.yytex",
+"texgroup_buildingtextures/buildingtextures_70.yytex",
+"texgroup_buildingtextures/buildingtextures_71.yytex",
+"texgroup_buildingtextures/buildingtextures_72.yytex",
+"texgroup_buildingtextures/buildingtextures_73.yytex",
+"texgroup_buildingtextures/buildingtextures_74.yytex",
+"texgroup_buildingtextures/buildingtextures_75.yytex",
+"texgroup_buildingtextures/buildingtextures_76.yytex",
+"texgroup_buildingtextures/buildingtextures_77.yytex",
+"texgroup_buildingtextures/buildingtextures_78.yytex",
+"texgroup_buildingtextures/buildingtextures_79.yytex",
+"texgroup_buildingtextures/buildingtextures_8.yytex",
+"texgroup_buildingtextures/buildingtextures_80.yytex",
+"texgroup_buildingtextures/buildingtextures_81.yytex",
+"texgroup_buildingtextures/buildingtextures_82.yytex",
+"texgroup_buildingtextures/buildingtextures_83.yytex",
+"texgroup_buildingtextures/buildingtextures_84.yytex",
+"texgroup_buildingtextures/buildingtextures_85.yytex",
+"texgroup_buildingtextures/buildingtextures_86.yytex",
+"texgroup_buildingtextures/buildingtextures_87.yytex",
+"texgroup_buildingtextures/buildingtextures_88.yytex",
+"texgroup_buildingtextures/buildingtextures_89.yytex",
+"texgroup_buildingtextures/buildingtextures_9.yytex",
+"texgroup_buildingtextures/buildingtextures_90.yytex",
+"texgroup_buildingtextures/buildingtextures_91.yytex",
+"texgroup_conceptart/conceptart_0.yytex",
+"texgroup_conceptart/conceptart_1.yytex",
+"texgroup_conceptart/conceptart_10.yytex",
+"texgroup_conceptart/conceptart_11.yytex",
+"texgroup_conceptart/conceptart_12.yytex",
+"texgroup_conceptart/conceptart_13.yytex",
+"texgroup_conceptart/conceptart_14.yytex",
+"texgroup_conceptart/conceptart_15.yytex",
+"texgroup_conceptart/conceptart_16.yytex",
+"texgroup_conceptart/conceptart_2.yytex",
+"texgroup_conceptart/conceptart_3.yytex",
+"texgroup_conceptart/conceptart_4.yytex",
+"texgroup_conceptart/conceptart_5.yytex",
+"texgroup_conceptart/conceptart_6.yytex",
+"texgroup_conceptart/conceptart_7.yytex",
+"texgroup_conceptart/conceptart_8.yytex",
+"texgroup_conceptart/conceptart_9.yytex",
+"texgroup_deathscreen/deathscreen_0.yytex",
+"texgroup_deathscreen/deathscreen_1.yytex",
+"texgroup_deathscreen/deathscreen_2.yytex",
+"texgroup_deathscreen/deathscreen_3.yytex",
+"texgroup_fbending/finalbossending_0.yytex",
+"texgroup_fbending/finalbossending_1.yytex",
+"texgroup_fbending/finalbossending_2.yytex",
+"texgroup_fbending/finalbossending_3.yytex",
+"texgroup_fbending/finalbossending_4.yytex",
+"texgroup_fbending/finalbossending_5.yytex",
+"texgroup_fbending/finalbossending_6.yytex",
+"texgroup_fbjumpscare/finalbossjumpscare_0.yytex",
+"texgroup_fbjumpscare/finalbossjumpscare_1.yytex",
+"texgroup_fbjumpscare/finalbossjumpscare_2.yytex",
+"texgroup_renders/renders_0.yytex",
+"texgroup_renders/renders_1.yytex",
+"texgroup_renders/renders_10.yytex",
+"texgroup_renders/renders_11.yytex",
+"texgroup_renders/renders_12.yytex",
+"texgroup_renders/renders_13.yytex",
+"texgroup_renders/renders_14.yytex",
+"texgroup_renders/renders_15.yytex",
+"texgroup_renders/renders_16.yytex",
+"texgroup_renders/renders_17.yytex",
+"texgroup_renders/renders_2.yytex",
+"texgroup_renders/renders_3.yytex",
+"texgroup_renders/renders_4.yytex",
+"texgroup_renders/renders_5.yytex",
+"texgroup_renders/renders_6.yytex",
+"texgroup_renders/renders_7.yytex",
+"texgroup_renders/renders_8.yytex",
+"texgroup_renders/renders_9.yytex" ].join( ";");
+      }
+
+      function manifestFilesMD5()
+      {
+        return [ "944e4ca42d1f509a495bdec2f2eb3b10",
+"3c9d7e5d0fca31379217e19ef59052dc",
+"9f2d2ae08c0bc749b040f83f74427502",
+"e8f1e8db8cf996f8715a6f2164c2e44e",
+"f044c3efb57412da88a965671b40b2e3",
+"573fecc1a727b9c7b7f7959f70f89de9",
+"eb0a71ead25a38631d0d618d3800fd87",
+"69e1553b9204f997ecd98c73ae3e345c",
+"1d116d0fff2237faa11d397c297a03ac",
+"43d9815d65878f67b3414dd3c355e48f",
+"f065f09f433fa60d3c1bada4ade30aa2",
+"9b8b194e43a49cf95f6bb5349808339f",
+"199e47aacb2d6b22704759d046a2c9ac",
+"64c36b50970ed621ea734bc96e64ce17",
+"08e453d37e69371fc0b90a79714c78db",
+"9b1462a2a3306c8bdd41ca118a788d9e",
+"b29a61fc16afdff86cacb4142b6a301f",
+"855047730f7bceacf4c5ebacfe58eee0",
+"68a0452b1c4d03543a82f9f95ed22133",
+"4660859c67ead2630f6ac62be6e30325",
+"11bed5e88b933d60b87e4793a67355b0",
+"98c5c67c4191a90b14ff69a051eb5ebd",
+"5a126b9fab0de02d827a18995e2d5729",
+"88e94a5c834a589f056d57dd4909faa2",
+"bd6a990d866dca129cca3afc1b50f213",
+"0076b8753b87ac1de3ce57c40834b589",
+"16f0aaf72244a7d97f56b1d6f0e9db76",
+"a7295fa0037e526989309f3d0cf84c1c",
+"d906cf23a5a0ec481d83fd6461bc41b3",
+"abbb1173e12efedc21a00da87006b16f",
+"cf12571164f57ccf7e3b2363f49de935",
+"f40a7a31dad83dd6af907dbb814cd3af",
+"f056960143d09435e27bd0ff858ad738",
+"aaee9ffe3cb631b8675cc229ce459abc",
+"5fb7a129e5a2e6bcb86fbaaaa8b2fa2f",
+"42d4cb34d2311cf9bb43dd59223e1098",
+"db969d31e35ea3cd070fffa5e8f542cf",
+"5fe3efba3109bd08b935c098de4ea3e5",
+"58f0658f31142778b2c9d4e6b7c4a28c",
+"924d39171649091f125b524b54f37d88",
+"c92a5ff2e97ffc0023f54bbe634ce629",
+"6a1903145e89a897d43dd21b21eba9e7",
+"e52d25851616933923869e784160f0c7",
+"7b8d5622410bea96bfdfe8989b469d9b",
+"6f1cd721c4f50d0b43b3c9492c516fa1",
+"1b1e74782b21217dda7f22603a844707",
+"9bc21e66104803f1d48099b185f1e640",
+"745c32e136fe666d1df4608dc66bd806",
+"1221b1a67a67818bd8edf1cc5f223a56",
+"409ccd1e9bb270424962a367b4f92515",
+"1173b6a5692b82199df94fb022ddfacf",
+"2bd107a4da5fc62fd6a6fc40a7a6a644",
+"e118adabbcd988b3ba9988705d2644d6",
+"ae9a47f3c91ade431b863254356f6123",
+"b824a4305af6c48a7f85340c11165c35",
+"3de86e56960fa0a816e1fc0ceede9916",
+"3d264f99cdea959bc2a8f7c5a3130175",
+"9e3a5d04323169ca4f119df2e1f53b6f",
+"9cd05f76f7fcd003062c3e3bbfc15826",
+"c4568763bc5ec56f4cfd3bf064099a04",
+"7cd110fde3890f21db1d02327f3416d5",
+"d8e5e3808b6f6b6e6c11645eab335497",
+"cd9b5c159114fe177b2d1e251ce230d4",
+"bdc2b78624153cdca7c8a99e1e60f40a",
+"8c7e23fe2eb775c8e272ed16023a2b6f",
+"d862260c961e30bf3080593c97a776f3",
+"4c58cfb36c62f993e707dc6f2bb0ed42",
+"5a2f4b700eecd8a9eeec6e3f19338acd",
+"155db6bd9e5dde6429db74a6bc08e23a",
+"9287e23270fda068f7dacfe299037efb",
+"08fac142614185874eaf060a846fdee1",
+"c5d815500ba6a2f09390f282b93c7541",
+"a8155b809d0f5c11746523b64e88b765",
+"e0cf805e4407be53f755b9e676fde716",
+"d726fd7b2cab7dbec186212354ee188a",
+"6b2e63416d7fef1f76e5f661a3940ee4",
+"35cbe5b4172cdc6ca3f0e6c2ea2321b1",
+"5d56605402f0a12c80701a4b0f7b46fe",
+"2a84c2111b1f2064900e28b50a35a71b",
+"d51daab977326c56870026181ef94a91",
+"7a7c76b18ced50aa5223520c02d629d5",
+"76f42384ef1069ceef062f394edd2d82",
+"2d861f48c1f464c8a9275633cc6437fe",
+"d5e30687bd3b6e91283e44e248cee6d6",
+"620231d4faf59d3f36ffa1c7e7352212",
+"ee54605059f0b0608755fc6bf05c1be6",
+"ff025316cb5e3a0e01d7e4a102f73917",
+"36c96af75462d1a0996b59db18f5049c",
+"39674d75ee1e5af2a395f25ae8292626",
+"9e16a6a5cd7f8ff6c788c4ecbf947ff3",
+"b6a33c96c1c00bb5980ebc860b089ace",
+"ccf9dbe8632d2371b56dd8bbd5db043c",
+"2c22764062e66ed923f77212bde95d12",
+"383e11cef2b02698a0670b78dde7fe1f",
+"eeac6f5cc0e123a1526d508b5c61bcf0",
+"1130cb37b22eeb890fcb3f586f03d7c4",
+"6c346e90f4db24f5003022e936f8cc2d",
+"937a26fdfd5169e5d47dda2c22a3fc44",
+"86eaeb3a3c4ba53c27a0e26ac9a569cf",
+"9f1e160a7602e365efe610b8fe2f49ea",
+"77522061bd510d478a84ab5e019288de",
+"e4a912e647727337270072d805f98d76",
+"eeb6a2b9389516eac4287669a1b55f23",
+"f4572ff07178dd63d05acafe97b71df1",
+"1650ff549d4395cc0ba4112e690685d6",
+"bf50d9a005f8a56289de490cab90bc25",
+"2ce3aa4c0b88a035bb4197d7d40dbc7e",
+"ca5fdfdd512602fdcf43d5084fd348fd",
+"6a2f7031ce48a3aa29875a42214ffcf0",
+"2c914c6766c330c7297d019bb1942ba7",
+"7e391453ba168fbe71da4dbaae6a211e",
+"436b1b46c7fbb7a60fd5841e290e9f98",
+"2f4de7c06af7525bd16493a4d85ca3c1",
+"91c9d8a40e562df5750c18b5de2919ba",
+"90e64080cef4cc400206dcd16db651bf",
+"6f708bede92cabd45bf89f2c0a684b61",
+"f9f36a6b40515dc116a764c6cdfaf89c",
+"9e1c4ba7c764b092572466c6a90c055a",
+"8ea54645709fca98b4a19623f86c0385",
+"0c7a0540ef52aee4912346c12bf5f39e",
+"9c52bf333d0fc1f8d0a7467da4527cd7",
+"34c3243093a0b5bb965235665756107f",
+"10e0ea926d7cb3068538453bb9ba288d",
+"15bdbfeb6bd58564719aadd256bd6b84",
+"19144f38c70da7758a665b95f8aea369",
+"4cecebb6c82819e4bf1d746ee4bfba7e",
+"d0f9148206b991cdbcc20b2c4e98f456",
+"d5dea0340ef99c753ab09490673188c1",
+"b8e9b12fa08c4a819bac1ac742d462cf",
+"414b69e72c0f5770640d86f46e2d1dfc",
+"e0833c30ae2e6155b260a433215df967",
+"00dc4bef69967e0b153a7035942a8dda",
+"31c105128611011aeae9fbe5488e994f",
+"6c9873a581e2b238992ace4a0fe0138e",
+"9a1d9eb4aa450efa330e77dfaf025e92",
+"2e13df772fd775b421f5d1be1658a86b",
+"5de497481c73fa214cbe2e35153da524",
+"1faa8db0eb59a26409d796c9e7779094",
+"b7c99747022d8000447cded7ba5c50ea",
+"a25ecb5d527695bc490671a87bd895da",
+"fee80cbd1f9103c1c4abaaeee4a77862",
+"baea45f6b041f1474a805a1972c3040f",
+"12a09dc331e1b66185c8b180fe401a2a",
+"3ca8fbc1e23ed258aa6fbfada31710e0",
+"786194240fe5cafb6068ec427cf21da5",
+"cda19d0c7784b6cf07573ac2bfbc52db",
+"1776b4659ed13bda008542fd2b5d0cb7",
+"64c27dda4ebc77fe520ce50ad335a627",
+"3d6211d95bac91e1142470e737755187",
+"0cacbbbd728119fdb1f6e2267037962e",
+"fd558a424be4e55f23803802ac33fa93",
+"6b040245b39c82201ef4beaddafcb751",
+"1a35a6cbf106c027e45831974bd05559" ];
+      }
+
+      function onFirstFrameRendered()
+      {
+          //console.log("First frame rendered!");
+      }
+
+      function onGameSetWindowSize(width,height)
+      {
+          console.log("Window size set to width: " + width + ", height: " + height);
+
+          startingHeight = height;
+          startingWidth = width;
+          startingAspect = startingWidth / startingHeight;
+          ensureAspectRatio();
+      }
+
+    function triggerAd(adId, _callback_beforeAd, _callback_afterAd, _callback_adDismissed, _callback_adViewed, _callback_adbreakDone) {
+       // need to take a copy of the RValues represented
+       var pRValueCopy = triggerAdPrefix( _callback_beforeAd, _callback_afterAd, _callback_adDismissed, _callback_adViewed, _callback_adbreakDone );
+       var pCallbackBeforeAd = pRValueCopy + (0*16);
+       var pCallbackAfterAd = pRValueCopy + (1*16);
+       var pCallbackAdDismissed = pRValueCopy + (2*16);
+       var pCallbackAdViewed = pRValueCopy + (3*16);
+       var pCallbackAdBreakDone = pRValueCopy + (4*16);
+
+       adBreak({
+         "type": "reward",                    // The type of this placement
+         "name": adId,                        // A descriptive name for this placement
+
+         "beforeAd": () => {                  // Prepare for the ad. Mute and pause the game flow
+           console.log("beforeAd");
+           // trigger _callback_beforeAd to game
+           doGMLCallback( pCallbackBeforeAd, { id:adId } );
+         },
+         "afterAd" : () => {                   // Resume the game and re-enable sound
+           console.log("afterAd");
+           // trigger _callback_afterAd to game
+           doGMLCallback( pCallbackAfterAd, { id:adId } );
+         },
+         "beforeReward": (showAdFn) => {      // Show reward prompt (call showAdFn() if clicked)
+           console.log("beforeReward");
+           showAdFn();
+           // Setup native prompt to indicate ad will load
+           // Will not be setup by dev so this UX controlled by GXC
+         },
+         "adDismissed": () => {               // Player dismissed the ad before it finished
+           console.log("adDismissed");
+           // trigger _callback_adDismissed to game
+           doGMLCallback( pCallbackAdDismissed, { id:adId } );
+         },
+         "adViewed": () => {                  // Player watched the ad–give them the reward.
+           console.log("adViewed");
+           // trigger _callback_adViewed to game
+           doGMLCallback( pCallbackAdViewed, { id:adId } );
+         },
+         "adBreakDone": (placementInfo) => {  // Always called (if provided) even if an ad didn't show
+           console.log("adBreakDone");
+           // trigger _callback_adBreakDone to game
+           doGMLCallback( pCallbackAdBreakDone, { id:adId } );
+           triggerAdPostfix( pRValueCopy );
+         }, 
+       });
+      }
+
+      function triggerPayment(itemId, _callback_PaymentComplete) {
+        var pRValueCopy = triggerPaymentPrefix(_callback_PaymentComplete);
+        setTimeout(() => {
+          console.log("triggerPayment");
+          doGMLCallback(pRValueCopy, { id:itemId });        
+        }, 1000);
+        triggerPaymentPostfix();
+      }
+
+      function ensureAspectRatio() {
+        if (canvasElement === undefined) {
+          return;
+        }
+
+        if (!CHANGE_ASPECT_RATIO) {
+          return;
+        }
+        
+        if (startingHeight === undefined && startingWidth === undefined) {
+          return;
+        }
+
+        canvasElement.classList.add("active");
+
+        const maxWidth = window.innerWidth;
+        const maxHeight = window.innerHeight;
+        var newHeight, newWidth;
+
+        // Find the limiting dimension.
+        var heightQuotient = startingHeight / maxHeight;
+        var widthQuotient = startingWidth / maxWidth;
+
+        if (heightQuotient > widthQuotient) {
+          // Max out on height.
+          newHeight = maxHeight;
+          newWidth = newHeight * startingAspect;
+        } else {
+          // Max out on width.
+          newWidth = maxWidth;
+          newHeight = newWidth / startingAspect;
+        }
+
+        canvasElement.style.height = newHeight + "px";
+        canvasElement.style.width = newWidth + "px";
+      }
+
+      function pause() { // Don't change the name - GX Mobile calls it when the app becomes inactive.
+        if (!canvasElement.classList.contains("active")) { // Wait for the canvas to load.
+          return
+        }
+        
+        GM_pause();
+        pauseMenu.hidden = false;
+        canvasElement.classList.add("paused");
+      }
+
+      function resume() {
+        GM_unpause();
+        pauseMenu.hidden = true;
+        canvasElement.classList.remove("paused");
+        canvasElement.classList.add("unpaused");
+        enterFullscreenIfSupported();
+        lockOrientationIfSupported();
+      }
+
+      function quitIfSupported() {
+        if (window.oprt && window.oprt.closeTab) { /* GX Mobile API */
+          window.oprt.closeTab();
+        } else if (window.chrome && window.chrome.runtime && window.chrome.runtime.sendMessage) {
+          window.chrome.runtime.sendMessage('mpojjmidmnpcpopbebmecmjdkdbgdeke', { command: 'closeTab' })
+        }
+      }
+
+      function enterFullscreenIfSupported() {
+        if (!window.oprt || !window.oprt.enterFullscreen) { /* GX Mobile API */
+          return;
+        }
+
+        window.oprt.enterFullscreen();
+        let viewStatus = GM_get_view_status();
+        viewStatus.fullscreen = true;
+        GM_set_view_status(viewStatus);
+      }
+
+      function lockOrientationIfSupported() {
+        if (!window.oprt || !window.oprt.lockPortraitOrientation || !window.oprt.lockLandscapeOrientation) { /* GX Mobile API */
+          return;
+        }
+
+        let viewStatus = GM_get_view_status();
+        if (viewStatus.landscape === true && viewStatus.portrait === false) {
+          window.oprt.lockPortraitOrientation();
+        } else if (viewStatus.landscape === false && viewStatus.portrait === true) {
+          window.oprt.lockPortraitOrientation();
+        }
+      }
+
+      /* Observe the dimensions of body and ensureAspectRatio of the canvas (whilst taking up maximum space)
+       *
+       * NOTE(robertz):
+       *  We also need to request an Animation Frame to do this, if we do not, resizeObserver might throw error
+       *  "ResizeObserver loop limit exceeded", which means that
+       *  "[...] ResizeObserver was not able to deliver all observations within a single animation frame"
+       *  https://stackoverflow.com/a/50387233 (source).
+       *
+       *  There are different ways to solve the issue, since the error is benign (meaning it wont crash anything)
+       *  we could choose to ignore it via changing the window.onerror method, i.e
+       *  ```
+       *  window.onerror((event)=> {
+       *    if(event==="ResizeObserver loop limit exceeded") {
+       *       return
+       *    }
+       *     ///...rest
+       *  }
+       *  ```
+       *  But for now we request an animationFrame which seems to be the recommended way to go about it.
+       *
+       * NOTE(ddrechny):
+       *  window.innerWidth/Height value updates are sometimes delayed in WebKit on iOS after an orientation
+       *  change. Hence we're calling ensureAspectRatio one more time after a delay to minimize the risk of
+       *  sizing the canvas with outdated values.
+       */
+      const resizeObserver = new ResizeObserver(() => {
+        window.requestAnimationFrame(ensureAspectRatio);
+        setTimeout(() => window.requestAnimationFrame(ensureAspectRatio), 100);
+      });
+      resizeObserver.observe(document.body);
+
+      /* NOTE(ddrechny):
+       *  Body needs to be scrollable on desktop browsers for debug buttons to be accessible.
+       *  On mobile browsers scrolling can be activated accidentally and debug buttons aren't useful,
+       *  so it's better to disable it.
+       */
+      if (/Android|iPhone|iPod/i.test(navigator.userAgent)) {
+        bodyElement.className = "scrollingDisabled";
+        canvasElement.classList.add("animatedSizeTransitions");
+        outputContainerElement.hidden = true;
+      }
+
+      document.addEventListener("visibilitychange", (event) => {
+        if (document.visibilityState != "visible") {
+          pause();
+        } else if (isMultiplayer()) {
+          resume();
+        }
+      });
+
+      window.addEventListener("load", (event) => {
+        if ((!window.oprt || !window.oprt.enterFullscreen) && (!window.chrome || !window.chrome.runtime || !window.chrome.runtime.sendMessage)) {
+          quitButton.hidden = true;
+        }
+      });
+
+      setWadLoadCallback(() => {
+        enterFullscreenIfSupported();
+        lockOrientationIfSupported();
+      });
+
+      var read_ptr = 0;
+      read_int = () => {
+        var heap_slice = Module["HEAPU8"].subarray(read_ptr, read_ptr + 4);
+        var buffer = new ArrayBuffer(4);
+        var barray = new Uint8Array(buffer);
+        for (var i = 0; i < 4; i++) barray[i] = heap_slice[i];
+        var int_array = new Int32Array(buffer);
+        var int = int_array[0];
+        read_ptr += 4;
+        return int;
+      };
+
+      read_pointer = () => {
+        var ptr = Module.getValue(read_ptr, "*");
+        read_ptr += 8;
+        return ptr;
+      };
+
+      readPeer = () => {
+        var peer = {
+          peer: read_int(),
+          local_frames_ahead: read_int(),
+          rtt: read_int(),
+          remote_frame_rate: read_int(),
+          remote_frame_delay: read_int(),
+        }
+
+        return peer;
+      }
+
+      readStats = (s) => {
+        read_ptr = s;
+
+        var stats = {
+          kbps_sent: read_int(),
+          kbps_received: read_int(),
+          pps_sent: read_int(),
+          pps_received: read_int(),
+          frame_rate: read_int(),
+          rollbacks: read_int(),
+          frame_delay: read_int(),
+          skipped_frames: read_int(),
+          rejected_inputs: read_int(),
+          relay_rtt: read_int(),
+          peer: read_int(),
+          num_peers: read_int(),
+
+          serialization_stats: {
+            state_size: read_int(),
+            managed_instances_num: read_int()
+          },
+          peers: []
+        }
+
+        read_ptr = read_pointer();
+        for (var j = 0; j < stats.num_peers; ++j) {
+          stats.peers.push(readPeer());
+        }
+
+        return stats;
+
+      }
+
+      var acceptable_rollback_frames = 0;
+      var set_acceptable_rollback = (frames) => {
+        acceptable_rollback_frames = frames;
+      }
+
+      drawLocal = (peers_elem, frame_delay_elem, relay_rtt_elem, peer_name, relay_rtt, frame_delay) => {
+          drawPeer(peers_elem, frame_delay_elem, peer_name, 0, frame_delay, 0);
+
+          const per_pixel = 100/16;
+          const frames_rtt = relay_rtt/16; // To ceil, or not to ceil - that's the question.
+
+          const y = 100 - frames_rtt * per_pixel;
+
+          const relay_rtt_marker = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          relay_rtt_marker.setAttribute('x1', -2);
+          relay_rtt_marker.setAttribute('y1', y);
+          relay_rtt_marker.setAttribute('x2', 2);
+          relay_rtt_marker.setAttribute('y2', y);
+
+          relay_rtt_marker.setAttribute('data-relay-rtt', relay_rtt);
+
+          relay_rtt_marker.classList.add(peer_name);
+          relay_rtt_marker.classList.add('relay-rtt');
+
+          relay_rtt_elem.appendChild(relay_rtt_marker);
+      }
+
+      drawPeer = (peers_elem, frame_delay_elem, peer_name, rtt, frame_delay, frames_ahead) => {
+        const per_pixel = 100/16;
+        const frames_rtt = rtt/16; // To ceil, or not to ceil - that's the question.
+        const x = 50 + frames_ahead * per_pixel;
+        const y = 100 - frames_rtt * per_pixel;
+
+        const peer = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        peer.setAttribute('cx', x);
+        peer.setAttribute('cy', y);
+        peer.setAttribute('r', 1);
+
+        peer.setAttribute('data-rtt', rtt);
+        peer.setAttribute('data-frame-delay', frame_delay);
+        peer.setAttribute('data-frames-ahead', frames_ahead);
+
+        peer.classList.add(peer_name);
+        peer.classList.add('peer');
+
+        peers_elem.appendChild(peer);
+
+        const peer_frame_delay = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        peer_frame_delay.setAttribute('cx', x);
+        peer_frame_delay.setAttribute('cy', y);
+        peer_frame_delay.setAttribute('r', frame_delay * per_pixel);
+
+        peer_frame_delay.classList.add(peer_name);
+        peer_frame_delay.classList.add('peer-frame-delay');
+
+        frame_delay_elem.appendChild(peer_frame_delay);
+
+        if (acceptable_rollback_frames > 0) {
+          const peer_acceptable_rollback = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          peer_acceptable_rollback.setAttribute('cx', x);
+          peer_acceptable_rollback.setAttribute('cy', y);
+          peer_acceptable_rollback.setAttribute('r', (frame_delay + acceptable_rollback_frames) * per_pixel);
+
+          peer_acceptable_rollback.classList.add(peer_name);
+          peer_acceptable_rollback.classList.add('peer-acceptable-rollback');
+          frame_delay_elem.appendChild(peer_acceptable_rollback);
+        }
+      }
+
+      report_stats = (stats_data) => {
+
+        var stats = readStats(stats_data);
+
+        var peers_elem = document.getElementById("stats-network-peers");
+        var frame_delay_elem = document.getElementById("stats-network-peer-frame-delays");
+        var relay_rtt_elem = document.getElementById("stats-network-relay-rtt");
+
+        peers_elem.innerHTML = '';
+        frame_delay_elem.innerHTML = '';
+        relay_rtt_elem.innerHTML = '';
+
+        stats.peers.forEach(p => {
+          drawPeer(peers_elem, frame_delay_elem, 'peer' + p.peer, p.rtt, p.remote_frame_delay, p.local_frames_ahead);
+        });
+
+        drawLocal(peers_elem, frame_delay_elem, relay_rtt_elem, 'peer' + stats.peer, stats.relay_rtt, stats.frame_delay);
+      }
+
+      let wallpaperConfig = {};
+      const wallpaperConfigKey = 'wallpaper-config';
+
+      function wallpaper_init_config_controls(definitions) {
+        const wallpaperContainer = document.getElementById("wallpaper-container");
+        wallpaperContainer.style.display = "block";
+
+        let configStyle = '<style type="text/css">' +
+          'body { color: white; font-family: Averta, -apple-system, "Segoe UI", system-ui, sans-serif; font-style: normal; font-size: 10px; }' +
+          '.config-row { display: flex; justify-content: flex-start; align-items: center; padding: .5em; }' +
+          '.config-row > label { flex: 1 }' +
+          '.config-row > input { flex: initial; }' +
+          '.config-row > textarea { flex: 1; }' +
+          '.config-row-label { font-size: 12px; font-weight: 600; }' +
+          'button { padding: 8px 16px; border-radius: 4px; background-color: unset; border-color: rgb(199, 159, 234); color: rgb(199, 159, 234); }' +
+          '<\/style>';
+        let configHTML = '<html><head><title><\/title>' + configStyle + '<\/head><body>' +
+          '<div class="wallpaper-header"><h1>Live Wallpaper Configurator<\/h1><button id="wallpaper-reset-parameters">Reset parameters<\/button><\/div>' +
+          '<div class="wallpaper-config" id="wallpaper-config"><\/div>' +
+          '<\/body><\/html>'
+
+        const wallpaperConfigDocument = document.getElementById("wallpaper-config-iframe").contentDocument;
+        wallpaperConfigDocument.open();
+        wallpaperConfigDocument.write(configHTML);
+        wallpaperConfigDocument.close();
+
+        const storedConfig = JSON.parse(localStorage.getItem(wallpaperConfigKey));
+        if (storedConfig) {
+          wallpaperConfig = storedConfig;
+        }
+
+        const configElement = wallpaperConfigDocument.getElementById("wallpaper-config");
+        const resetButton = wallpaperConfigDocument.getElementById("wallpaper-reset-parameters");
+        resetButton.addEventListener("click", (e) => {
+          wallpaper_reset_config();
+          wallpaperConfig = {};
+          add_config_elems(configElement, definitions);
+          notify_config_change();
+        }, false);
+
+        add_config_elems(configElement, definitions);
+        notify_config_change();
+      }
+
+      function add_config_elems(configElement, definitions) {
+        while (configElement.hasChildNodes()) {
+          configElement.removeChild(configElement.lastChild);
+        }
+
+        definitions.value
+          .map(d => create_elems(d, wallpaperConfig, ""))
+          .filter(e => e !== null && e !== undefined)
+          .map(e => configElement.appendChild(e));
+      }
+
+      function create_elems(definition, config, prefixId) {
+          if (definition.type === undefined || definition.name === undefined) {
+            console.log("missing definition name or type for: ", definition);
+            return null;
+          }
+
+          if  (definition.type === "section") {
+            return create_section_elem(definition, config, prefixId);
+          }
+
+
+          if (definition.value === undefined ) {
+            console.log("missing definition value for: ", definition);
+            return null;
+          }
+
+          if (definition.type === "range") {
+            return create_range_elem(definition, config, prefixId);
+          }
+
+          if (definition.type === "boolean") {
+            return create_checkbox_elem(definition, config, prefixId);
+          }
+
+          if (definition.type === "color" || definition.type === "colour") {
+            return create_color_elem(definition, config, prefixId);
+          }
+
+          if (definition.type === "string") {
+            return create_text_elem(definition, config, prefixId);
+          }
+
+          if (definition.type === "string_multiline") {
+            return create_multiline_text_elem(definition, config, prefixId);
+          }
+
+          if (definition.type === "select") {
+            return create_select_elem(definition, config, prefixId);
+          }
+
+          if (definition.type === "file" || definition.type === "folder") {
+            return create_not_supported_elem(definition, config);
+          }
+          
+          console.log("missing config value for: ", definition);
+          return null;
+      }
+
+      function create_section_elem(definition, config, prefixId) {
+        const divElem = document.createElement("div");
+
+        const headerElem = document.createElement("h2");
+        headerElem.innerHTML = definition.label;
+
+        divElem.appendChild(headerElem);
+
+        const sectionId = prefixId + definition.name + "-"
+        if (!config[definition.name]) {
+          config[definition.name] = {};
+        }
+
+        definition.children
+          .map(c => create_elems(c, config[definition.name], sectionId))
+          .filter(e => e !== null && e !== undefined)
+          .map(e => divElem.appendChild(e));
+
+        return divElem;
+      }
+
+      function get_initial_value(definition, config) {
+        let value =  definition.value;
+        const configValue = config[definition.name];
+        if (configValue && (typeof(configValue) === typeof(value))) {
+          value = configValue;
+        }
+
+        return value;
+      }
+
+      function wrap_with_label(inputElem, definition, prefixId) {
+        const controlElem = document.createElement("div");
+        controlElem.classList.add(definition.name + "-control");
+        controlElem.classList.add("config-row");
+
+        const labelElem = document.createElement("label");
+        labelElem.htmlFor = prefixId + definition.name;
+        labelElem.innerHTML = "<span class='config-row-label'>" + (definition.label || definition.name) + "<\/span>";
+        if (definition.description) {
+          labelElem.innerHTML += "<p>" + definition.description + "<\/p>";
+        }
+        controlElem.appendChild(labelElem);
+
+        inputElem.id = prefixId + definition.name;
+        controlElem.appendChild(inputElem);
+
+        return controlElem;
+      }
+
+      function create_range_elem(definition, config, prefixId) {
+        const value = get_initial_value(definition, config);
+
+        const valueElem = document.createElement("span");
+        valueElem.style = "margin: 0.5em";
+        valueElem.innerHTML = "(" + value + ")";
+
+        const stepElem = document.createElement("input");
+        stepElem.id = prefixId + definition.name;
+        stepElem.type = "range";
+        stepElem.min = definition.min || 0;
+        stepElem.max = definition.max || 100;
+        stepElem.step = definition.step || 1;
+        stepElem.value = value;
+
+        config[definition.name] = value;
+        function range_value_updated(e) {
+          const valueUpdate = Number(e.target.value);
+          config[definition.name] = valueUpdate;
+          valueElem.innerHTML = "(" + valueUpdate + ")";
+
+          notify_config_change();
+        }
+
+        stepElem.addEventListener("change", range_value_updated, false);
+        stepElem.addEventListener("input", range_value_updated, false);
+
+        const valueWrapper = document.createElement("span");
+        valueWrapper.appendChild(valueElem);
+        valueWrapper.appendChild(stepElem);
+
+        return wrap_with_label(valueWrapper, definition, prefixId);
+      }
+
+      function create_checkbox_elem(definition, config, prefixId) {
+        const value = get_initial_value(definition, config);
+
+        const checkboxElem = document.createElement("input");
+        checkboxElem.type = "checkbox";
+        checkboxElem.checked = value;
+        
+        config[definition.name] = value;
+        checkboxElem.addEventListener("change", (e) => {
+          const valueUpdate = Boolean(e.target.checked);
+          config[definition.name] = valueUpdate;
+          notify_config_change();
+        });
+
+        return wrap_with_label(checkboxElem, definition, prefixId);
+      }
+
+      function create_color_elem(definition, config, prefixId) {
+        const value = get_initial_value(definition, config);
+
+        const bgrColor = value;
+        const r = (bgrColor & 0x0000ff);
+        const g = (bgrColor & 0x00ff00) >> 8;
+        const b = (bgrColor & 0xff0000) >> 16;
+        const rgbColor = (r << 16) + (g << 8) + b;
+        const color = "#" + rgbColor.toString(16).padStart(6, '0');
+
+        const colorElem = document.createElement("input");
+        colorElem.type = "color";
+        colorElem.value = color;
+
+        config[definition.name] = value;
+        function color_value_updated(e) {
+          const color = e.target.value;
+          const rgbColor = parseInt(color.slice(1), 16);
+          const r = (rgbColor & 0xff0000) >> 16;
+          const g = (rgbColor & 0x00ff00) >> 8;
+          const b = (rgbColor & 0x0000ff);
+          const bgrColor = (b << 16) + (g << 8) + r;
+
+          config[definition.name] = bgrColor;
+          notify_config_change();
+        }
+
+        colorElem.addEventListener("change", color_value_updated, false);
+        colorElem.addEventListener("input", color_value_updated, false);
+        
+        return wrap_with_label(colorElem, definition, prefixId);
+      }
+
+      function create_text_elem(definition, config, prefixId) {
+        const value = get_initial_value(definition, config);
+
+        const textElem = document.createElement("input");
+        textElem.type = "text";
+        textElem.value = value;
+        console.log("text", value)
+        if (definition.max_length && definition.max_length > 0) {
+          textElem.maxLength = definition.max_length;
+        }
+
+        config[definition.name] = value;
+        textElem.addEventListener("input", (e) => {
+          config[definition.name] = e.target.value;
+          notify_config_change();
+        });
+        
+        return wrap_with_label(textElem, definition, prefixId);
+      }
+
+      function create_multiline_text_elem(definition, config, prefixId) {
+        const value = get_initial_value(definition, config);
+
+        const textareaElem = document.createElement("textarea");
+        textareaElem.rows = 5;
+        textareaElem.cols = 50;
+        textareaElem.value = value;
+        if (definition.max_length && definition.max_length > 0) {
+          textareaElem.maxLength = definition.max_length;
+        }
+
+        config[definition.name] = value;
+        textareaElem.addEventListener("input", (e) => {
+          config[definition.name] = e.target.value;
+          notify_config_change();
+        });
+        
+        return wrap_with_label(textareaElem, definition, prefixId);
+      }
+
+      function create_select_elem(definition, config, prefixId) {
+        const value = get_initial_value(definition, config);
+
+        const selectElem = document.createElement("select");
+        selectElem.value = value;
+        
+        const options = definition.options || [];
+        options.forEach(o => {
+          const option = document.createElement("option");
+          option.value = o;
+          option.text = o;
+          option.selected = o == value ? "selected" : "";
+          selectElem.appendChild(option);
+        })
+
+        config[definition.name] = value;
+        selectElem.addEventListener("change", (e) => {
+          e.selected = "selected";
+          config[definition.name] = e.target.value;
+          notify_config_change();
+        });
+        
+        return wrap_with_label(selectElem, definition, prefixId);
+      }
+
+      function create_not_supported_elem(definition, config, prefixId) {
+        const labelElem = document.createElement("label");
+        labelElem.innerHTML = "Not supported in browser";
+
+        config[definition.name] = definition.value;
+        return wrap_with_label(labelElem, definition, prefixId);
+      }
+
+      function notify_config_change() {
+        console.log(wallpaperConfig)
+        localStorage.setItem(wallpaperConfigKey, JSON.stringify(wallpaperConfig));
+
+        wallpaper_update_config(JSON.stringify(wallpaperConfig));
+      }
+    </script>
+	    <script async type="text/javascript" src="https://cdn.jsdelivr.net/gh/reeyuki/frickbears3port@4e185a27651d1d331a2e37f40f3d4e7a431b5b03/runner.js"></script>
+
+    <!-- Custom BodyEnd code is injected here -->
+    
+
+  </body>
+  
+  <!-- Custom PostBody code is injected here -->
+  
+</html>

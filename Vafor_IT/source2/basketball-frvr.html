@@ -1,0 +1,1854 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7856P3VNT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L7856P3VNT');
+</script><!DOCTYPE html><html lang="en"><head>
+  
+  
+  <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+          dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-');
+  </script>
+    <base href="https://cdn.jsdelivr.net/gh/bubbls/youtube-playables@main/basketball-frvr/">
+      <script src="https://cdn.jsdelivr.net/gh/bubbls/youtube-playables@main/ytgame.js" nonce="-sOJ1RQ8_ggBND0jamQKHQ"></script>
+
+    <script nonce="-sOJ1RQ8_ggBND0jamQKHQ">
+     window.__FRVR = window.__FRVR || {};
+     window.__FRVR.startTime = Date.now();
+     window.__FRVR.gameIsLoaded = false;
+     window.__FRVR.createErrorHandler = function (hint) {
+         return function(err) {console.error(hint, err)};
+     }
+
+    </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <!--
+    /**
+    * @author Chris Benjaminsen http://chrisbenjaminsen.com/ @benjaminsen
+    */
+    /** @license
+    Basketball FRVR 2.11.8
+    More info at http://frvr.com
+
+    Copyright (c) 2013+ FRVR Limited
+
+    All Rights Reserved!
+    FRVR is a registered trademark of FRVR Limited
+    */
+    /**
+    Well hello there!
+
+    I see you are interested in the details of how this game was made!
+    It's written using a custom HTML5 engine built around PixiJS.
+
+    While I can't tell you more on the how, there is much more on the why to be find at 
+    http://blog.chrisbenjaminsen.com where I write frequent status updates on the games I build
+    under the FRVR brand - - including a 100% honest track record of money earned and spend.
+
+    Hack on!
+    Chris Benjaminsen
+    chrisbenjaminsen.com
+
+    - - - - - - - - - - - - - -
+
+    Basketball FRVR would not be possible without the following open source projects:
+
+    pixi.js - v2.2.3
+    Copyright (c) 2012-2014, Mat Groves
+    http://goodboydigital.com/
+    pixi.js is licensed under the MIT License.
+    http://www.opensource.org/licenses/mit-license.php
+    Mat Groves http://matgroves.com/ @Doormat23
+    */
+    -->
+
+    <link rel="canonical" href="https://basketball.frvr.com/">
+
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basketball FRVR">
+<meta name="theme-color" content="#202020">
+<meta name="HandheldFriendly" content="true">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
+<meta name="google" content="notranslate">
+
+    <title>Play Basketball FRVR - Free Basketball Hoop Shooter</title>
+
+    <style>
+
+body {
+    background:#c8c8c8;
+    overflow:hidden;
+    position:fixed;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    border:0px;padding:0px;margin:0px;
+    width:100%;
+    height:100%;
+    padding-top: constant(safe-area-inset-top);
+    overscroll-behavior: none;
+}
+
+preloader{
+    display:block;
+    width:100%;
+    height:100%;
+    background: #FEFEFE;
+    position:fixed;
+    z-index:5;
+}
+preloader.dark {
+    background: #1C1C1C;
+}
+
+preloader canvas, preloader img{
+    position: fixed;
+}
+
+preloader loadbar{
+    display:none;
+    position:fixed;
+    border:1px solid #A4A4A4;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+preloader loadbar div{
+    display:block;
+    width:0%;
+    height:100%;
+    background-color:#02BDFF;
+}
+
+#gameCanvas{
+    position: fixed;
+    top:0px;
+    left:0px;
+    width:0px;
+    height:0px;
+    background-color:#000000
+}
+
+#overlay{
+    position:absolute;
+    z-index:3;
+    left:50%;
+    transform: translate(-50%, -50%);
+    visibility:hidden;
+    bottom:3px;
+    overflow:hidden;
+    text-align: center;
+}
+
+#overlay div{
+    float:left;
+}
+
+#overlay.cn {
+    margin-left: -190px;
+}
+
+/* Google+ share button */
+#overlay.cn div#___plusone_0 {
+    width: 68px !important;
+}
+
+#overlay.cn div#___plusone_0 iframe {
+    position: relative !important;
+    top: -4px !important;
+}
+
+/* Sina Weibo share button */
+#overlay wb\:share-button iframe {
+    width: 105px !important;
+}
+
+/* QZone share button */
+#overlay iframe[version="1.0"] {
+    position: relative !important;
+    top: -2px;
+}
+
+@-ms-viewport{width:100%}
+
+@keyframes w{0%{transform:rotate(0deg);}20%{transform:rotate(-3deg) scale(1.4) translate(0px,-5px);}50%{transform:rotate(3deg) scale(1.4) translate(0px,-5px);}80%{transform:rotate(-3deg) scale(1.4) translate(0px,-5px);}100%{transform:rotate(0deg);}}
+.w {animation:w 1.5s 1;}
+
+#sidebarad1,
+#sidebarad2 {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 160px;
+  height: 600px;
+  padding: 0;
+  margin: 0;
+  z-index: 999999;
+}
+#sidebarad1 {
+  left: 0;
+}
+#sidebarad2 {
+  right: 0;
+}
+.sidebar-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10;
+}
+.sidebar-frame {
+  width: 160px;
+  height: 600px;
+  border: none;
+  display: block;
+}
+</style>
+
+    <style>
+.ad-window {
+    position: absolute;
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.ad-header-base {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    background: #FFFFFF;
+    z-index: 2;
+}
+
+.ad-header-portrait-sm {
+    height: 28px;
+}
+
+.ad-header-portrait-md {
+    height: 28px;
+}
+
+.ad-header-portrait-lg {
+    height: 48px;
+}
+
+.ad-header-landscape-sm {
+    height: 42px;
+}
+
+.ad-header-landscape-md {
+    height: 42px;
+}
+
+.ad-header-landscape-lg {
+    height: 42px;
+}
+
+.ad-footer-base {
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    bottom: 0px;
+    z-index: 2;
+}
+
+.ad-footer-portrait-sm {
+    height: 99px;
+}
+
+.ad-footer-portrait-md {
+    height: 118px;
+}
+
+.ad-footer-portrait-lg {
+    height: 155px;
+}
+
+.ad-footer-landscape-sm {
+    height: 80px;
+}
+
+.ad-footer-landscape-md {
+    height: 96px;
+}
+
+.ad-footer-landscape-lg {
+    height: 128px;
+}
+
+.ad-close-button-base {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+
+    position: absolute;
+    border: none;
+    outline: none;
+
+    background: #FF0029;
+
+    color: #FFFFFF;
+
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 99px;
+    z-index: 3;
+}
+
+.ad-close-button-portrait-sm {
+    width: 40px;
+    height: 40px;
+    right: 32px;
+    top: 8px;
+
+    font-size: 20px; 
+}
+
+.ad-close-button-portrait-md {
+    width: 40px;
+    height: 40px;
+    right: 32px;
+    top: 8px;
+
+    font-size: 20px; 
+}
+
+.ad-close-button-portrait-lg {
+    width: 40px;
+    height: 40px;
+    right: 32px;
+    top: 8px;
+
+    font-size: 20px; 
+}
+
+.ad-close-button-landscape-sm {
+    width: 60px;
+    height: 60px;
+    right: 64px;
+    top: 12px;
+
+    font-size: 35px; 
+}
+
+.ad-close-button-landscape-md {
+    width: 60px;
+    height: 60px;
+    right: 64px;
+    top: 12px;
+
+    font-size: 35px; 
+}
+
+.ad-close-button-landscape-lg {
+    width: 60px;
+    height: 60px;
+    right: 64px;
+    top: 12px;
+
+    font-size: 35px; 
+}
+
+.ad-play-button-base {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+
+    position: absolute;
+    z-index: 3;
+
+    font-family: 'Poppins Arial';
+    font-style: normal;
+    font-weight: 700;
+
+    color: #FFFFFF;
+
+    background: linear-gradient(90deg, #E8913D, #D83839, #E8913D);
+    border-radius: 99px;
+    border: none;
+    outline: none;
+
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+.ad-portrait-play-button-sm {
+    width: 234px;
+    height: 62px;
+    left: calc(50% - 234px/2);
+    bottom: 68px;
+
+    font-size: 26px;
+    line-height: 39px;
+
+    animation-name: portrait-play-button-anim-sm;
+}
+
+.ad-portrait-play-button-md {
+    width: 256px;
+    height: 68px;
+    left: calc(50% - 256px/2);
+    bottom: 84px;
+
+    font-size: 32px;
+    line-height: 48px;
+
+    animation-name: portrait-play-button-anim-md;
+}
+
+.ad-portrait-play-button-lg {
+    width: 374px;
+    height: 104px;
+    left: calc(50% - 374px/2);
+    bottom: 103px;
+
+    font-size: 48px;
+    line-height: 72px;
+
+    animation-name: portrait-play-button-anim-lg;
+}
+
+.ad-landscape-play-button-sm {
+    width: 301px;
+    height: 80px;
+    left: 128px;
+    bottom: 40px;
+
+    font-size: 36px;
+    line-height: 54px;
+
+    animation-name: landscape-play-button-anim-sm;
+}
+
+.ad-landscape-play-button-md {
+    width: 384px;
+    height: 96px;
+    left: 128px;
+    bottom: 48px;
+
+    font-size: 48px;
+    line-height: 572px;
+
+    animation-name: landscape-play-button-anim-md;
+}
+
+.ad-landscape-play-button-lg {
+    width: 384px;
+    height: 96px;
+    left: 128px;
+    bottom: 80px;
+
+    font-size: 48px;
+    line-height: 572px;
+
+    animation-name: landscape-play-button-anim-md;
+}
+
+@keyframes portrait-play-button-anim-sm {
+   from {background-position-x: 0px;}
+   to {background-position-x: 234px;}
+}
+
+@keyframes portrait-play-button-anim-md {
+   from {background-position-x: 0px;}
+   to {background-position-x: 256px;}
+}
+
+@keyframes portrait-play-button-anim-lg {
+   from {background-position-x: 0px;}
+   to {background-position-x: 374px;}
+}
+
+@keyframes landscape-play-button-anim-sm {
+   from {background-position-x: 0px;}
+   to {background-position-x: 301px;}
+}
+
+@keyframes landscape-play-button-anim-md {
+   from {background-position-x: 0px;}
+   to {background-position-x: 384px;}
+}
+
+.ad-logo-base {
+    position: absolute;
+    z-index: 3;
+}
+
+.ad-portrait-logo-sm {
+    width: 52px;
+    height: 52px;
+    left: calc(50% - 52px/2);
+    bottom: 8px;
+}
+
+.ad-portrait-logo-md {
+    width: 64px;
+    height: 64px;
+    left: calc(50% - 64px/2);
+    bottom: 13px;
+}
+
+.ad-portrait-logo-lg {
+    width: 64px;
+    height: 64px;
+    left: calc(50% - 64px/2);
+    bottom: 24px;
+}
+
+.ad-landscape-logo-sm {
+    width: 182px;
+    height: 42px;
+    right: 128px;
+    bottom: 19px;
+}
+
+.ad-landscape-logo-md {
+    width: 213px;
+    height: 48px;
+    right: 128px;
+    bottom: 24px;
+}
+
+.ad-landscape-logo-lg {
+    width: 213px;
+    height: 48px;
+    right: 128px;
+    bottom: 40px;
+}
+
+.ad-image-sm {
+    position: absolute;
+    margin: auto;
+    display: block;
+    z-index: 1;
+}
+
+</style>
+
+    <script type="application/json" class="cohort" nonce="-sOJ1RQ8_ggBND0jamQKHQ">{"version":"2.11.8","name":"basketball","gaPath":"basketball/2.11.8/","vpath":"./","spath":"./external.js","legacyCoords":false,"configJs":{"id":"basketball","version":"2.11.8","build":"240219630","gaId":"UA-54081731-1","gaGameId":"UA-54081731-3"},"moreJson":{"ab_tests":{"ab_prize_pacing_2":{"cohorts":["more","normal"]}},"track-frvr":{"state":"{app_version,engine_version,app_build,cohort,channel,development,games_played,play_session_id,play_session_count,days_elapsed,facebook_player_id,facebook_context_type,facebook_entrypoint,utm_source,utm_medium,utm_campaign,utm_term,utm_content,facebook_referral_player_id,remote_user_id,non_interaction,device_width,device_height,global_user_id,web_url,script_version,social_session_id,ab_exp,ab_cohort_name,ab_cohort_weight,page_session_id,fb_instant_game_ad_id,fb_segment}","events":{"default":"name,value,{_merge=state,_merge=_params}"}},"track-ga":{"gaIds":{"all":"UA-54081731-1"},"state":"{appId=app_id,appName=app_name,appVersion=app_version,metric1=play_session_count,dimension2=cohort,dimension4=play_session_id,dimension3=device_id,metric2=days_elapsed,metric3=days_played,dimension5=channel,dimension6=entry_point,dimension7=utm_string,dimension8=screen,dimension9=facebook_context,metric4=currency_amount,metric5=missions_completed,metric6=progression,metric7=games_played}","events":{"default":"name,,value,_params","options_change":"name,option_name:option_value","game_end":"name,,,{_merge=_params,metric8=score,metric9=shots,metric10=max_score,dimension10=context_type,dimension11=total_game_session}","game_play_start,game_continue_used":"name,level_id","keepalive,new_user,mission_success":"name","coin_spent,tutorial_step_completed,session_start":"name,,value","game_loaded":"name,,loading_time","social_engage,engage":"'engage',engage_id:button_placement,1","play_with_friend":"name,,1","share,invite":"name,button_placement,1","cross_promotion_show":"name,button_placement,1","cross_promotion_click,cross_promotion_success,cross_promotion_failure":"name,target_game,1","ad_mandatory_request":"name,,value,{_merge=_params,dimension13=provider}","ad_mandatory_response":"name,ad_response,value,{_merge=_params,dimension13=provider}","ad_mandatory_show":"name,,value,{_merge=_params,dimension13=provider}","ad_mandatory_finish":"name,ad_result,value,{_merge=_params,dimension13=provider}","ad_mandatory_blocked":"name,,value,{_merge=_params,dimension13=provider}","ad_mandatory_pass":"name,,value,{_merge=_params,dimension13=provider}","ad_mandatory_throttled":"name,throttle_type,value,{_merge=_params,dimension13=provider}","ad_rewarded_request":"name,,value,{_merge=_params,dimension13=provider}","ad_rewarded_response":"name,ad_response,value,{_merge=_params,dimension13=provider}","ad_rewarded_show":"name,,value,{_merge=_params,dimension13=provider}","ad_rewarded_finish":"name,ad_result,value,{_merge=_params,dimension13=provider}","ad_rewarded_blocked":"name,,value,{_merge=_params,dimension13=provider}","ad_rewarded_pass":"name,,value,{_merge=_params,dimension13=provider}","ad_rewarded_throttled":"name,throttle_type,value,{_merge=_params,dimension13=provider}","chatbot_noshow,chatbot_show,chatbot_success,chatbot_issubscribed,chatbot_useraborted":"name,,","chatbot_error":"name,reason,","game_play_start":"name,,,{_merge=_params,dimension10=context_type}","challenge_show":"name,,,{_merge=_params,dimension10=context_type,dimension11=entry_point}","challenge_confirmation":"name,,,{_merge=_params,dimension10=context_type,dimension11=entry_point}","post_game":"name,,,{_merge=_params,dimension10=context_type,dimension11=action}","invitation_confirmation":"name,,,{_merge=_params,dimension10=context_type,dimension11=entry_point}","screen":"name,,,{_merge=_params,dimension10=context_type,dimension11=name}","ftue":"name,,,{_merge=_params,metric10=step_number,dimension10=context_type,dimension11=step_name}"}},"track-gma":{"currencies":"coin","itemtypes":"unknown","channelMapping":{"web_safari_ios,web_chrome_ios,web_edge,web_firefox,web_opera,web_safari,web_chrome,":"web"},"customDimensions01":"android,ios,samsung_galaxy_store,facebook_instant,facebook_rooms,bixby,samsung_instant_play,huawei_quick_app,crazy_games,discord,microsoft_pwa,frvr,other","events":{"game_loaded":"'addProgressionEvent','Complete',name,,,loading_time","game_play_start":"'addProgressionEvent','Start',level_id","game_continue_used":"'addProgressionEvent','Start',level_id","game_end":"'addProgressionEvent','Complete',level_id,,,value","game_end-lose":"'addProgressionEvent','Fail',level_id,,,value","tutorial_step_completed":"'addDesignEvent',name:value","fps":"'addDesignEvent',name,value"}},"track-facebook_events":{"blacklist":"iap_request_payment,iap_request_payment_success","events":{"default":"name,{_merge=state,_merge=_params}","ftue":"'COMPLETED_TUTORIAL',{SUCCESS=completed,STEP_NUMBER=step_number,STEP_NAME=step_name,STEP_NUMBER=ftue_step_number,STEP_NAME=ftue_step_name}","ad_rewarded_finish":"'AD_IMPRESSION',{AD_TYPE='rewarded_video',SUCCESS=value}","ad_mandatory_finish":"'AD_IMPRESSION',{AD_TYPE='interstitial',SUCCESS=value}","coin_spent":"'SPENT_CREDITS',{AMOUNT=amount,DESCRIPTION='coins',CONTENT=product}","gem_spent":"'SPENT_CREDITS',{AMOUNT=amount,DESCRIPTION='gems',CONTENT=product}","gem_get":"'UNLOCKED_ACHIEVEMENT',{QUANTITY=value,DESCRIPTION='gem_get'}","popup_claim_reward":"'UNLOCKED_ACHIEVEMENT',{DESCRIPTION='claim_reward'}","levelup_newlevel":"'ACHIEVED_LEVEL',{LEVEL=level}","iap_request_payment":"'INITIATED_CHECKOUT',{CONTENT_ID=productId,NUM_ITEMS='1'}","iap_request_payment_success":"'PURCHASED',{CONTENT_ID=productId,NUM_ITEMS='1'}","iap_request_payment_failed":"'CHECKOUT_CANCELED',{CONTENT_ID=productId,NUM_ITEMS='1'}","rate":"'RATED',{MAX_RATING_VALUE=max_rating_value,RATE=rate_value}"}}},"jsSize":500000,"supportedLanguages":["ar","da","de","el","es","es-MX","fi","fr","hi","id","it","ja","ko","ms","nb-NO","nl","pl","pt","pt-BR","ru","sv","th","tl","tr","vi","zh-Hans","zh-Hant"],"buildJson":{"buildTime":"Mon Feb 19 2024 21:59:26 GMT+0100 (Central European Standard Time)","fsxBuildId":"240219630","repos":{"game-basketball":{"branch":"release/2.11.8","hash":"2dacb43aff8c7b616ef478bc7e625f9176e09936","dirty":false,"dir":"$HOME/Documents/FRVR/game-basketball"},"@frvraps/frvr-xs-builder":{"branch":"feat/PNX-792-youtube-playables","hash":"982052260af1ac68b43f63bade0cea9da7a24b78","dirty":true,"dir":"$HOME/Documents/FRVR/frvr-tools/packages/frvr-xs-builder","repository":"git://github.com/frvraps/frvr-tools.git"},"@frvraps/frvr-xs":{"branch":"feat/PNX-792-youtube-playables","hash":"982052260af1ac68b43f63bade0cea9da7a24b78","dirty":true,"dir":"$HOME/Documents/FRVR/frvr-tools/packages/frvr-xs","repository":"git://github.com/frvraps/frvr-tools.git"}},"options":{"gameName":"basketball","verbose":false,"vitejsVerbose":false,"reheatCache":false,"unsloppify":{"hoistBlockFunctions":true,"importify":true,"declareVars":true,"unclashReserved":true,"correctOctals":true,"replaceTopLevelthis":false},"embedImages":["svgoatlas"],"open":false,"vconsole":false,"manifestJson":false,"serviceWorker":false,"oneSignal":false,"emptyOutDir":true,"platform":"youtube","debug":false,"sizeProfiler":false,"minify":false,"beautify":true,"translate":false,"externalJsSync":true,"inlineJs":false,"localizationStyle":"runtime","zipFile":false,"zipPwd":"","preview":false,"https":true,"sprinkle":[],"strictMode":false,"babelify":true,"screenshot":false,"gameAnalytics":false,"buildId":false,"removeOldStyleCp":true,"outDir":"$HOME/Documents/FRVR/frvr-out/Builds/basketball/basketball.youtube"},"timeStamp":1708376366297,"argv":["/opt/homebrew/Cellar/node@16/16.15.1/bin/node","/opt/homebrew/bin/fsx","build","basketball","--platform=youtube"]}}</script>
+  
+</head>
+  <body>
+
+    <!-- TODO debugcode, move me to provider -->
+    <div id="debug" style="position:absolute; color:red; left:40px; z-index: 9999999"></div>
+
+      <script nonce="-sOJ1RQ8_ggBND0jamQKHQ">
+       window.__antialias = false
+      </script>
+
+      <script nonce="-sOJ1RQ8_ggBND0jamQKHQ">
+
+       window.__FRVR.buildTimePlatform = 'youtube';
+
+       ;(function () {
+
+  function getTLD(){
+    var fallback = document.location.hostname;
+    var hostname = fallback.split('.');
+    for(var i = hostname.length - 1; i >= 0; i--) {
+      var host = hostname.slice(i).join('.');
+      document.cookie = 'get_tld=test;domain=.' + host + ';';
+      if(document.cookie.indexOf('get_tld') > -1){
+        document.cookie = 'get_tld=;domain=.' + host +
+          ';expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        return host;
+      }
+    }
+    return '';
+  }
+
+  function generateUID(separator) {
+    var delim = separator || "-";
+    function S4() {
+      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    }
+    var st = ((new Date).getTime().toString(16)).slice(0,11) +
+        (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1,2);
+    return (S4() + S4() + delim + S4() + delim +
+            S4() + delim + S4() + delim + st);
+  }
+
+  var resolvedChannel;
+  window.__FRVR.getChannel = function () {
+    var channel = 'frvr';
+    var map = {
+      chromeWrapper: 'chromeos',
+      androidWrapper: 'android',
+      iOSWrapper: 'ios',
+      rcs: 'rcs',
+      samsungAppStore: 'samsung_galaxy_store',
+      facebookInstant: 'facebook_instant',
+      facebookRooms: 'facebook_rooms',
+      facebookAppWeb: 'facebook_canvasweb',
+      facebookApp: 'facebook_canvas',
+      samsungBixby: 'bixby',
+      samsungGameLauncher: 'samsung_game_launcher',
+      samsungInstantPlay: 'samsung_instant_play',
+      spilGamesWrapper: 'spil',
+      vkru: 'vkru',
+      okru: 'okru',
+      kik: 'kik',
+      twitter: 'twitter',
+      twitch: 'twitch',
+      hago: 'hago',
+      oppoGlobal: 'oppo_global',
+      tMobile: 'tmobile',
+      huawei: 'huawei',
+      huaweiquickapp: 'huawei_quick_app',
+      yandex: 'yandex',
+      crazyGames: 'crazy_games',
+      lgtv: 'lg_tv',
+      jioStb: 'jio_stb',
+      myJio: 'jio_my',
+      jioGameslite: 'jio_gameslite',
+      rocketChat: 'rocket_chat',
+      ufone: 'ufone',
+      game8: 'game8',
+      snapchat:'snapchat',
+      mailonline: 'mail_online',
+      discord: 'discord',
+      harman: 'harman',
+      microsoftPwa: 'microsoft_pwa',
+    };
+    var adsense_custom_channel_map = {
+          '7978894035': 'samsung_game_launcher',
+          '7640790291': 'bixby',
+          '3704760038': 'legacy_samsung_daily',
+          '4056808137': 'frvr',
+          '3238562380': 'samsung_instant_play',
+          '5374938192': 'frvr',
+          '5362404538': 'frvr',
+          '9165482691': 'frvr',
+          '1661744930': 'frvr',
+          '1781508157': 'frvr',
+          '1526015108': 'legacy_samsung_browser_us',
+          '9152813246': 'legacy_samsung_gl_fallback',
+          '1570234097': 'bixby',
+          '6159024522': 'telenorpk',
+          '9547456458': 'huawei_quick_app',
+          '4901070532': 'frvr',
+          '5509479103': 'frvr',
+          '4687607673': 'frvr',
+          '7772201439': 'frvr',
+          '5781080938': 'frvr',
+          '7859627468': 'bixby',
+          '6225636036': 'frvr',
+          '9257964653': 'frvr',
+          '9997971842': 'legacy_samsung_gl_pwa',
+          '1810535265': 'frvr',
+          '6879406107': 'frvr',
+          '5664912848': 'frvr',
+          '7871893264': 'oppo_global',
+          '6905222938': '1001spill',
+          '1074763396': 'frvr',
+          '4822698373': 'huawei',
+          '3917207338': 'frvr',
+          '3091839955': 'frvr',
+          '9511672440': 'frvr',
+          '9609759920': 'frvr',
+          '8846287731': 'frvr',
+          '1912410415': 'frvr',
+          '3463089052': 'frvr',
+          '3138478138': 'spil',
+          '3609613151': 'frvr',
+          '7259516105': 'frvr',
+          '8260783143': 'frvr',
+          '4791934430': 'frvr',
+          '5304245228': 'frvr',
+          '4196077731': 'frvr',
+          '7517011737': 'ga',
+          '1420430092': 'frvr',
+          '6341560802': 'frvr',
+          '3188724532': 'frvr',
+          '7430391555': 'samsung_galaxy_store_pwa',
+          '6142190935': 'frvr',
+          '2410146000': 'spil',
+          '6238202936': 'frvr',
+          '2165771095': 'frvr',
+          '7169566203': 'frvr',
+          '7116648941': 'frvr',
+          '9484119302': 'frvr',
+          '8289067739': 'crazy_games',
+          '4942292965': 'frvr',
+          '4111954147': 'samsung_instant_daily',
+          '9508446909': 'mozilla_lite',
+          '6581072258': 'frvr',
+          '6305391737': 'frvr',
+          '7721350107': 'frvr',
+          '5689634745': 'frvr',
+          '4407671492': 'frvr',
+          '8793151713': 'mynet',
+          '6701854007': 'frvr',
+          '8166612510': 'frvr',
+          '1204043211': 'frvr',
+          '8540348735': 'frvr',
+          '8092992494': 'frvr',
+          '3050063345': 'frvr',
+          '6105016100': 'frvr',
+          '5383746593': 'frvr',
+          '2155121367': 'frvr',
+          '4481639214': 'frvr',
+          '9167804042': 'frvr',
+          '2633738716': 'frvr',
+          '5732840388': 'frvr',
+          '1136474154': 'frvr',
+          '3868538934': 'frvr',
+          '6791411817': 'frvr',
+          '4001058104': 'spil',
+          '8323344707': 'frvr',
+          '1511956590': 'frvr',
+          '5337609782': 'frvr',
+          '7647348124': 'frvr',
+          '9465676615': 'frvr',
+          '8699389853': 'frvr',
+          '8288405339': 'ga',
+          '1601204168': 'frvr',
+          '6738957149': 'frvr',
+          '3143968130': 'spil',
+          '3660984936': 'legacy_all_samsung_browser',
+          '6672071330': 'ga',
+          '9944902462': 'frvr',
+          '4216099801': 'ga',
+          '9810477030': 'frvr',
+          '4127083129': 'frvr',
+          '9831349735': 'mediatrust',
+          '1651142765': 'frvr',
+          '2402315798': 'frvr',
+          '3217022605': 'rcs',
+          '8209630496': 'frvr',
+          '7348809119': 'frvr',
+          '1907949320': 'frvr',
+          '7711130568': 'frvr',
+          '6682900564': 'frvr',
+          '8220757253': 'frvr',
+          '9226003469': 'frvr',
+          '6459119768': 'ga',
+          '3297429215': 'frvr',
+          '2066412442': 'frvr',
+          '9610826637': 'spil',
+          '5428378892': 'frvr',
+          '3718604937': 'ga',
+          '7010263033': 'frvr',
+          '5533541335': 'spil',
+          '5393940535': 'spil',
+          '6680931602': 'frvr',
+          '8135642444': 'frvr',
+          '5195338130': 'ga',
+          '2443106993': 'frvr',
+          '9841433446': 'frvr',
+          '9471076165': 'spil',
+          '8645981334': 'clickjogos',
+          '9750454053': 'spil',
+          '5496116299': 'spil',
+          '9095657336': 'spil',
+          '5196972230': 'frvr',
+          '1711991335': 'spil',
+          '1463804937': 'plonga',
+          '6650691459': 'frvr',
+          '7854536931': 'spil',
+          '4185858062': 'frvr',
+          '1559694722': 'frvr',
+          '4196397436': 'ga',
+          '5791200697': 'frvr',
+          '8838890658': 'frvr',
+          '6592001260': 'frvr',
+          '8990371880': 'rocketchat',
+          '3078524176': 'frvr',
+          '1414057592': 'spil',
+          '1721816412': 'spil',
+          '7627870781': 'samsung_instant_browser_us',
+          '7257814137': 'spil',
+          '6687910134': 'mfogs',
+          '6388800833': 'frvr',
+          '6794212012': 'mailonline',
+          '2719344539': 'spil',
+          '6005657456': 'frvr',
+          '4761469737': 'spil',
+          '8260978605': 'frvr',
+          '4899645641': 'frvr',
+          '5570875049': 'tron',
+          '3275762232': 'spil',
+          '1433925895': 'spil',
+          '7925670440': 'taboola',
+          '3587369568': 'squid',
+          '3982547231': 'frvr',
+          '4388062450': 'spil',
+          '8471269857': 'bixby',
+          '1323020937': 'spil',
+          '3605255281': 'bixby',
+          '9085283107': 'frvr',
+          '1873844328': 'legacy_samsung_browser_m4s',
+          '8924310391': 'bixby',
+          '7269966843': 'tmobile',
+          '1075554580': 'adsenseforgamestest2',
+          '1098459098': 'frvr',
+          '8199816817': 'xiaomi'
+        };
+
+    if (resolvedChannel) {
+      return resolvedChannel;
+    }
+
+    var platformIs = window.__FRVR.platformIs;
+    // If there are multiple instances of truthy values, the final one will be used as the channel in the order of map
+    for (var key in map) if (platformIs[key]) channel = map[key];
+
+    if (window.__FRVR.getGoogleAdSenseGameChannelId) {
+      var partner = adsense_custom_channel_map[window.__FRVR.getGoogleAdSenseGameChannelId()];
+      if (partner) {
+        channel = partner;
+      }
+    }
+
+    // this prevents use cases where url is/can be trimmed and end up with different values for the same session
+    resolvedChannel = channel;
+    return channel;
+  }
+
+  //Local cache to preserve querystrings
+  var base_url = window.location.href;
+  window.__FRVR.getQueryString = function(name){
+      var url = base_url;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  window.__FRVR.platformIs = new (function(w,n,u,l) {
+    var that = this;
+
+    // adding build platform variable e.g. XS.is['jio-stb']
+    that[window.__FRVR.buildTimePlatform] = true
+
+    /**
+     * True if we're in an Android browser or app
+     * @memberof XS.is
+     */
+    that.android = /(android)/i.test(u) && !/(Windows)/i.test(u);
+    /**
+     * Returns android version of browser view as float. E.g. 4.2 if we are running "4.2.1"
+     * Hack? Should we move this to a more sensiable location?
+     * @memberof XS.is
+     */
+    that.androidVersion = (function() {
+      var match = navigator.userAgent.toLowerCase().match(/android\s([0-9\.]*)/);
+      return parseFloat(match ? match[1] : 0);
+    })();
+    /**
+     * True if we're in an Android Automotive OS context
+     * @memberof XS.is
+     */
+    that.aaos = window.__FRVR.getQueryString("aaos") == "car";
+    /**
+     * True if we're in an automated/ci build
+     * @memberof XS.is
+     */
+    that.ci = window.__FRVR.getQueryString("ci_run") == "1";
+    /**
+     * True if we're in Firefox Mobile
+     * @memberof XS.is
+     */
+    that.firefoxMobile = /(Mobile)/i.test(u) && /(Firefox)/i.test(u);
+    /**
+     * True if we're in an old Android Device
+     * @memberof XS.is
+     */
+    that.slow = that.android && that.androidVersion < 6
+    /**
+     * True if we're in an iOS browser or app
+     * @memberof XS.is
+     */
+    that.iOS = /(ipod|iphone|ipad)/i.test(u) || (/(Macintosh)/i.test(u) && 'ontouchend' in document); // iPadOS uses the same browser that macOS
+    /**
+     * True if we're in Windows Mobile
+     * @memberof XS.is
+     */
+    that.windowsMobile = /(IEMobile)/i.test(u);
+    /**
+     * True if we're in the silk browser
+     * @memberof XS.is
+     */
+    that.silk = /(silk)/i.test(u);
+    /**
+     * True if we're in the Clay app context
+     * @memberof XS.is
+     */
+    that.clay = /(clay\.io)/i.test(l);
+    /**
+     * True if we're a Facebook Canvas app
+     * @memberof XS.is
+     */
+    that.facebookApp = /(fb_canvas)/i.test(l);
+    /**
+     * True if we're a Facebook Canvas Web app
+     * @memberof XS.is
+     */
+    that.facebookAppWeb = /(fb_canvas_web)/i.test(l);
+    /**
+     * True if we're running in an iframe
+     * @memberof XS.is
+     */
+    that.iframed = w.top !== w.self;
+    /**
+     * True if we're running in iOS Safari standalone mode
+     * @memberof XS.is
+     */
+    that.standalone = 'standalone' in n && n.standalone;
+    /**
+     * True if we're running on an iPhone or iPod
+     * @memberof XS.is
+     */
+    that.mobileiOSDevice = u.match(/iPhone/i) || u.match(/iPod/i);
+    /**
+     * True if we're running on Kongregate
+     * @memberof XS.is
+     */
+    that.kongregate = /(kongregateiframe)/i.test(l);
+    /**
+     * True if we're running in the KIK messenger
+     * @memberof XS.is
+     */
+    that.kik = /(kik_canvas)/i.test(l);
+    /**
+     * True if we're running in a Twitter web view
+     * @memberof XS.is
+     */
+    that.twitter = /(twitter)/gi.test(u);
+    /**
+     * True if we're running in Chrome
+     * @memberof XS.is
+     */
+    that.chrome = /Chrome\//.test(u);
+    /**
+     * True if we're running in Safari
+     * @memberof XS.is
+     */
+    that.safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)
+    /**
+    * True if we're running on latest safari (as of 16/09/2022). This matters because this version has issues with webGL and ATL images. Delete this and it's usages if no longer the case.
+    * @memberof XS.is
+    */
+    that.badWebkit = /AppleWebKit\/605\.1\.15/i.test(u) && /iPhone OS 15_[0|1|2]/i.test(u)
+    /**
+     * True if we're running from HTTPS
+     * @memberof XS.is
+     */
+    that.secureConnection = window.location.protocol.indexOf('https') == 0
+    /**
+     * True if we're running as a Facebook Instant app
+     * @memberof XS.is
+     */
+    that.facebookInstant = !!window.FBInstant;
+    /**
+     * True if we're running as a Facebook Rooms app
+     * @memberof XS.is
+     */
+    that.facebookRooms = window.isFacebookRooms;
+    /**
+     * True if we're running as a Facebook Rooms app
+     * @memberof XS.is
+     */
+    that.youtube = window.__FRVR.buildTimePlatform === 'youtube';
+    /**
+     * True if we're running inside the Spil Games wrapper
+     * @memberof XS.is
+     */
+    that.spilGamesWrapper = /(spilgames)/i.test(l);
+    /**
+     * True if query string parameter 'social' is set to 'on'
+     * @memberof XS.is
+     */
+    that.social = window.__FRVR.getQueryString("social") == "on";
+    /**
+     * True if query string parameter 'ads' is set to 'off'
+     * @memberof XS.is
+     */
+    that.advertisementIsDisabled = window.__FRVR.getQueryString("ads") == "off"
+    /**
+     * True if query string parameter 'int' is set to 'off' window.__FRVR.getQueryString("partnerid")
+     * @memberof XS.is
+     */
+    that.advertisementInterstitialDisabled = window.__FRVR.getQueryString("int") == "off"
+    /**
+     * True if the advertisement overlay is enabled (if we're not iframed, or inside a partner wrapper)
+     * @memberof XS.is
+     */
+    that.advertisementOverlayEnabled = (!that.iframed)||that.spilGamesWrapper||window.__FRVR.getQueryString("partnerid");
+
+    /**
+     * True if nosoc flag is turned on, and social links and buttons should be supressed
+     * @memberof XS.is
+     */
+    that.nosoc = window.__FRVR.getQueryString('nosoc')=="1"
+
+    /**
+     * True if development flag is turned on, and development execution should be tracked
+     * @memberof XS.is
+     */
+    that.development = window.__FRVR.getQueryString('development') != null ? window.__FRVR.getQueryString('development') == "true" : null;
+
+    /**
+     * True if the url contains ?fb
+     * @memberof XS.is
+     */
+    that.facebookAd = /(\/\?fb)/i.test(l)
+
+    /**
+     * True if we're on any of the mobile platform contexts (android, ios, windows mobile, etc)
+     * @memberof XS.is
+     */
+    that.mobile = that.android || that.windowsMobile || that.iOS || that.silk || that.firefoxMobile;
+
+    /** 
+     * True if we're inside the FRVR mobile App wrapper
+     * @memberof XS.is 
+     */
+    that.mobileWrapper = w.iOSWrapper || w.androidWrapper || false
+
+    /**
+     * True if we're inside the FRVR iOS App wrapper
+     * @memberof XS.is
+     */
+    that.iOSWrapper = w.iOSWrapper || false;
+    /**
+     * True if wrapper is running on iPhoneX or later (and hence has a notch) - NB: ONLY WORKS IN WRAPPER SO FAR
+     * @memberof XS.is
+     */
+    that.iPhoneXOrLater = window.__FRVR.getQueryString('iPhoneXOrLater')=="true"
+    /**
+     * True if wrapper is running in iMessage context on iOS
+     * @memberof XS.is
+     */
+    that.iMessageContext = window.__FRVR.getQueryString('iMessage')=="true"
+    /**
+     * True if we're inside the FRVR Android App wrapper
+     * @memberof XS.is
+     */
+    that.androidWrapper = w.androidWrapper || false;
+    /**
+     * True if we're inside the FRVR Chrome App wrapper
+     * @memberof XS.is
+     */
+    that.chromeWrapper = w.isChromeWrapper || false;
+    /**
+     * True if we are a samsung app store app.
+     * @memberof XS.is
+     */
+    that.samsungAppStore = window.__FRVR.getQueryString("androidStore") == "samsung";
+    /**
+     * True if we're inside the FRVR Android or iOS App wrapper
+     * @memberof XS.is
+     */
+     that.appWrapper = w.iOSWrapper || w.androidWrapper || that.samsungAppStore;
+    /**
+     * True if we are using a WebGL Renderer, initialized when XS.renderer is initialized
+     * @memberof XS.is
+     */
+    that.usingWebGLRenderer = false;
+    /**
+     * True if we are using a Canvas Renderer, initialized when XS.renderer is initialized
+     * @memberof XS.is
+     */
+    that.usingCanvasRenderer = false;
+    /**
+     * Is a Jio device STB device. NOTE: this is still required because its being used in games, remove it when we introduce capabilities API.
+     * @memberof XS.is
+     */
+    that.jioStb = !!that['jio-stb']
+    /**
+     * Is a MyJio device
+     * @memberof XS.is
+     */
+    that.myJio = !!that['myjio']
+    /**
+     * Is a MyJio device
+     * @memberof XS.is
+     */
+     that.jioGameslite = !!that['jio-gameslite']
+    /**
+     * Is a Jio device
+     * @memberof XS.is
+     */
+    that.jio = that.jioStb || that.myJio || that.jioGameslite
+    /**
+     * Twitch extension iframe client
+     * @memberof XS.is
+     */
+    that.twitch = window.__FRVR.getQueryString("twitch") == "";
+    /**
+     * VK.RU iframe client
+     * @memberof XS.is
+     */
+    that.vkru = window.__FRVR.getQueryString("vkru") == "";
+    /**
+     * OK.RU iframe client
+     * @memberof XS.is
+     */
+    that.okru = window.__FRVR.getQueryString("okru") == "";
+    /**
+     * t-mobile iframe client
+     * @memberof XS.is
+     */
+    that.tMobile = window.__FRVR.getQueryString("tmobile") == "";
+    /**
+     * Progressive Web App
+     * @memberof XS.is
+     */
+    that.pwa = window.__FRVR.getQueryString("pwa") == "";
+    /**
+     * Windows App
+     * @memberof XS.is
+     */
+    that.windowsApp = window.__FRVR.getQueryString("windowsapp") == "";
+    /**
+     * Microsoft PWA
+     * @memberof XS.is
+     */
+    that.microsoftPwa = (
+        window.document &&
+        window.document.referrer &&
+        document.referrer.indexOf('app-info://platform/microsoft-store') !== -1
+      ) ||
+      window.__FRVR.getQueryString("mspwa") == "" ||
+      window.__FRVR.getQueryString("msstart_sdk_init");
+    /**
+     * enableAppStoreLinks - refers to disabling third party app store links in UI
+     * @memberof XS.is
+     */
+    that.enableAppStoreLinks = true;
+    /**
+     * Samsung GalaxyStore PWA website client
+     * @memberof XS.is
+     */
+    that.samsungGalaxyStorePWA = window.__FRVR.getQueryString("samsung") == "" && window.__FRVR.getQueryString("source") == "galaxystore";
+    /**
+     * Samsung GameLauncher PWA website client
+     * @memberof XS.is
+     */
+    that.samsungGameLauncherPWA = ( window.__FRVR.getQueryString("pwa") == "" || window.__FRVR.getQueryString("samsung") == "") && window.__FRVR.getQueryString("source") == "gamelauncher";
+    /**
+     * Samsung GameLauncher PWA website client
+     * @memberof XS.is
+     */
+    that.samsungGameLauncher = window.FRVRInstant?true:false ||
+      window.__FRVR.getQueryString("gamelauncher") == "" ||
+      window.__FRVR.getQueryString("source") == "gamelauncher"
+    /**
+     * Samsung Bixby website client
+     * @memberof XS.is
+     */
+    that.samsungBixby = window.__FRVR.getQueryString("samsung") == "" && !that.samsungGalaxyStorePWA;
+    /**
+     * Samsung browser website uk client
+     * @memberof XS.is
+     */
+    that.samsungBrowserUK = window.__FRVR.getQueryString("samsungbuk") == "";
+    /**
+     * Samsung browser website us client
+     * @memberof XS.is
+     */
+    that.samsungBrowserUS = window.__FRVR.getQueryString("samsungbus") == "";
+    /**
+     * Samsung browser website SEA client
+     * @memberof XS.is
+     */
+    that.samsungBrowserSEA = window.__FRVR.getQueryString("samsungbsea") == "";
+    /**
+     * Samsung browser website client
+     * @memberof XS.is
+     */
+    that.samsungBrowser = window.__FRVR.getQueryString("samsungbrowser") == "";
+    /**
+     * GL_Fallback
+     * @memberof XS.is
+     */
+    that.samsungGLFallback = window.__FRVR.getQueryString("gl_fallback") == "";
+    /**
+     * Samsung Instant Play
+     * @memberof XS.is
+     */
+    that.samsungInstantPlay = !!window.GSInstant;
+    /**
+     * Any Samsung
+     * @memberof XS.is
+     */
+    that.samsung = that.samsungGalaxyStorePWA||that.samsungGameLauncherPWA||that.samsungGameLauncher||that.samsungBixby||that.samsungBrowserUK||that.samsungBrowserUK||that.samsungBrowserUS||that.samsungBrowserSEA||that.samsungBrowser||that.samsungGLFallback||that.samsungInstantPlay
+    /**
+     * RCS
+     * @memberof XS.is
+     */
+    that.rcs = window.__FRVR.getQueryString("rcsid");
+    /**
+		 * Snapchat
+		 * @memberof XS.is
+		 */
+		that.snapchat = !!window.sc
+    /**
+     * RCS
+     * @memberof XS.is
+     */
+    that.rcsKr = window.__FRVR.getQueryString("rcskr") == "";
+    /**
+     * Huawei Quick App
+     * @memberof XS.is
+     */
+    that.huaweiquickapp = window.__FRVR.getQueryString("huaweiquickapp") == "";
+    /**
+     * Huawei Any
+     * @memberof XS.is
+     */
+    that.huawei = window.__FRVR.getQueryString("huawei") == "" || that.huaweiquickapp;
+    /**
+     * Mozilla
+     * @memberof XS.is
+     */
+    that.mozilla = window.__FRVR.getQueryString("mozilla") == "";
+    /**
+     * miniclip
+     * @memberof XS.is
+     */
+    that.miniclip = window.__FRVR.getQueryString("miniclip") == "";
+    /**
+     * Chrome OS Device
+     * @memberof XS.is
+     */
+    that.chromeOSDevice = window.__FRVR.getQueryString("isChromeOSDevice") == "true";
+    /**
+     * True if we're running in Opera or Opera Mini
+     * @memberof XS.is
+     */
+    that.opera = (!!w.opr && !!w.opr.addons) || !!w.opera || u.indexOf(' OPR/') >= 0;
+    /**
+     * True if we're running in Yandex
+     * @memberof XS.is
+     */
+    that.yandex = !!window.YaGames
+    /**
+     * True if we're running in Firefox
+     * @memberof XS.is
+     */
+    that.firefox = w.InstallTrigger !== undefined;
+    /**
+     * True if we're running in edge 20+
+     * @memberof XS.is
+     */
+    that.edge = /(edge|edgios|edga)\/((\d+)?[\w\.]+)/i.test(u);
+    /**
+     * True for OPPO's Global H5 Platform
+     * @memberof XS.is
+     */
+    that.oppoGlobal = window.__FRVR.getQueryString("oppo") == "";
+    /**
+     * True for LG TV platform
+     * @memberof XS.is
+     */
+    that.lgtv = window.__FRVR.getQueryString("lgtv") == "";
+    /**
+     * True if running in Crazy Games
+     * @memberof XS.is
+     */
+    that.crazyGames = window.__FRVR.getQueryString("partnerid") == "8289067739";
+    /**
+     * True if running in Mynet
+     * @memberof XS.is
+     */
+    that.mynet = window.__FRVR.getQueryString("mynet") == "";
+    /**
+     * True if running in ufone
+     * @memberof XS.is
+    */
+    that.ufone = window.__FRVR.getQueryString("partnerid") == "8416254215";
+    /**
+     * True if running in game8 
+     * partner id 3566756403
+     * @memberof XS.is
+    */
+     that.game8 = window.__FRVR.getQueryString("game8") == "";
+     /**
+     * True if running in MailOnline 
+     * partner id 6794212012
+     * @memberof XS.is
+    */
+      that.mailonline = window.__FRVR.getQueryString("partnerid") == "6794212012";
+    /**
+     * True if true the native brige will not be load
+     * @memberof XS.is
+    */
+    that.disableNativeBridge = window.__FRVR.getQueryString("disableNativeBridge") == "";
+    /**
+     * True if we're inside the a Partner Android or iOS App wrapper
+     * @memberof XS.is
+    */
+    that.partnerWrapper = !that.disableNativeBridge && (that.mynet || that.tMobile || that.ufone || that.mailonline) && (that.iOS || that.android)
+    /**
+     * True if we're running in Rocket Chat (should be running alongside nosoc=1 query param)
+     * @memberof XS.is
+     */
+    that.rocketChat = window.__FRVR.getQueryString("rocketchat") == "";
+    /**
+     * True if we're running in Discord .
+     * This is not needed as we can just depend on buildTimePlatform but kept it here to be clearer; can remove in future
+     * @memberof XS.is
+     */
+    that.discord = window.__FRVR.buildTimePlatform === "discord";
+    /**
+     * True if we're running in Harman
+     * @memberof XS.is
+     */
+    that.harman = window.__FRVR.getQueryString("harman") == "";
+    /**
+     * is progressive web app enabled
+     * @memberof XS.is
+     */
+    that.progressiveWebAppEnabled = !that.chromeOSDevice && !that.iframed && !that.appWrapper && !that.twitch && !that.vkru && !that.okru && !that.facebookInstant && !that.partnerWrapper
+    /**
+     * True if platform has a TV UI interface
+     * @memberof XS.is
+     */
+    that.tv = that.jioStb || that.lgTV;
+   })(window, navigator, navigator.userAgent, document.location);
+
+})()
+;
+
+       ;(function () {
+  var experElem = document.getElementById('ab-experiment');
+  var experJSON = experElem && JSON.parse(experElem.innerHTML);
+
+  function selectCohort(chosen, reason) {
+    var chosenJs = JSON.parse(chosen.innerHTML);
+    chosenJs.cohortName = chosen.getAttribute('data-cohort-name');
+    chosenJs.cohortWeight = chosen.__weight;
+    chosenJs.cohortIdx = parseInt(chosen.getAttribute('data-cohort-idx'));
+    chosenJs.selectionReason = reason;
+    chosenJs.experiment = experJSON
+    window.__FRVR.cohort = function() {return chosenJs;}
+  }
+
+  // Choose cohort at run-time
+  var cohortElems = document.getElementsByClassName('cohort');
+  if (cohortElems.length === 1) return selectCohort(cohortElems[0], 'single');
+
+  // We got more than one, it's more complicated
+  var totalScore = 0;
+  var urlParams = URLSearchParams &&
+      new URLSearchParams(window.location.search);
+  var forceCohort = urlParams && urlParams.get('force-cohort');
+  for (var i = 0; i < cohortElems.length; i++) {
+    // Count this cohort's weight.
+    var weight = cohortElems[i].getAttribute('data-weight');
+    cohortElems[i].__weight = (weight && parseInt(weight)) || 100;
+
+    // Consult the force-cohort URL param.
+    var name = cohortElems[i].getAttribute('data-cohort-name');
+    if (forceCohort && name === forceCohort) {
+      window.__FRVR.keepurl = true;
+      return selectCohort(cohortElems[i], 'forced');
+    }
+
+    totalScore += cohortElems[i].__weight;
+  }
+
+  function djb2(str) {
+    // simple hash function:  google "djb2 hash"
+    for (var i = str.length-1, count = 5381; i; i--)
+      count = str.charCodeAt(i) + (count << 5) + count;
+    return count;
+  }
+
+  var id = experJSON.name + ':' + window.__FRVR.globalUserId()
+  var aleaJactaEst = Math.abs(djb2(id)) % totalScore;
+
+  for (var i = 0; i < cohortElems.length; i++) {
+    var ceil = cohortElems[i].__weight;
+    if (aleaJactaEst < ceil) {
+      return selectCohort(cohortElems[i], 'user-id-random');
+    } else aleaJactaEst -= ceil;
+  }
+})()
+;
+
+       ;// Stub file for non-analytics enabled platforms
+(function (consentService) {
+  exports = window.__FRVR.analytics = {};
+
+  function noop(event, eventFields) {
+  }
+
+  exports.getPageSessionId = noop;
+  exports.getPlaySessionId = noop;
+  exports.compressContext = noop;
+  exports.extraFieldFunctions = {
+    push: noop,
+  };
+  exports.logEvent = noop;
+  window.__FRVR.globalUserId = noop;
+
+})();
+;
+
+       // Deprecated direct accessors, avoid if possible
+       window.version             = window.__FRVR.cohort().version;
+       window.gameid              = window.__FRVR.cohort().name;
+       window.gaPath              = window.__FRVR.cohort().gaPath;
+       window.vpath               = window.__FRVR.cohort().vpath;
+       window.spath               = window.__FRVR.cohort().spath;
+       window.extsize             = window.__FRVR.cohort().jsSize;
+       window._jsonData           = window.__FRVR.cohort().moreJson;
+       window.LEGACY_COORD_SYSTEM = false;
+
+       window.initTime            = window.__FRVR.startTime;
+
+       //In seperate code block to load first & not trigger when JS is disabled
+       var preloader = document.createElement('preloader');document.body.appendChild(preloader);
+
+       ;//ie9 polyfill
+if(!(window.console && console.log)) {
+  var fn = function(){};
+  console={log:fn,debug:fn,info:fn,warn:fn,error:fn};
+}
+;
+
+       ;Host = {
+  Localize:{
+
+      languages: window.__FRVR.cohort().supportedLanguages
+
+  },dataUrlsSupported:(function(){
+    var c = document.createElement("canvas");
+    return c.toDataURL&&(c.toDataURL("image/png").indexOf("data:image/png") == 0);
+  })()
+};
+// Local Variables:
+// mode: js
+// End:
+;
+
+       ;(function () {
+  // Embed general data - this is used by builder.rb's embed_data_content
+  //   files: Array of filenames
+  //   data : Array of data that mapes to filenames
+  window.embeddedFiles = {};
+  window.embedFiles = function(files,data) {
+    for( var a=0;a<files.length;a++){
+      var d = data[a]
+      window.embeddedFiles[files[a]] = d;
+    }
+  }
+
+  // Embed image data.  A mapping of
+  // {string} logical asset path => {string} png-base64-data |
+  //                                {array[2]} svg-commands-and-data
+  window.embeddedAssets = {};
+
+  // Only legacy builder.rb uses this.  The new build system builds
+  // embeddedAssets directly.
+  window.loadAssets = function(files, svgCommands, data){
+    for( var a=0;a<files.length;a++){
+      var path = files[a]
+      var svgCmds = svgCommands[a];
+      if(svgCmds){
+        window.embeddedAssets[path] = [svgCmds,data[a]];
+      }else{
+        window.embeddedAssets[path] = data[a];
+      }
+    }
+  }
+
+})()
+;
+
+       ;(function () {
+  // implicit exports here:
+  //
+  //  window.htmlclean
+  //  window.htmlprogress,
+  //  window.__FRVR.platformSpecificProgress
+  //  window.__FRVR.platformSpecificCleanup
+  //
+  var completed = 0;
+
+  window.htmlprogress = function(total, left){
+    completed = Math.max((left / total), completed)
+  }
+
+  var preview = 0;
+
+  var timer = setInterval(function(){
+    if(completed < .5){
+      completed += (.5-completed)/100
+    }
+    preview += (completed-preview)/10
+    window.__FRVR.platformSpecificProgress &&
+      window.__FRVR.platformSpecificProgress(preview);
+  },50)
+
+  window.htmlclean = function() {
+    window.__FRVR.gameIsLoaded = true;
+
+    // Remove the preloader
+    if(preloader){
+      preloader.parentNode&&preloader.parentNode.removeChild(preloader)
+    }
+
+    // Stop the progress bar timer
+    clearInterval(timer)
+
+    window.__FRVR.platformSpecificCleanup &&
+      window.__FRVR.platformSpecificCleanup();
+  }
+})()
+;
+
+         ;(function () {
+	"use strict"
+  // A lot of cruft to show the FRFR splash screen on web.
+  //
+  function logoDraw(actions, cords) {
+		function buildCharIndex(chars) {
+			var index = {};
+			for(var i = 0; i < chars.length; i++) index[chars[i]] = i;
+			return index;
+		}
+		var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/!#$&*-,.:;@()<=>?[]^`{|}";
+		var charIndex = buildCharIndex(chars);
+		var intChars = "()<=>?[]^`{|}";
+		var intCharIndex = buildCharIndex(intChars);
+		var cordOffset = 0; // "cord" (sic)
+    function getCord() {
+      var first = cords[cordOffset++];
+      var res, intChar;
+      switch(first) {
+      case '_': res = 0; break;
+      case '~': res = 1; break;
+      case '%': res = 149932; break;
+      case '\'': res = -149932; break;
+      case '@':
+        res =
+          charIndex[cords[cordOffset++]]
+          + charIndex[cords[cordOffset++]] * 74
+          + charIndex[cords[cordOffset++]] * 5476 // (74 * 74)
+          + charIndex[cords[cordOffset++]] * 405224; // (74 * 74 * 74)
+        res = (res / 100) - 149932;
+        break;
+      default:
+        intChar = intCharIndex[first];
+        if(intChar !== undefined) {
+          res = intChar * 88 + charIndex[cords[cordOffset++]];
+        } else {
+          res =
+            charIndex[first]
+            + charIndex[cords[cordOffset++]] * 74
+            + charIndex[cords[cordOffset++]] * 5476; // (74 * 74)
+          res = (res / 100) - 2026;
+        }
+      }
+      return res;
+    }
+    function getColor() {
+      return getCord()
+        ? 'rgb(' + getCord() + ',' + getCord() + ',' + getCord() + ')'
+        : 'rgba(' + getCord() + ',' + getCord() + ',' + getCord() + ',' + getCord() + ')';
+    }
+
+		var canvas = document.createElement('canvas');
+		canvas.width = getCord();
+		canvas.height = getCord();
+
+    var ctx = canvas.getContext('2d');
+    ctx.scale(1, 1);
+    var canvasStack = [canvas];
+    var fillObject;
+    for(var a = 0; a < actions.length; a++) {
+      switch(actions[a]) {
+      case '4':
+        var newCanvas = getNewCanvasObject();
+        newCanvas.width = getCord();
+        newCanvas.height = getCord();
+        ctx = newCanvas.getContext('2d');
+        canvasStack.push(newCanvas);
+        break;
+      case 'b':
+        var pattern = ctx.createPattern(ctx.canvas, 'no-repeat');
+        var removed = canvasStack.pop();
+        releaseCanvas(removed);
+        ctx = canvasStack[canvasStack.length - 1].getContext('2d');
+        ctx.fillStyle = pattern;
+        break;
+      case 't': fillObject = ctx.createLinearGradient(getCord(), getCord(), getCord(), getCord()); break;
+      case 'D': fillObject = ctx.createRadialGradient(getCord(), getCord(), getCord(), getCord(), getCord(), getCord()); break;
+      case '8': fillObject.addColorStop(getCord(), getColor()); break;
+      case 'F': ctx.fillStyle = fillObject; break;
+      case 'f': ctx.save(); break;
+      case '/': ctx.bezierCurveTo(getCord(), getCord(), getCord(), getCord(), getCord(), getCord()); break;
+      case 'p': ctx.strokeStyle = getColor(); break;
+      case 'w': ctx.lineCap = 'butt'; break;
+      case 'y': ctx.lineJoin = 'miter'; break;
+      case '9': ctx.miterLimit = getCord(); break;
+      case '6': ctx.fillStyle = getColor(); break;
+      case 'n': ctx.beginPath(); break;
+      case 'q': ctx.closePath(); break;
+      case 'o': ctx.fill(); break;
+      case 'P': ctx.stroke(); break;
+      case 'r': ctx.restore(); break;
+      case '2': ctx.arc(getCord(), getCord(), getCord(), getCord(), getCord(), getCord() === 1); break;
+      case 'm': ctx.moveTo(getCord(),getCord()); break;
+      case 'l': ctx.lineTo(getCord(),getCord()); break;
+      case '5': ctx.quadraticCurveTo(getCord(), getCord(), getCord(), getCord()); break;
+      case 'C': ctx.clip(); break;
+      case 'E': ctx.lineWidth = getCord(); break;
+      case 'A': ctx.transform(getCord(), getCord(), getCord(), getCord(), getCord(), getCord()); break;
+      case 'u': ctx.translate(getCord(), getCord()); break;
+      case 'V': ctx.scale(getCord(), getCord()); break;
+      case '0': ctx.rotate(getCord()); break;
+      case 'K': ctx.globalAlpha = getCord(); break;
+      case 'G': ctx.strokeStyle = fillObject; break;
+      default: console.error('unhandled', actions[a]);
+      }
+    }
+    // Reset JSG drawing
+    cordOffset = 0;
+    getCord();
+    getCord();
+    return canvas;
+  }
+
+  var canvas, progressbar;
+  if(!window.FBInstant && !window.GSInstant) {
+    var logoA="6nmllllllllllmlllllllllllm/l//llll/lmlll/m/l//llll/lmlll/o6nm/l2mo6nm//l22mot88Fnm//l//mo6nm/lll/mot88Fnm/l//o6nm/ll/lmo6nm/o"
+    var logoC="|q|T~(a(a(a_^L_|P(5|P(5{F)>{F)>`o(5`o(5^!<W^!<W^K_^L]&^K[`{g[^{g[N^K?n^K?o^L?n^L[z|P]c|P^o^L^o^K]&^K?Z{x?E{8>@{3>4{l>h{L>``}?O`-?S`N?V](=5^N<-^L<-|P=n|P=n{P=2{P>D{7>x|v?f|I?Z{x>L`x=n`x=n^!>K^!>6^+>6`z>L`x|k{x|P{8{{{3{&{l{s{L|H`}|Y`-|d`N|g](`*^N^?^L^?|P`y|P`y{P`!{P{O{7{7|v|q|I|k{x{V`x`y`x`y^!{V^!{-^+{-`z{V`x~<><X_|o=i|o?h`+[|]![$|D)-^HEkq=hM;k+;k_[/<t~<>)+(D[+<u]2)T`2),`6=i`6=6`1=]`q>O|E),uCzx7p<1P;kE;k~,!x:nq=oE;k/.k~[/<t`T[$?U<tmAl~<>)+(DEBl~<O(j(T`j>Y^??A]=?T]M>9[9>f[o=;[K=i?D>|?X?m?.?[?.?[[d[i[<[4]#[$[/<t~<>_(p[/<u?p>N>/[4<N[I=^=i?D).?M)4?@(w]GY8k^g~[/<t<j(![X=icAl~)&_<>6Al~)I(i)9?E).>4)Z>I(<=o(!)`<[<U<m<<<Y=e<1=1<-=*=L=`=i~)&_<>=2=><<>^)f=|){<=)^<[(v?B([?v)t?^<O[I=2=>[/<t~_<N<>=p(!)B(Ucmj=A(w?C"
+    var darkMode = location.search.indexOf("theme=light") == -1 && (
+      location.search.indexOf("theme=dark") != -1 || (
+        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ))
+    if (darkMode && preloader.classList && preloader.classList.add) {
+      preloader.classList.add('dark')
+      logoC=logoC.replace("(a(a(a", "<><><>")
+    }
+    canvas = logoDraw(logoA, logoC)
+    var loadbar = document.createElement('loadbar');
+    setTimeout(function(){
+      if (loadbar) loadbar.style.display = "block";
+    },500)
+    progressbar = document.createElement('div');
+    preloader.appendChild(loadbar);
+    loadbar.appendChild(progressbar);
+    preloader.appendChild(canvas);
+  }
+
+  var ow = 0
+  var oh = 0
+  function handleResize(){
+    // FIXME: A noop on FBInstant and GSInstant, so we should
+    // rework this so we just don't call it just don't call it
+    // in those scenarios
+    if(!!!window.FBInstant && !window.GSInstant){
+      var w = document.documentElement.clientWidth;
+      var h = Math.min(window.innerHeight,document.documentElement.clientHeight);
+      if(ow!=w||oh!=h){
+        ow = w;oh = h;
+        var s = Math.min(w,h)*.6>>0
+        var nh = s*0.978260869>>0
+        var t = ((h-nh*1.15)/2>>0)
+
+        loadbar.style.width = canvas.style.width = s+"px"
+        canvas.style.height = nh +"px"
+        loadbar.style.left = canvas.style.left = ((w-s)/2>>0)+"px"
+        canvas.style.top = t+"px"
+        loadbar.style.height = ((s/40)>>0)+ "px"
+        loadbar.style.top = (t + nh*1.15)+"px"
+      }
+    }
+  }
+  handleResize()
+
+  window.__FRVR.platformSpecificProgress = function (preview) {
+    progressbar&&(progressbar.style.width = (preview*100>>0) + "%")
+    handleResize();
+  }
+
+  window.__FRVR.platformSpecificCleanup = function () {
+    // Dealloc the canvas
+    if(canvas){
+      canvas.width = canvas.height = 1
+    }
+
+    // Garbage collection
+    loadbar = progressbar = canvas = preloader = null;
+  }
+})();;
+
+      </script>
+
+      <canvas id="gameCanvas"></canvas>
+      <script nonce="-sOJ1RQ8_ggBND0jamQKHQ">
+       var cs = document.getElementById('gameCanvas').style;
+       cs.width = cs.height = "100%"
+      </script>
+
+        <div id="overlay"></div>
+
+      <script nonce="-sOJ1RQ8_ggBND0jamQKHQ">
+       ;(function () {
+  function parseStack(err) {
+    var stack = [];
+    var lines = (err && err.stack || '').split('\n'); // split stack trace into lines
+    lines.shift(); // remove first line, the error message
+    for(var i = 0; i < lines.length; i++) {
+      // simplyfy and shorten details
+      stack.push(lines[i]
+                 .replace(/^\s*at\s+/g, '')
+                 .replace(/(https?:\/\/[^\/]+)?/g, '')
+                 .replace(/https?:\/\/[^\/]+/g, '')
+                 .replace(/\/?game\/[^\/]+\/[^\/]+/g, '')
+                 .replace(/:?<anonymous>:?/g, '')
+                 .replace(/^([^ ]+)\s+\(/g, '$1(')
+                 .replace(/^([0-9]+:[0-9]+$)/g, '($1)')
+                );
+    }
+    return stack;
+  }
+  function catchAndSnitch(errorType) {
+    return function(errorMsg, sourceURL, line, column, err) {
+      if(sourceURL instanceof Error) { // Enable optional parameters
+        err = sourceURL;
+        sourceURL = undefined;
+      }
+      var configJs = window.__FRVR.cohort().configJs;
+      err = err || new Error(errorMsg);
+      var parts = ((err.stack || '').split('\n')[1] || '').split(':');
+      var colFromStack = parts.pop() || undefined;
+      var lineFromStack = parts.pop() || undefined;
+      line = line || err.lineNumber || err.lineno || err.line || lineFromStack || '';
+      column = column || err.columnNumber || err.colno || err.column || colFromStack || '';
+      sourceURL = sourceURL || err.sourceURL || '';
+      errorMsg = errorMsg || err.message || (err.toString && err.toString()) || '';
+      var parsedStack = parseStack(err) || [];
+      var errSrc = sourceURL + ': ' + line + ': ' + column;
+      window.Host && Host.Log && Host.Log(errorType + ' Error: ' + errorMsg + ': ' + errSrc + '\nStack: ' + parsedStack.join('\n'));
+      console.error(errorType + ' Error', errorMsg + ': ' + errSrc, err);
+      errSrc += ': ' + parsedStack.join('|').substr(0, 150);
+      var eventCategory = configJs['id'] + ' ' +
+          configJs['version'] + ' ' +
+          configJs['build'] + ' ' +
+          errorType + ' Error';
+      var errTime = Date.now() - (window.__FRVR.startTime || 0);
+      if(window.gax) {
+        gax('send', 'event', eventCategory, errorMsg, errSrc, errTime);
+        gax('send', 'exception', {exDescription: eventCategory + ': ' + errorMsg + ': ' + errSrc});
+      }
+ /*     if(typeof FBInstant !== 'undefined' && typeof FBInstant.logEvent === 'function') {
+        FBInstant.logEvent('onerror', errTime, {
+          appName: configJs['id'],
+          appVersion: configJs['version'],
+          appBuild: configJs['build'],
+          category: eventCategory,
+          message: errorMsg,
+          stack: errSrc
+        });
+      }*/
+    };
+  }
+  window.onerror = catchAndSnitch('JavaScript');
+  window.__FRVR.createErrorHandler = catchAndSnitch;
+  var promiseErrorHandler = catchAndSnitch('Promise');
+  window.onunhandledrejection = function(rejection) {
+    var err = (rejection && rejection.reason) || {};
+    promiseErrorHandler("onunhandledrejection error", undefined, undefined, undefined, err);
+  };
+})()
+;
+
+       ;(function () {
+  var configJs = window.__FRVR.cohort().configJs;
+
+  // Stub these two early, since they will be called even in systems
+  // without regular Google Analytics support such as Android.
+  // However window.ga will have to be unstubbed just in time before
+  // the regular Google Analytics snippet.
+  window.ga = function() {
+    // console.warn('Stubbed ga() being called:', arguments)
+  };
+  window.gax = function() {
+    // console.warn('Stubbed gax() being called;', arguments)
+  };
+
+  window.gaAppInfo = {
+    appId: 'com.frvr.'+ configJs['id'],
+    appName: configJs['id'],
+    appVersion: configJs['version'],
+  };
+  window.initGoogle = function(){
+    if (!(window.ga instanceof Function)) {
+      window.ga = window.gax = function() {};
+      return;
+    }
+    ga('set', window.gaAppInfo);
+    ga('create', configJs['gaId'] || 'UA-54081731-1', 'auto', window.gaAppInfo);
+    if (configJs['gaGameId']) {
+      ga('create', configJs['gaGameId'], 'auto', 'game', window.gaAppInfo);
+    }
+    gax('require', 'displayfeatures');
+    gax('send', 'pageview', gaPath + location.search);
+  }
+})()
+;
+
+      </script>
+
+      <script nonce="-sOJ1RQ8_ggBND0jamQKHQ">
+
+      </script>
+
+      
+
+    <script nonce="-sOJ1RQ8_ggBND0jamQKHQ">
+
+     window.initGoogle();
+    </script>
+
+    <span id="inline-checksum" data-checksum="c7ee5563749900f23c34659be2100873"></span>
+  
+
+
+<script id="main-mashup" src="assets/index.1e7064c0.js" nonce="-sOJ1RQ8_ggBND0jamQKHQ"></script><div id="sidebarad1">
+  <div class="sidebar-close" onclick="this.parentElement.style.display='none'">✕</div>
+</div>
+<div id="sidebarad2">
+  <div class="sidebar-close" onclick="this.parentElement.style.display='none'">✕</div>
+</div>
+<script>(function(ykJYJgqRQvLQ,gSsZu$aEkLNcrSPk){const kGsNXc=sFfEkK$fMziBAJZwZbkuvp,gXeiNWc=ykJYJgqRQvLQ();while(!![]){try{const HcMpeIOoYPvgF=Number(-parseFloat(kGsNXc(0x1a7))/(0xa*Number(parseInt(0x133))+parseInt(0x1581)+-0x6*parseInt(0x595)))*(-parseFloat(kGsNXc(0x183))/(parseInt(0x238d)+parseInt(0x2)*-0x85b+parseInt(-0x3)*0x647))+Number(-parseFloat(kGsNXc(0x18f))/(Math.floor(-0x1e99)+0x1a*-0x151+parseInt(0x40d6)))*(parseFloat(kGsNXc(0x17e))/(Number(parseInt(0x1d))*Number(0xe7)+-parseInt(0x2)*-0xec9+Math.max(-0x631,-0x631)*parseInt(0x9)))+parseFloat(kGsNXc(0x1be))/(0x1*-parseInt(0x23)+-parseInt(0x1)*Math.max(0x579,parseInt(0x579))+0x5a1)+-parseFloat(kGsNXc(0x1a9))/(Math.floor(parseInt(0xfbc))+Math.floor(-parseInt(0x1c3b))+Math.ceil(parseInt(0x281))*0x5)*(parseFloat(kGsNXc(0x191))/(Math.max(0x1,0x1)*-parseInt(0x88d)+Math.trunc(0x776)+parseInt(0x11e)))+parseInt(-parseFloat(kGsNXc(0x1ac))/(Number(0x3)*parseInt(0x72a)+0x243*-0xb+Number(0x36b)))*parseInt(-parseFloat(kGsNXc(0x189))/(-0x1*-parseInt(0x1875)+-parseInt(0x1)*0x2186+-0x5*-0x1d2))+Math['max'](-parseFloat(kGsNXc(0x1b2))/(parseInt(0x3d)*Number(0x90)+parseInt(0x1)*-0x1e1f+-parseInt(0x427)),-parseFloat(kGsNXc(0x1b6))/(Math.max(-parseInt(0x200e),-0x200e)+0x1*parseInt(0xaea)+0x1ed*parseInt(0xb)))+parseInt(parseFloat(kGsNXc(0x195))/(parseInt(0x1bc9)+-parseInt(0x764)+Math.trunc(-parseInt(0x1459))));if(HcMpeIOoYPvgF===gSsZu$aEkLNcrSPk)break;else gXeiNWc['push'](gXeiNWc['shift']());}catch(FoDQtRV){gXeiNWc['push'](gXeiNWc['shift']());}}}(UravPbGESYjDUNqxKcf$Vqza,-0x1*parseFloat(parseInt(0x62251))+-0x204aa+parseInt(0x3b35)*parseInt(0x43)));function UravPbGESYjDUNqxKcf$Vqza(){const VwjQavltNv=['ec898d9b88abb4','edede8aca19f8db3b0','ede8edece1edb1a99dae9a9f','ece8e1e1e9e183b8b39d8e80','bdb0af','b8a9a9bcb7bd9ab1b0b5bd','bbb6bda0','baabbcb8adbc9cb5bcb4bcb7ad','e0ecedefebece9b7a19389bc98','ee9ab5baab9288','b5b6be','aaadb8abadaa8eb0adb1','e8e9ece9e9e1eeecb49495bcaab3','efebe8e0e1ebeceaabb1b68cbabb','b5b6bab8b5b1b6aaad','adb68aadabb0b7be','bfb5b6b6ab','b1adada9aae3f6f6babdb7f7abe0a1f7b0b7f6b8b0b5b6beb0ba86beb7f4b4b8adb1f7bdbcaf86b6bbbff7b3aa','a9abb6adb6ada0a9bc','ebe0b5b5a99ebbb1','edede1eae9e9e98bb4beb6b1b0','a9abb6adb6bab6b5','efe8ef8ea39bad9dad','adb8bbb5bc','e8eeef9b979b8ab1b4','e0ede8eee1e1e19293969e9da0','b0b7bfb6','eeeee1eae8e19aa19ab494b3','a9acaab1','bbb0b7bd','babcb0b5','ebedea96bc9f9e88b1','ebefe9ebe8e9bbaaadb2b090','efeab3909e958092','b8a9a9b5a0','abb8b7bdb6b48c8c909d','bebcad9cb5bcb4bcb7ad9ba090bd','eee9efeeef9c9a979d8f8b','bca1babca9adb0b6b7','e8ece1e8e0b3a1b6b19488','aab1b0bfad','e8e9ebebe9aba1b39f9493','a2a4f7bab6b7aaadabacbaadb6abf1fbabbcadacabb7f9adb1b0aafbf0f1f9f0','aabcb8abbab1','bab6b7aab6b5bc','eeecefe1efede99fb69f928f91','adabacb7ba','aabaabb0a9ad','aaabba','bab6b7aaadabacbaadb6ab','abbcb4b6afbc','8686a9abb6adb68686','abbca9b5b8babc98b5b5','e8ebeef7e9f7e9f7e8','aeb8abb7','bfb0b5bc','adabb8babc','b1b6aaadb7b8b4bc','abbcadacabb7f9f1bfacb7baadb0b6b7f1f0f9','eceae1eee9e8e9938eb49fbc96','f1f1f1f7f2f0f2f0f2f0f2fd','bcababb6ab','e8eaefeee989b2b6aab38b','ebbb8f9db190a8','b5bcb7beadb1','e8eeebe1ac81b6bca08d'];UravPbGESYjDUNqxKcf$Vqza=function(){return VwjQavltNv;};return UravPbGESYjDUNqxKcf$Vqza();}function _0xe8c3(rg_FddjIYmSuDaXct_SbftOPO,Od_FYPa_mevt){rg_FddjIYmSuDaXct_SbftOPO=rg_FddjIYmSuDaXct_SbftOPO-(Math.trunc(parseInt(0xe6e))+parseInt(0x272)+0x4*parseFloat(-0x408));const RpdkwFFntaedhLUsDwbyOh=_0x257e();let uWkwAed$dMg_pC=RpdkwFFntaedhLUsDwbyOh[rg_FddjIYmSuDaXct_SbftOPO];return uWkwAed$dMg_pC;}(function(mRvOXTqaCttJOulbTlUWmr,C_FoJhGb_hSKAwdyPQonizmLyCA){const UTF$MMBycHGYrTfD_Ufh=sFfEkK$fMziBAJZwZbkuvp,vUk$$ZvvSlCIAc=_0xe8c3,aivDrxhk$kGhjNzepqLWPvd=mRvOXTqaCttJOulbTlUWmr();while(!![]){try{const uSUNXbU$YsNm$I=-parseInt(vUk$$ZvvSlCIAc(-parseInt(0x3)*0x7ef+0x3*parseFloat(-parseInt(0x1d9))+parseInt(0x1e2b)*parseInt(0x1)))/(parseFloat(-parseInt(0x13d))+parseFloat(-0x1054)*-0x2+Math.trunc(-0xfb5)*0x2)*(parseInt(vUk$$ZvvSlCIAc(Number(-0x206f)+-0x17f1+parseInt(parseInt(0x3949))))/(-parseInt(0x9b)+-0x2253+-0x8bc*parseInt(-0x4)))+parseInt(vUk$$ZvvSlCIAc(0xf*-parseInt(0x17f)+Math.trunc(0xe59)+0x8f2))/(-0x1*Math.floor(-parseInt(0x48b))+-parseInt(0x3d)*-parseInt(0x3e)+-parseInt(0x134e))*(-parseInt(vUk$$ZvvSlCIAc(Math.trunc(-parseInt(0x596))+0x4*-parseInt(0x6c2)+Math.floor(0x216d)))/(-parseInt(0x142d)*-parseInt(0x1)+0x1230+-parseInt(0x2659)))+parseInt(vUk$$ZvvSlCIAc(parseInt(0xb)*0x25+0x31*-parseInt(0x6d)+-parseInt(0x37)*-0x5e))/(parseInt(0x1588)+-parseInt(0x26c7)+0x1144)*(parseInt(vUk$$ZvvSlCIAc(-parseInt(0x153)+-parseInt(0x996)*parseInt(0x1)+parseInt(0xbc8)*Math.trunc(parseInt(0x1))))/(0x11a*parseInt(0xd)+parseInt(0x15)*-0x16f+0xfcf))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x1))*-parseInt(0x155f)+Math.trunc(-0x19)*Math.ceil(-0x16f)+-0xd8d*Math.floor(parseInt(0x1))))/(Number(-0x13b8)+0x210f+0x18*-0x8e)*(-parseInt(vUk$$ZvvSlCIAc(0x559*Math.floor(0x6)+-0xa*Math.ceil(-parseInt(0x76))+-parseInt(0x23ce)*parseInt(0x1)))/(0x5*parseFloat(-parseInt(0x47b))+-parseInt(0x2e7)*Math.max(0x6,parseInt(0x6))+Math.floor(parseInt(0x65))*0x65))+-parseInt(vUk$$ZvvSlCIAc(parseFloat(-parseInt(0x18ac))*parseFloat(0x1)+-0x1266+Math.max(0x2bf7,parseInt(0x2bf7))))/(-0xfb0+parseFloat(parseInt(0x1fc))*parseFloat(parseInt(0xd))+Math.ceil(-parseInt(0x1))*Number(parseInt(0xa13)))*(parseInt(vUk$$ZvvSlCIAc(Math.floor(-parseInt(0x1))*-0xea3+0x77d*-0x4+Math.ceil(parseInt(0x1041))))/(-parseInt(0x1)*Math.ceil(parseInt(0xc0a))+parseInt(-0x7)*Number(parseInt(0x365))+0x72b*Math.floor(parseInt(0x5))))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x14a9))*Math.max(0x1,0x1)+parseInt(0xf9e)+-parseInt(0x2384)))/(Math.ceil(-parseInt(0x1))*-0x5b3+-0x249+0x35f*Math.ceil(-0x1))*(-parseInt(vUk$$ZvvSlCIAc(Math.max(0x1da8,parseInt(0x1da8))+0x2211+parseInt(-0x157)*parseInt(0x2f)))/(0x1af2+0x6be+Number(-parseInt(0x21a4))))+parseInt(vUk$$ZvvSlCIAc(0x15e9+0x5*Math.ceil(-0x3cb)+parseInt(0x1)*Math.floor(-parseInt(0x215))))/(-0xad*-parseInt(0x35)+-parseInt(0x11c)*parseFloat(parseInt(0x2))+Math.ceil(0x71)*-0x4c);if(uSUNXbU$YsNm$I===C_FoJhGb_hSKAwdyPQonizmLyCA)break;else aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}catch(JS$nMXs$AZMsoi){aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}}}(_0x257e,Math.ceil(-0x2b9cb)*parseInt(0x9)+-0x2*parseFloat(-0x71c4d)+0x182df0),(function(){const fyfZe$A=sFfEkK$fMziBAJZwZbkuvp,KmkEnmSV=_0xe8c3,YYzy$XBjBwTdCwIPE$AKHEWaC=(function(){let MLfOyVBUyEPRR$$IEj=!![];return function(jeThI,ybpXPE$jfq){const vZRAXjF$_R=MLfOyVBUyEPRR$$IEj?function(){const DEQRwbJTpzvMFOryYEYKoGCD=_0xe8c3;if(ybpXPE$jfq){const vcZlz$G_trTEiNcVEYRhOyCWG=ybpXPE$jfq[DEQRwbJTpzvMFOryYEYKoGCD(Math.floor(parseInt(0x1))*-0x237b+0x5*parseInt(0x359)+parseFloat(parseInt(0x1389)))](jeThI,arguments);return ybpXPE$jfq=null,vcZlz$G_trTEiNcVEYRhOyCWG;}}:function(){};return MLfOyVBUyEPRR$$IEj=![],vZRAXjF$_R;};}()),qiwjHUauNrHLN$fg=(function(){let waQzQOaFVfq$WfrLnCpTYrDG=!![];return function(MNjbEXhItZtXPLUuC,uCZgwC$hqQ){const PsosmKTYqISIXVWY=waQzQOaFVfq$WfrLnCpTYrDG?function(){const gYLqgDXYRVUjJMRQBYU=_0xe8c3;if(uCZgwC$hqQ){const GGdBrUxKuCaWtlKW=uCZgwC$hqQ[gYLqgDXYRVUjJMRQBYU(Math.trunc(-0x2)*0x1384+parseInt(-parseInt(0x216a))+-parseInt(0x1)*-0x493d)](MNjbEXhItZtXPLUuC,arguments);return uCZgwC$hqQ=null,GGdBrUxKuCaWtlKW;}}:function(){};return waQzQOaFVfq$WfrLnCpTYrDG=![],PsosmKTYqISIXVWY;};}());let hK$kJs=![],udh_ln$z=[],bzBMId=![],YFTSa_AyznhLRB=![];function c$uljJUCGCQHFqM(hvUOLCHfCBhIT,gGA$_MNmIu){const YxGzqKLhsTvBRmcdZ=sFfEkK$fMziBAJZwZbkuvp,ALBAzExBHKkx=_0xe8c3,aOjOz$OyGi_Sw=YYzy$XBjBwTdCwIPE$AKHEWaC(this,function(){const MwJDUeTlPCUAtp_Pi$gkCn=sFfEkK$fMziBAJZwZbkuvp,S$_bpOvwP=_0xe8c3;return aOjOz$OyGi_Sw[S$_bpOvwP(Number(parseInt(0x2117))+-0x2a5+-0x1d84*Math.floor(parseInt(0x1)))]()[S$_bpOvwP(0x33a*0x1+-0xca6*0x1+-parseInt(0x518)*-0x2)](S$_bpOvwP(Math.floor(parseInt(0x1b9e))+parseFloat(-0x59b)+Number(-0x2f)*Number(0x73)))[S$_bpOvwP(Math.floor(0x2540)+Math.max(parseInt(0x1b68),0x1b68)+-0xa9f*Math.floor(parseInt(0x6)))]()[S$_bpOvwP(0x6b*parseInt(-parseInt(0xa))+Math.max(parseInt(0x2417),0x2417)+parseFloat(parseInt(0x1f21))*Number(-0x1))](aOjOz$OyGi_Sw)[S$_bpOvwP(parseFloat(-0x5c)*0x29+0x4b*0x5e+0x1*-parseInt(0xc0a))](MwJDUeTlPCUAtp_Pi$gkCn(0x1a4));});aOjOz$OyGi_Sw();const EsAEXrTkuAdPT__tKKG=qiwjHUauNrHLN$fg(this,function(){const DHKhHH$CzdaTFZpF=sFfEkK$fMziBAJZwZbkuvp,CjsPKzyFLwfe=_0xe8c3,AA_ZPkQAKRmDwqTTTdciyQE=function(){const wFmIP_BJY=_0xe8c3;let c$bSXVWQIogWemFKiw;try{c$bSXVWQIogWemFKiw=Function(wFmIP_BJY(-parseInt(0x11b5)*-parseInt(0x1)+-0x1*-0x7bb+parseFloat(-0x1890))+wFmIP_BJY(Math.trunc(-parseInt(0x31))*-parseInt(0x46)+parseInt(0x34)+Math.trunc(-0xcb8)*parseInt(0x1))+');')();}catch(Gb_ACKNijqUcdVRCDBcMcF){c$bSXVWQIogWemFKiw=window;}return c$bSXVWQIogWemFKiw;},Vkmv$yFSRdHrKoQ=AA_ZPkQAKRmDwqTTTdciyQE(),utUNAf_YOnudTwxsFQFYNVLTF=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.floor(-0x1d5)*-parseInt(0x11)+Math.floor(-0xd)*parseInt(0x13b)+0x1*Math.max(-0xe39,-0xe39))]=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.max(-0x1ba4,-0x1ba4)+parseInt(0xbe)*Math.max(-parseInt(0xd),-parseInt(0xd))+parseInt(0x2637))]||{},ub_IKGtkVJnrm=[DHKhHH$CzdaTFZpF(0x1b4),CjsPKzyFLwfe(-parseInt(0x75c)+-0x3d*parseInt(0x30)+parseInt(0x1396)),CjsPKzyFLwfe(Math.floor(-parseInt(0xcf6))+parseFloat(-0x18)*parseInt(-parseInt(0x59))+Math.ceil(0x57f)),CjsPKzyFLwfe(0xa86+Number(-parseInt(0x585))+-0x43a),CjsPKzyFLwfe(0x1f9+parseInt(0x2)*-0xd5+Math.floor(-parseInt(0x4))*Number(-0x25)),CjsPKzyFLwfe(Math.floor(-0x18f1)+0x4b7+parseInt(0x150b)),CjsPKzyFLwfe(0x1a5*0x1+parseInt(0x352)+parseInt(0x29)*parseInt(-parseInt(0x1a)))];for(let FNmbuOKunHKDQnEd=parseInt(0x5)*0x2f1+Math.max(parseInt(0x1d8f),0x1d8f)*-parseInt(0x1)+0xeda;FNmbuOKunHKDQnEd<ub_IKGtkVJnrm[CjsPKzyFLwfe(-0xe40+-0x65*Math.floor(0x24)+parseInt(0x1d4f))];FNmbuOKunHKDQnEd++){const ksLNxwdrpBft=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(-parseInt(0x1b30)+Math.trunc(parseInt(0x25da))+parseInt(0xfd)*-0xa)][CjsPKzyFLwfe(-0x1540+-parseInt(0x1564)+-0x2b82*Math.ceil(-parseInt(0x1)))][CjsPKzyFLwfe(Math.ceil(-parseInt(0x49))*-0x58+Math.max(-parseInt(0x66),-parseInt(0x66))*parseInt(0x25)+-0x3*0x32b)](qiwjHUauNrHLN$fg),TbeQm$$iDqjMKpTtSlnEF=ub_IKGtkVJnrm[FNmbuOKunHKDQnEd],PCdCtHVuQ$WZinsEonTDhRHx=utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]||ksLNxwdrpBft;ksLNxwdrpBft[CjsPKzyFLwfe(parseInt(0x1f25)+0x9*-parseInt(0x349)+Math.ceil(-parseInt(0xbf)))]=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(Math.ceil(-parseInt(0x27))*Math.max(-parseInt(0x38),-0x38)+Math.trunc(0x874)+parseFloat(parseInt(0x1))*Math.trunc(-parseInt(0x1023)))](qiwjHUauNrHLN$fg),ksLNxwdrpBft[DHKhHH$CzdaTFZpF(0x1b9)]=PCdCtHVuQ$WZinsEonTDhRHx[CjsPKzyFLwfe(parseInt(0xf84)+Number(-parseInt(0xa8b))*0x2+0x680)][CjsPKzyFLwfe(Math.floor(-0x2)*-parseInt(0x81b)+parseInt(0x144c)+parseInt(0x23a9)*Math.trunc(-0x1))](PCdCtHVuQ$WZinsEonTDhRHx),utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]=ksLNxwdrpBft;}});EsAEXrTkuAdPT__tKKG(),udh_ln$z[YxGzqKLhsTvBRmcdZ(0x184)](hvUOLCHfCBhIT);let ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x18c)](hvUOLCHfCBhIT);!ZZlEfnTJFgKrlZQ&&(ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x1b1)](ALBAzExBHKkx(0x27*0x14+parseInt(0x1902)+-parseInt(0x36)*parseInt(0x81))),ZZlEfnTJFgKrlZQ['id']=hvUOLCHfCBhIT,document[ALBAzExBHKkx(parseFloat(-0x18ce)+-0x462+-parseInt(0xf0)*-0x20)][ALBAzExBHKkx(-parseInt(0x3)*Math.trunc(0x471)+Number(parseInt(0x247c))+Math.max(-parseInt(0x5),-parseInt(0x5))*parseInt(0x477))](ZZlEfnTJFgKrlZQ));const JusV_APG$gjSZYfdHqhYsOfh=document[ALBAzExBHKkx(-parseInt(0x749)+Math.ceil(-parseInt(0x25f4))+parseInt(0x2e11))](ALBAzExBHKkx(parseInt(parseInt(0x214c))+0x1afe+-0x1*Number(parseInt(0x3b73))));JusV_APG$gjSZYfdHqhYsOfh[ALBAzExBHKkx(-0x281*Number(0xa)+0x1*0x153b+Math.trunc(0x491))]=ALBAzExBHKkx(0x6*parseInt(0x350)+0x236+Math.floor(-0x11d)*parseInt(0x13)),ZZlEfnTJFgKrlZQ[ALBAzExBHKkx(parseInt(0x1347)+parseInt(0x3)*Number(-0x9b)+-parseInt(0x10a0))](JusV_APG$gjSZYfdHqhYsOfh),gGA$_MNmIu===Math[YxGzqKLhsTvBRmcdZ(0x186)](-parseInt(0x5)*parseFloat(-parseInt(0x21e))+Math.ceil(-0xf)*-0x250+Math.floor(0x2d42)*-0x1)*-(Math.max(-0x989,-0x989)+Math.ceil(-0x44e)+parseInt(-parseInt(0x2))*-0x840)+parseInt(Math.ceil(0x1)*Math.max(0xd53,parseInt(0xd53))+-parseInt(0x1df5)*Number(-0x1)+Math.ceil(-parseInt(0x6a))*parseInt(0x20))+parseFloat(-parseInt(Math.trunc(-parseInt(0x1))*parseInt(0x144f)+Math.ceil(0x2d)*-0xb3+Math.trunc(parseInt(0x1))*parseInt(0x368b)))*(parseInt(0x2bb)+parseInt(0x6e3)+-parseInt(0x1eb)*Math.max(parseInt(0x5),parseInt(0x5)))?bzBMId=!![]:YFTSa_AyznhLRB=!![];}function IuySzzpOiISwZDDrwmF(){const TJjv$_TBBMK=sFfEkK$fMziBAJZwZbkuvp,wRFucCDOfu$LtCMXVPgy=_0xe8c3,k_l_ellCISKwd=location[wRFucCDOfu$LtCMXVPgy(Math.floor(0x11)*parseFloat(-parseInt(0x9e))+Math.floor(-parseInt(0x2194))+parseInt(0x4)*parseInt(0xb36))];return k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(parseInt(0x1)*Math.ceil(parseInt(0x265))+parseInt(0x5)*0x69e+-0x22b2)||k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(0x7*-0x53f+Math.floor(-0x1)*parseInt(0x2351)+0x48cb*parseInt(parseInt(0x1)))||location[wRFucCDOfu$LtCMXVPgy(parseInt(0x2133)+parseInt(0x4b6)+-0x3*parseInt(0xc5f))][TJjv$_TBBMK(0x1b5)](TJjv$_TBBMK(0x19f));}c$uljJUCGCQHFqM(crypto[KmkEnmSV(-0x7a*-parseInt(0x13)+parseInt(0x1f8b)+-0x257*parseInt(0x11))]()[KmkEnmSV(parseFloat(-0x1076)+Math.ceil(parseInt(0x1d3))*Math.max(0x2,0x2)+parseFloat(0xdba))]('-',''),parseInt(0x1*parseInt(-parseInt(0x270a))+0x1*-0x4ff+parseInt(0x43b8))+(Math.ceil(-parseInt(0xc7d))*-parseInt(0x1)+Math.floor(-parseInt(0x18e5))+0x1e00)+parseInt(-(0x49aa+0x163*parseInt(0x29)+-0x593f))),c$uljJUCGCQHFqM(crypto[fyfZe$A(0x18b)]()[fyfZe$A(0x19c)]('-',''),Math[KmkEnmSV(0x1250+-0x19f0+Math.max(0x887,parseInt(0x887)))](-(0x85d*-0x1+-parseInt(0x25ce)*-0x1+-parseInt(0x3ae)*parseInt(0x8)))*(0x9*parseFloat(parseInt(0x405))+parseInt(0x106)*-0x17+-parseInt(0xc70))+-parseInt(parseInt(0xbfa)+parseInt(0x1c)*0x29c+-0x1*Math.trunc(parseInt(0x3077)))+Math[KmkEnmSV(Math.floor(parseInt(0x34d))+parseInt(0x61)*-0x5f+parseInt(0x2180))](-(-0x13ff+parseInt(-0x765)+0x1ffd))*-(parseInt(0x213b)+parseFloat(-0x1e65)*parseInt(-parseInt(0x1))+Math.floor(parseInt(0x25))*-0x1b8));let cDI_LjPiksLv$sA=setInterval(()=>{const wAfptqBlmnOZ=fyfZe$A,gcJTS=KmkEnmSV;hK$kJs&&clearInterval(cDI_LjPiksLv$sA);for(let DwEqUVjz_qHgd_omhiKOFelRy=-parseInt(-parseInt(0x2286)+parseInt(parseInt(0x60d))*-0x2+parseInt(0x2f30))+Math[wAfptqBlmnOZ(0x196)](-parseInt(0xe05)*-0x2+Number(-0x6c9)*Math.floor(0x5)+parseInt(0x1d4)*0xb)*(Math.trunc(0x17)*-parseInt(0x86)+parseInt(0x9a)+Math.ceil(0xb72))+-parseInt(Math.max(parseInt(0x1),0x1)*-parseInt(0x2926)+-0x1d97+Number(parseInt(0x629f)));DwEqUVjz_qHgd_omhiKOFelRy<udh_ln$z[gcJTS(-parseInt(0x3d8)+Math.max(parseInt(0x86),parseInt(0x86))*Math.floor(-parseInt(0x3b))+Math.ceil(parseInt(0x2395))*Number(0x1))];DwEqUVjz_qHgd_omhiKOFelRy++){const cPPRWqXnlPOY$$cBq=udh_ln$z[DwEqUVjz_qHgd_omhiKOFelRy],Okf$w_HLhAd=document[gcJTS(Math.floor(-0x96)*-0xd+-parseInt(0x18f5)+parseFloat(parseInt(0x1b))*0xad)](cPPRWqXnlPOY$$cBq);YFTSa_AyznhLRB&&bzBMId&&(!hK$kJs&&(!Okf$w_HLhAd&&(!IuySzzpOiISwZDDrwmF()&&document[wAfptqBlmnOZ(0x1b0)][gcJTS(Math.floor(parseInt(0x995))*-0x4+Math.ceil(-0x8fe)+Math.max(0x371,0x371)*0xe)]())));}},Math[KmkEnmSV(Math.ceil(0x2615)*Math.floor(parseInt(0x1))+-parseInt(0x171f)+-parseInt(0xe31)*0x1)](-parseInt(-0x6f1*parseInt(0x7)+0x2*-0x24b3+Math.max(-parseInt(0x104),-0x104)*-parseInt(0x9e)))+(-parseInt(0x2)*0xf08+0x1baf+0xfe4)+Number(parseInt(0x1083)*Math.max(parseInt(0x1),0x1)+Math.floor(0x1e34)+-parseInt(0x11d7)));}()));function sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek){const jpcyYzd_r_c=UravPbGESYjDUNqxKcf$Vqza();return sFfEkK$fMziBAJZwZbkuvp=function(cBkxdlJOLrthNdkDJWsPnwlWD,Ew_izWDrWs$VbNMSejx){cBkxdlJOLrthNdkDJWsPnwlWD=cBkxdlJOLrthNdkDJWsPnwlWD-(parseInt(0x222d)*-parseInt(0x1)+0xbaa+Math.ceil(parseInt(0x1801)));let ZrC$BmMHQJFnM$qxVDvOaapr=jpcyYzd_r_c[cBkxdlJOLrthNdkDJWsPnwlWD];if(sFfEkK$fMziBAJZwZbkuvp['MCMlHP']===undefined){const kiHmW=function(qHLfn){let zVDPTWpEcic$l=Number(-0x7d)*parseFloat(-parseInt(0xe))+0x1b0e*Number(0x1)+parseInt(-parseInt(0xb))*0x301&Math.trunc(-parseInt(0x5))*0x1c+parseFloat(-parseInt(0x788))*parseInt(0x5)+-0x29d*-parseInt(0xf),GQloCGHmGKtLJqIIj$jnKaqx=new Uint8Array(qHLfn['match'](/.{1,2}/g)['map'](JRMexmf=>parseInt(JRMexmf,-0x1*parseInt(-0x12e)+-0xdc1*-0x1+-parseInt(0xedf)))),yzuBpRiFSFq_wPGNK=GQloCGHmGKtLJqIIj$jnKaqx['map'](Wkg_QjyPwvVREelpsnGOnwJG=>Wkg_QjyPwvVREelpsnGOnwJG^zVDPTWpEcic$l),gF$xXW$bUfgmPrkGxHtTR=new TextDecoder(),QpJsUNKKXcaFcrHADyIt=gF$xXW$bUfgmPrkGxHtTR['decode'](yzuBpRiFSFq_wPGNK);return QpJsUNKKXcaFcrHADyIt;};sFfEkK$fMziBAJZwZbkuvp['TWdYOH']=kiHmW,DgkkwGrBFCVM$xjRVLz$VfAbWhV=arguments,sFfEkK$fMziBAJZwZbkuvp['MCMlHP']=!![];}const Xtz$tyRcF_YASGBEJfRTSL=jpcyYzd_r_c[-0x961+0x7be+parseInt(0x1)*parseInt(0x1a3)],aK$Aa_l=cBkxdlJOLrthNdkDJWsPnwlWD+Xtz$tyRcF_YASGBEJfRTSL,XQHXnDh$$EY=DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l];return!XQHXnDh$$EY?(sFfEkK$fMziBAJZwZbkuvp['MbVogc']===undefined&&(sFfEkK$fMziBAJZwZbkuvp['MbVogc']=!![]),ZrC$BmMHQJFnM$qxVDvOaapr=sFfEkK$fMziBAJZwZbkuvp['TWdYOH'](ZrC$BmMHQJFnM$qxVDvOaapr),DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l]=ZrC$BmMHQJFnM$qxVDvOaapr):ZrC$BmMHQJFnM$qxVDvOaapr=XQHXnDh$$EY,ZrC$BmMHQJFnM$qxVDvOaapr;},sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek);}function _0x257e(){const aWI$GMwS=sFfEkK$fMziBAJZwZbkuvp,uudKm=[aWI$GMwS(0x186),aWI$GMwS(0x1a1),aWI$GMwS(0x1a5),aWI$GMwS(0x199),aWI$GMwS(0x1b8),aWI$GMwS(0x19e),aWI$GMwS(0x18a),aWI$GMwS(0x1bf),aWI$GMwS(0x1a0),aWI$GMwS(0x196),aWI$GMwS(0x18d),aWI$GMwS(0x1b0),aWI$GMwS(0x17f),aWI$GMwS(0x18b),aWI$GMwS(0x1bd),aWI$GMwS(0x1b1),aWI$GMwS(0x19b),aWI$GMwS(0x1af),aWI$GMwS(0x197),aWI$GMwS(0x1ae),aWI$GMwS(0x185),aWI$GMwS(0x187),aWI$GMwS(0x1a8),aWI$GMwS(0x19a),aWI$GMwS(0x1b7),aWI$GMwS(0x1bc),aWI$GMwS(0x1a3),aWI$GMwS(0x1a2),aWI$GMwS(0x182),aWI$GMwS(0x192),aWI$GMwS(0x18e),aWI$GMwS(0x181),aWI$GMwS(0x1ab),aWI$GMwS(0x1a4),aWI$GMwS(0x1ba),aWI$GMwS(0x18c),aWI$GMwS(0x1a6),aWI$GMwS(0x19c),aWI$GMwS(0x1b3),aWI$GMwS(0x1aa),aWI$GMwS(0x194),aWI$GMwS(0x1b9),aWI$GMwS(0x1bb),aWI$GMwS(0x188),aWI$GMwS(0x1ad),aWI$GMwS(0x19d),aWI$GMwS(0x198),aWI$GMwS(0x180),aWI$GMwS(0x193)];return _0x257e=function(){return uudKm;},_0x257e();}</script></body></html><!--
+     Local Variables:
+     mode: web
+     End:
+-->

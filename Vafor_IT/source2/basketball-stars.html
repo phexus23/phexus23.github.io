@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+
+<!-- Ultimate Game Stash file--> 
+<!-- For the regularly updating doc go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ -->
+
+
+
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/assets/css/app.css" type="text/css" />
+    <title>Basketball Stars</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <div id="content"></div>
+    <div id="orientation"></div>
+    <div id="loader">Loading ...</div>
+    <script type="text/javascript" src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+
+    <script type="text/javascript" src="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/assets/lib/nape.min.js">
+        var nape ="nape.min.js";
+    </script>
+
+    <script type="text/javascript" src="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/assets/lib/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/assets/lib/easeljs-0.8.2.combined.js"></script>
+    <script type="text/javascript" src="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/assets/lib/bluebird.min.js"></script>
+    <script type="text/javascript" src="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/assets/lib/phaser.min.js"></script>
+    <script type="text/javascript" src="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/assets/lib/phaser-cachebuster.min.js"></script>
+    <script type="text/javascript" src="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/assets/lib/phaser-super-storage.min.js"></script>
+    <script type="text/javascript" src="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/assets/lib/dragonBones.min.js"></script>
+
+
+    <script type="text/javascript">
+        var notIE11 = (typeof (Event) ==='function');
+
+        window.SDK_OPTIONS = {
+            gameId: "ycc9yyyfyazoiibce061j1b7jx91tt8a",
+            onEvent: function (event) {
+                switch (event.name) {
+                    case "SDK_GAME_START":
+                        // advertisement done, resume game logic and unmute audio
+                        var event;
+                        if (notIE11) {
+                            event = new Event("SDK_GAME_START");
+                        } else {
+                            event = document.createEvent('Event');
+                            event.initEvent('SDK_GAME_START', true, true);
+                        }
+                        document.getElementById("content").dispatchEvent(event);
+                        break;
+                    case "SDK_GAME_PAUSE":
+                        // pause game logic / mute audio
+                        var event;
+                        if (notIE11) {
+                            event = new Event("SDK_GAME_PAUSE");
+                        } else {
+                            event = document.createEvent('Event');
+                            event.initEvent('SDK_GAME_PAUSE', true, true);
+                        }
+                        document.getElementById("content").dispatchEvent(event);
+                        break;
+                    case "SDK_READY":
+                        // this event is triggered when your user doesn't want personalised targeting of ads and such
+                        console.log("SDK_READY");
+                        break;
+                }
+            },
+        };
+        (function (a, b, c) {
+            var d = a.getElementsByTagName(b)[0];
+            a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src ="https://cdn.jsdelivr.net/gh/st39/sdk@main/sdk.js", d.parentNode.insertBefore(a, d))
+        })(document, "script", "gamemonetize-sdk"); 
+    </script>
+<script type="text/javascript" src="https://36043189-480959866522093217.preview.editmysite.com/uploads/b/139890129-743801889220072865/files/bs.min.js"></script></body>
+<script src="https://cdn.jsdelivr.net/gh/st39/sdk@main/api.js"></script>
+</html>

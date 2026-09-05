@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: #121212;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      #game-container {
+        text-align: center;
+        width: 100%;
+        height: 100%;
+      }
+      #loading-progress {
+        font-size: 18px;
+        margin-top: 20px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game-container">
+      <div id="game"></div>
+      <div id="loading-progress">Loading: 0/0</div>
+      <div id="first-time">First-time loading may take longer...</div>
+    </div>
+    <script>
+          document.getElementById("loading-progress").remove();
+          document.getElementById("first-time").remove();
+          EJS_player = "#game";
+          EJS_core = "nds";
+          EJS_gameName = "Phoenix Wright - Ace Attorney - Justice for All";
+          EJS_color = "#0064ff";
+          EJS_startOnLoaded = true;
+          EJS_pathtodata = "https://cdn.jsdelivr.net/gh/ant9012/emu-updated@master/";
+          EJS_gameUrl = "https://cdn.jsdelivr.net/gh/AxolotSmall/emujs@main/Phoenix%20Wright%20-%20Ace%20Attorney%20-%20Justice%20for%20All%20(USA).zip";
+          const script = document.createElement("script");
+          script.src = "https://cdn.jsdelivr.net/gh/ant9012/emu-updated@master/loader.js";
+          document.body.appendChild(script);
+    </script>
+  </body>
+</html>

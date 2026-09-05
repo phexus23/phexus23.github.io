@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+<body>
+  <base href="https://cdn.jsdelivr.net/gh/web-ports/pvz@latest/">
+  <style>
+    #loading-text {
+  font-weight: bold;
+  background: linear-gradient(
+    270deg,
+    #ff0000,
+    #ff7f00,
+    #ffff00,
+    #00ff00,
+    #0000ff,
+    #4b0082,
+    #8f00ff
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 3s ease infinite;
+}
+
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+  </style>
+<div id="loading-text"
+    style="color: white; font-size: 48px; font-family: cursive; text-align: center; margin-top: 20px;"> LOADING...
+  </div>
+<canvas id="canvas" width="800" height="600" style="display:block; outline:0"></canvas>
+
+<textarea
+  id="pvz-soft-keyboard"
+  style="position:fixed; top:0; left:0; width:1px; height:1px; opacity:0; pointer-events:none; font-size:16px"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  enterkeyhint="done"
+  spellcheck="false"
+></textarea>
+
+<script>
+  let _res, _rej;
+  window.moduleReadyPromise = new Promise((r, e) => { _res = r; _rej = e; });
+
+  var Module = {
+    canvas: document.getElementById("canvas"),
+    noInitialRun: true,
+    onRuntimeInitialized: _res,
+    onAbort: e => _rej(e),
+    print: console.log,
+    printErr: console.warn,
+  };
+</script>
+
+<script>
+var loadingText = document.querySelector("#loading-text");
+    let totalBytes = 0;
+    let loadedBytes = 0;
+
+    async function fetchWithProgress(url) {
+      const response = await fetch(url);
+      const reader = response.body.getReader();
+      let chunks = [];
+      let received = 0;
+      while (true) {
+        const {
+          done,
+          value
+        } = await reader.read();
+        if (done) break;
+        received += value.length;
+        loadedBytes += value.length;
+        chunks.push(value);
+        let mbDone = (loadedBytes / (1024 * 1024)).toFixed(2);
+        let mbTotal = '43.34';
+        loadingText.textContent = `LOADING... ${mbDone} MB / ${mbTotal} MB`;
+      }
+      let fullBuffer = new Uint8Array(received);
+      let offset = 0;
+      for (let chunk of chunks) {
+        fullBuffer.set(chunk, offset);
+        offset += chunk.length;
+      }
+      return fullBuffer.buffer;
+    }
+
+    async function mergeFiles(fileParts, cacheKey) {
+      const cache = await caches.open("pvz-cache");
+      const cachedResponse = await cache.match(cacheKey);
+      if (cachedResponse) {
+        const blob = await cachedResponse.blob();
+        return URL.createObjectURL(blob);
+      }
+      const buffers = await Promise.all(
+        fileParts.map(part => fetchWithProgress(part))
+      );
+      const mergedBlob = new Blob(buffers);
+      const response = new Response(mergedBlob);
+      await cache.put(cacheKey, response);
+      return URL.createObjectURL(mergedBlob);
+    }
+
+    function getParts(file, start, end) {
+      let parts = [];
+      for (let i = start; i <= end; i++) {
+        parts.push(file + ".part" + i);
+      }
+      return parts;
+    }
+    (async () => {
+      const [pakurl] = await Promise.all([
+        mergeFiles(getParts("main.pak", 1, 3), "main.pak"),
+      ]);
+      let ns = document.createElement("script");
+      ns.src="pvz.js";
+      document.body.appendChild(ns);
+    await moduleReadyPromise;
+
+    const files = [
+      [pakurl, "main.pak"],
+      ["properties/Layout.xml", "properties/Layout.xml"],
+      ["properties/partner.xml.sig", "properties/partner.xml.sig"],
+      ["properties/default.xml", "properties/default.xml"],
+      ["properties/partner.xml", "properties/partner.xml"],
+      ["properties/partner_logo.jpg", "properties/partner_logo.jpg"],
+    ];
+
+    for (const [src, dest] of files) {
+      const data = new Uint8Array(await (await fetch(src)).arrayBuffer());
+      const parts = dest.split("/");
+      let dir = "/";
+      for (let i = 0; i < parts.length - 1; i++) {
+        dir += (dir === "/" ? "" : "/") + parts[i];
+        try { Module.FS.mkdir(dir); } catch {}
+      }
+      Module.FS.writeFile("/" + dest, data);
+    }
+
+    try { Module.FS.mkdir("/saves"); } catch {}
+    try { Module.FS.mount(Module.FS.filesystems.IDBFS, {}, "/saves"); } catch {}
+    await new Promise(r => Module.FS.syncfs(true, r));
+
+    const c = document.getElementById("canvas");
+    const resize = () => {
+      const s = Math.min(innerWidth / 800, innerHeight / 600);
+      c.style.width  = s * 800 + "px";
+      c.style.height = s * 600 + "px";
+    };
+    resize();
+    addEventListener("resize", resize);
+    addEventListener("fullscreenchange", resize);
+
+    document.body.style = "margin:0; background:#000; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden";
+
+    const sync = () => Module.FS.syncfs(false, () => {});
+    setInterval(sync, 5000);
+    addEventListener("visibilitychange", () => document.hidden && sync());
+    addEventListener("pagehide", sync);
+
+    Module.callMain([]);
+    loadingText.remove();
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<base href="https://cdn.jsdelivr.net/gh/wasmdotrip/wasm.rip@main/files/tchamp/" />
+<meta charset="utf-8">
+<title>Trombone Champ</title>
+<style>
+html,body{margin:0;padding:0;width:100%;height:100%;background:#000;overflow:hidden}
+#unityContainer{position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000}
+#unityContainer canvas{display:block;width:100%!important;height:100%!important;outline:none}
+</style>
+</head>
+<body>
+<div id="unityContainer"></div>
+<script>
+(function(){
+  var CHUNKED = {
+    'Build/web.data.unityweb': 6,
+    'Build/web.wasm.code.unityweb': 4
+  };
+  var blobUrls = {};
+
+  function fetchArrayBuffer(url){
+    return fetch(url).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status+' '+url);
+      return r.arrayBuffer();
+    });
+  }
+
+  function buildChunkedBlob(relPath, count){
+    var parts = [];
+    for(var i=0; i<count; i++){
+      parts.push(relPath + (i<10?'0':'') + i);
+    }
+    return Promise.all(parts.map(fetchArrayBuffer))
+      .then(function(bufs){
+        return URL.createObjectURL(new Blob(bufs, {type:'application/octet-stream'}));
+      });
+  }
+
+  function rewrite(url){
+    if(typeof url !== 'string') return url;
+    var u = url;
+    if(u.indexOf('://') === -1 && u.charAt(0) === '/') u = u.slice(1);
+    for(var key in CHUNKED){
+      if(u.indexOf(key) !== -1 && blobUrls[key]) return blobUrls[key];
+    }
+    return url;
+  }
+
+  var origOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function(method, url){
+    var args = Array.prototype.slice.call(arguments);
+    args[1] = rewrite(url);
+    return origOpen.apply(this, args);
+  };
+  var origFetch = window.fetch;
+  window.fetch = function(input, init){
+    if(typeof input === 'string'){
+      input = rewrite(input);
+    } else if(input && input.url){
+      var ru = rewrite(input.url);
+      if(ru !== input.url) input = new Request(ru, input);
+    }
+    return origFetch.call(this, input, init);
+  };
+
+  var jobs = Object.keys(CHUNKED).map(function(k){
+    return buildChunkedBlob(k, CHUNKED[k]).then(function(u){ blobUrls[k] = u; });
+  });
+
+  Promise.all(jobs).then(function(){
+    var s = document.createElement('script');
+    s.src = 'Build/UnityLoader.js';
+    s.onload = function(){ UnityLoader.instantiate('unityContainer', 'Build/web.json'); };
+    document.head.appendChild(s);
+  }).catch(function(e){
+    document.body.innerHTML += '<pre style="color:#f88;padding:20px">Load error: '+e.message+'</pre>';
+  });
+})();
+</script>
+</body>
+</html>

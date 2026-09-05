@@ -28,10 +28,11 @@ function sourceIsEnabled(source) {
 document.addEventListener('DOMContentLoaded', function() {
     Promise.all([
         fetch('json/list.json').then(response => response.json()),
-        fetch('json/ezclasswork.json').then(response => response.json())
+        fetch('json/source2.json').then(response => response.json())
     ])
         .then(([data, ezClassworkGames]) => {
-            const ezGames = ezClassworkGames.map(game => ({
+            // Skip entries whose wrapper file failed to download ("missing") — they're broken on the source site too.
+            const ezGames = ezClassworkGames.filter(game => !game.missing).map(game => ({
                 ...game,
                 imgsrc: ezClassworkPlaceholderImage(game.name),
                 foldername: `ezclasswork-${game.slug}`,

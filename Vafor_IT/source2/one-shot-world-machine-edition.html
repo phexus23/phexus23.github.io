@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="https://cdn.jsdelivr.net/gh/larpinguser/fa72c1decf204689a638fe1ed96acaed@latest/dist/" > 
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OneShot: World Machine Edition</title>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background: #000; }
+        * { box-sizing: border-box; }
+        #canvas { image-rendering: pixelated; display: block; width: 100%; height: 100%; }
+
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a0a0a;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 100;
+            transition: opacity .4s ease;
+        }
+        #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+        #loading-box { text-align: center; width: 360px; }
+
+        #loading-title {
+            color: #ccc; font-family: 'Segoe UI', sans-serif; font-size: 22px;
+            font-weight: 300; letter-spacing: 1px; margin-bottom: 32px;
+        }
+
+        #loading-bar-track {
+            width: 100%; height: 6px; background: #222; border-radius: 3px;
+            overflow: hidden; margin-bottom: 16px;
+        }
+        #loading-bar-fill {
+            height: 100%; width: 30%; border-radius: 3px;
+            background: linear-gradient(90deg, #5599ff, #77bbff, #5599ff);
+            background-size: 200% 100%;
+            animation: loadBar 1.8s ease-in-out infinite;
+        }
+        @keyframes loadBar {
+            0%   { width: 0%; margin-left: 0; }
+            50%  { width: 50%; }
+            100% { width: 0%; margin-left: 100%; }
+        }
+
+        #loading-text {
+            color: #777; font-family: monospace; font-size: 14px;
+            transition: color .3s;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay">
+        <div id="loading-box">
+            <div id="loading-title">OneShot: World Machine Edition</div>
+            <div id="loading-bar-track"><div id="loading-bar-fill"></div></div>
+            <div id="loading-text">Initializing...</div>
+        </div>
+    </div>
+    <canvas id="canvas"></canvas>
+    <script type="module" src="index.js"></script>
+</body>
+</html>

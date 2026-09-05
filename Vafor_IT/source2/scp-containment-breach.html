@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="https://cdn.jsdelivr.net/gh/larpinguser/q8j@main/">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>SCP – Containment Breach</title>
+<style>
+  html,body { margin:0; padding:0; width:100%; height:100%; background:#000; overflow:hidden; }
+  #wrap { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000; }
+  #canvas { display:block; background:#000; outline:none; }
+  #loading { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center;
+             justify-content:center; background:#000; z-index:5; }
+  #pct { color:#fff; font:500 15px/1 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         margin-bottom:14px; letter-spacing:0.06em; font-variant-numeric:tabular-nums; }
+  #bar { width:min(340px, 60vw); height:3px; background:rgba(255,255,255,0.15); border-radius:2px; overflow:hidden; }
+  #barfill { height:100%; width:0%; background:#fff; border-radius:2px; transition:width .25s ease-out; }
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="canvas" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas></div>
+<div id="loading"><div id="pct">0%</div><div id="bar"><div id="barfill"></div></div></div>
+<script>
+  const canvas = document.getElementById('canvas');
+  const loading = document.getElementById('loading');
+  const barfill = document.getElementById('barfill');
+  const pctEl = document.getElementById('pct');
+
+  function fit(){
+    const gw = canvas.width || 1280, gh = canvas.height || 720;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const s = Math.min(vw / gw, vh / gh);
+    canvas.style.width  = Math.round(gw * s) + 'px';
+    canvas.style.height = Math.round(gh * s) + 'px';
+  }
+  new MutationObserver(fit).observe(canvas, { attributes: true, attributeFilter: ['width', 'height'] });
+  fit();
+  addEventListener('resize', fit);
+  addEventListener('fullscreenchange', fit);
+
+  addEventListener('keydown', (e) => {
+    if (e.code === 'KeyF' && !e.repeat && document.pointerLockElement !== canvas) {
+      const el = document.documentElement;
+      if (!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+    }
+  }, true);
+  canvas.addEventListener('mousedown', () => { canvas.focus(); });
+
+  const rpl = canvas.requestPointerLock ? canvas.requestPointerLock.bind(canvas) : null;
+  canvas.requestPointerLock = function(){
+    try {
+      const p = rpl ? rpl() : undefined;
+      if (p && p.catch) p.catch(() => {});
+    } catch (e) {}
+  };
+  const epl = document.exitPointerLock ? document.exitPointerLock.bind(document) : null;
+  document.exitPointerLock = function(){
+    try { if (epl) epl(); } catch (e) {}
+  };
+
+  let maxPct = 0;
+  var Module = {
+    canvas: canvas,
+    print: (t) => { if (t) console.log(t); },
+    printErr: (t) => { if (t) console.error(t); },
+    setStatus: (t) => {
+      if (!t) { loading.style.display = 'none'; return; }
+      const m = /\((\d+(\.\d+)?)\/(\d+)\)/.exec(t);
+      if (m) {
+        const pct = Math.min(100, Math.round((parseFloat(m[1]) / parseFloat(m[3])) * 100));
+        if (pct >= maxPct) {
+          maxPct = pct;
+          barfill.style.width = pct + '%';
+          pctEl.textContent = pct + '%';
+        }
+      }
+    },
+    postRun: [ () => { setTimeout(() => { loading.style.display = 'none'; }, 350); } ],
+    preRun: [ () => {
+      const LP = FS.lookupPath.bind(FS);
+      const cache = new Map();
+      const fix = (abs) => {
+        if (cache.has(abs)) return cache.get(abs);
+        let base = '/';
+        const out = [];
+        for (const comp of abs.split('/').filter(c => c && c !== '.')) {
+          const tryPath = (base === '/' ? '/' : base + '/') + comp;
+          let ok = false;
+          try { LP(tryPath, {}); ok = true; } catch (e) {}
+          if (ok) { out.push(comp); base = tryPath; continue; }
+          let names;
+          try { names = FS.readdir(base); } catch (e) { cache.set(abs, null); return null; }
+          const lc = comp.toLowerCase();
+          const m = names.find(n => n.toLowerCase() === lc);
+          if (!m) { cache.set(abs, null); return null; }
+          out.push(m);
+          base = (base === '/' ? '/' : base + '/') + m;
+        }
+        const fixed = '/' + out.join('/');
+        cache.set(abs, fixed);
+        return fixed;
+      };
+      const caseFixed = (path) => {
+        let abs = path;
+        if (typeof abs !== 'string' || !abs.startsWith('/')) {
+          const c = FS.cwd();
+          abs = (c === '/' ? '/' : c + '/') + abs;
+        }
+        return fix(abs);
+      };
+      const wrap = (obj, method) => {
+        const orig = obj[method].bind(obj);
+        obj[method] = function(path, ...rest){
+          try { return orig(path, ...rest); }
+          catch (e) {
+            if (!e || e.errno !== 44 || typeof path !== 'string') throw e;
+            const f = caseFixed(path);
+            if (f && f !== path) return orig(f, ...rest);
+            throw e;
+          }
+        };
+      };
+      wrap(FS, 'lookupPath');
+      wrap(FS, 'open');
+      wrap(FS, 'stat');
+      if (FS.lstat) wrap(FS, 'lstat');
+      if (FS.readdir) wrap(FS, 'readdir');
+    }, () => {
+      const LS_KEY = 'scpcb.options';
+      const OPTIONS_DIR = '/Undertow Games/SCP - Containment Breach';
+      const OPTIONS_PATH = OPTIONS_DIR + '/options.ini';
+      const mkdirp = (path) => {
+        const parts = path.split('/').filter(Boolean);
+        let cur = '';
+        for (const part of parts) { cur += '/' + part; try { FS.mkdir(cur); } catch (e) {} }
+      };
+      // The new source creates its options file itself (InitOptionsFile) at
+      // runtime, only if one doesn't already exist there - so pre-writing a
+      // restored copy here (before bbMain starts) is picked up as-is and
+      // never overwritten. This must not block startup (no run dependency):
+      // the game creates this path itself if we don't, so waiting on its
+      // existence here would deadlock against the very code that creates it.
+      try {
+        mkdirp(OPTIONS_DIR);
+        const saved = localStorage.getItem(LS_KEY);
+        if (saved) FS.writeFile(OPTIONS_PATH, saved);
+        const resOf = (t) => {
+          const w = /^width *= *(\d+)/m.exec(t), h = /^height *= *(\d+)/m.exec(t);
+          return (w ? w[1] : '') + 'x' + (h ? h[1] : '');
+        };
+        let last = saved || null;
+        let bootRes = saved ? resOf(saved) : null;
+        setInterval(() => {
+          try {
+            const cur = FS.readFile(OPTIONS_PATH, { encoding: 'utf8' });
+            if (bootRes === null) bootRes = resOf(cur);
+            if (cur !== last) {
+              last = cur;
+              localStorage.setItem(LS_KEY, cur);
+              if (resOf(cur) !== bootRes) location.reload();
+            }
+          } catch (e) {}
+        }, 1000);
+      } catch (e) {}
+
+      const SAVES_KEY = 'scpcb.saves';
+      const b64enc = (bytes) => { let s = ''; for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]); return btoa(s); };
+      const b64dec = (str) => { const s = atob(str); const b = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) b[i] = s.charCodeAt(i); return b; };
+      const walk = (dir, out) => {
+        let names;
+        try { names = FS.readdir(dir); } catch (e) { return; }
+        for (const n of names) {
+          if (n === '.' || n === '..') continue;
+          const p = dir + '/' + n;
+          let mode;
+          try { mode = FS.stat(p).mode; } catch (e) { continue; }
+          if (FS.isDir(mode)) walk(p, out);
+          else if (FS.isFile(mode)) { try { out[p] = b64enc(FS.readFile(p)); } catch (e) {} }
+        }
+      };
+      try { FS.mkdir('/Saves'); } catch (e) {}
+      try {
+        const savedTree = localStorage.getItem(SAVES_KEY);
+        if (savedTree) {
+          const tree = JSON.parse(savedTree);
+          for (const p in tree) {
+            mkdirp(p.slice(0, p.lastIndexOf('/')));
+            FS.writeFile(p, b64dec(tree[p]));
+          }
+        }
+      } catch (e) {}
+      let lastSaves = localStorage.getItem(SAVES_KEY) || '';
+      setInterval(() => {
+        try {
+          const out = {};
+          walk('/Saves', out);
+          const ser = JSON.stringify(out);
+          if (ser !== lastSaves && ser !== '{}') {
+            lastSaves = ser;
+            localStorage.setItem(SAVES_KEY, ser);
+          }
+        } catch (e) {}
+      }, 4000);
+    } ],
+  };
+
+  function fail(t){
+    document.getElementById('bar').style.display = 'none';
+    pctEl.style.display = 'none';
+    const m = document.createElement('div');
+    m.style.cssText = 'color:#fff;max-width:520px;text-align:center;padding:0 24px;font:500 15px/1.6 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;';
+    m.textContent = t;
+    loading.appendChild(m);
+  }
+
+  (async () => {
+    if (!navigator.gpu) {
+      fail('This game requires WebGPU. Use Chrome or Edge 113+, or Safari 26+, over HTTPS or localhost.');
+      return;
+    }
+    let adapter = null;
+    try { adapter = await navigator.gpu.requestAdapter(); } catch (e) {}
+    if (!adapter) {
+      fail('WebGPU is available but no GPU adapter could be acquired on this system.');
+      return;
+    }
+    Module.onAbort = (w) => fail('Startup failed: ' + w);
+
+    try {
+      const mf = await fetch('assets.manifest.json', { cache: 'no-cache' });
+      if (mf.ok) {
+        const manifest = await mf.json();
+        const total = manifest.size;
+        const buf = new Uint8Array(total);
+        let offset = 0, loaded = 0;
+        for (const part of manifest.parts) {
+          const r = await fetch(part, { cache: 'no-cache' });
+          if (!r.ok) throw new Error('chunk ' + part + ' failed');
+          const chunk = new Uint8Array(await r.arrayBuffer());
+          if (offset + chunk.length > total) {
+            throw new Error('asset package mismatch (stale cache?) - please hard-refresh (Cmd/Ctrl+Shift+R)');
+          }
+          buf.set(chunk, offset);
+          offset += chunk.length;
+          loaded += chunk.length;
+          const pct = Math.floor((loaded / total) * 100);
+          barfill.style.width = pct + '%';
+          pctEl.textContent = pct + '%';
+        }
+        Module.getPreloadedPackage = () => buf.buffer;
+      }
+    } catch (e) {
+      fail('Failed to load game assets: ' + e.message);
+      return;
+    }
+
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'scpcb.js';
+    document.body.appendChild(s);
+  })();
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"9a1ade38654440d0a3e0b5dcd2dd0312","r":1}' crossorigin="anonymous"></script>
+</body>
+</html>

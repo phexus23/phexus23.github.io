@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+
+<!-- Ultimate Game Stash file--> 
+<!-- For the regularly updating doc go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ -->
+
+
+
+<html lang="en-us">
+<base href="https://cdn.jsdelivr.net/gh/bubbls/UGS-Assets@104c364f36401fd94165923f6b5a76c113e3540e/baldi%20decomp/">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Baldi's Basics The Ultra Decompile</title>
+  <link type="image/png" href="TemplateData/favicon.png" rel="icon">
+  <link rel="stylesheet" href="TemplateData/style.css">
+  <link rel="apple-touch-icon" href="TemplateData/AppIcon.png">
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-title" content="Baldi's Basics Ultra Decompile">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="white">
+</head>
+
+<body>
+  <div id="unity-container" class="unity-desktop">
+    <canvas id="unity-canvas" width=1024 height=576></canvas>
+    <div id="unity-loading-bar">
+      <div id="unity-logo"></div>
+      <div id="unity-progress-bar-empty">
+        <div id="unity-progress-bar-full"></div>
+      </div>
+    </div>
+    <div id="unity-warning"> </div>
+  </div>
+  <script>
+    function isStandalone() {
+      return (window.navigator.standalone === true) || window.matchMedia("(display-mode: fullscreen)").matches || window.matchMedia("(display-mode: standalone)").matches;
+    }
+
+    function isMobile() {
+      if (navigator.userAgent.match(/Mac/) && navigator.maxTouchPoints && navigator.maxTouchPoints > 2) return true;
+      return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    }
+
+    function isIOS() {
+      if (navigator.userAgent.match(/Mac/) && navigator.maxTouchPoints && navigator.maxTouchPoints > 2) return true;
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    window.addEventListener("load", function() {
+      if ("serviceWorker" in navigator && (isStandalone() || (isMobile() && !isIOS()))) {
+        navigator.serviceWorker.register("ServiceWorker.js");
+      }
+    });
+
+    var container = document.querySelector("#unity-container");
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingBar = document.querySelector("#unity-loading-bar");
+    var progressBarFull = document.querySelector("#unity-progress-bar-full");
+    var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+    var warningBanner = document.querySelector("#unity-warning");
+
+
+    // Shows a temporary message banner/ribbon for a few seconds, or
+    // a permanent error message on top of the canvas if type=='error'.
+    // If type=='warning', a yellow highlight color is used.
+    // Modify or remove this function to customize the visually presented
+    // way that non-critical warnings and error messages are presented to the
+    // user.
+    function unityShowBanner(msg, type) {
+      function updateBannerVisibility() {
+        warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+      }
+      var div = document.createElement('div');
+      div.innerHTML = msg;
+      warningBanner.appendChild(div);
+      if (type == 'error') div.style = 'background: red; padding: 10px;';
+      else {
+        if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+        setTimeout(function() {
+          warningBanner.removeChild(div);
+          updateBannerVisibility();
+        }, 5000);
+      }
+      updateBannerVisibility();
+    }
+        function mergeFiles(fileParts) {
+            return new Promise((resolve, reject) => {
+                let buffers = [];
+
+                function fetchPart(index) {
+                    if (index >= fileParts.length) {
+                        let mergedBlob = new Blob(buffers);
+                        let mergedFileUrl = URL.createObjectURL(mergedBlob);
+                        resolve(mergedFileUrl);
+                        return;
+                    }
+                    fetch(fileParts[index]).then((response) => response.arrayBuffer()).then((data) => {
+                        buffers.push(data);
+                        fetchPart(index + 1);
+                    }).catch(reject);
+                }
+                fetchPart(0);
+            });
+        }
+
+        function getParts(file, start, end) {
+            let parts = [];
+            for (let i = start; i <= end; i++) {
+                parts.push(file + ".part" + i);
+            }
+            return parts;
+        }
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/HTML.loader.js";
+    Promise.all([
+        mergeFiles(getParts("Build/HTML.data.unityweb", 1, 9)),
+        mergeFiles(getParts("Build/HTML.wasm.unityweb", 1, 2))
+    ]).then(([dataUrl, wasmUrl]) => {
+        container.hidden = false;
+        var config = {
+            dataUrl: dataUrl,
+            frameworkUrl: buildUrl + "/HTML.framework.js.unityweb",
+            codeUrl: wasmUrl,
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "SmashGames",
+            productName: "Kindergarten2",
+            productVersion: "2.00",
+            showBanner: unityShowBanner,
+        };
+
+        var isFullScreen = false;
+        //var isDesktop = true;
+
+        if (isMobile() || isStandalone()) {
+
+          var meta = document.createElement('meta');
+          meta.name = 'viewport';
+          meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+          document.getElementsByTagName('head')[0].appendChild(meta);
+          container.className = "unity-mobile";
+
+          // canvas.style.width = window.innerWidth + 'px';
+          // canvas.style.height = window.innerHeight + 'px';
+          canvas.style.width = '100%';
+          canvas.style.height = '100%';
+
+          //isDesktop = false;
+        } else {
+          // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+          canvas.style.width = "1024px";
+          canvas.style.height = "576px";
+          if (location.hostname.includes("gamejolt")) // Change to promo logo
+          {
+            document.getElementById('unity-webgl-logo').id = "gamejolt-promo-logo";
+          }
+          if (!location.hostname.includes("gamejolt") && !window.location.toString().includes("m=1")) {
+            // this is for itch.io
+            var meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+            document.getElementsByTagName('head')[0].appendChild(meta);
+            container.className = "unity-mobile";
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            //isDesktop = false;
+          }
+        }
+
+        loadingBar.style.display = "block";
+
+        if (isMobile() && !/Android/i.test(navigator.userAgent) && !isStandalone()) {
+          unityShowBanner(window.self !== window.top ? "Scroll to the Install Instructions on how to play." : "Begin the game by adding it to Home Screen and running it there.", "warning");
+          loadingBar.style.display = "none";
+          canvas.style.display = "none";
+          throw new Error("Add to Home Screen to begin.")
+        }
+
+        var script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onload = () => {
+          createUnityInstance(canvas, config, (progress) => {
+            progressBarFull.style.width = 100 * progress + "%";
+          }).then((unityInstance) => {
+            loadingBar.style.display = "none";
+            // // Full screen change
+            // const el = document.documentElement;
+
+            // el.addEventListener("fullscreenchange", (event) => {
+            //   if (isDesktop) {
+            //     if (document.fullscreenElement) {
+            //       container.className = "unity-mobile";
+            //       canvas.style.width = '100%';
+            //       canvas.style.height = '100%';
+            //     } else {
+            //       container.className = "unity-desktop";
+            //       canvas.style.width = "1024px";
+            //       canvas.style.height = "576px";
+            //     }
+            //   }
+            // });
+          }).catch((message) => {
+            alert(message);
+          });
+        };
+        document.body.appendChild(script);
+    }).catch((error) => {
+        unityShowBanner("Failed to load game files: " + error, "error");
+        loadingBar.style.display = "none";
+        canvas.style.display = "none";
+    });
+  </script>
+</body>
+
+</html>

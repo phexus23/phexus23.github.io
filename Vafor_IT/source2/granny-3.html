@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Unity WebGL Player | Granny 3</title>
+<style>
+html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #231F20 }
+#unity-canvas { width: 100%; height: 100%; display: block }
+</style>
+</head>
+<body>
+<canvas id="unity-canvas" tabindex="-1"></canvas>
+<script src="https://cdn.jsdelivr.net/gh/larpinguser/granny3-webport@main/FinalBuild/Build/FinalBuild.loader.js"></script>
+<script>
+(async function() {
+const baseUrl = "https://cdn.jsdelivr.net/gh/larpinguser/granny3-webport@main/FinalBuild/Build/";
+async function fetchAndMerge(filename, count, pad) {
+      const parts = [];
+      for (let i = 1; i <= count; i++) {
+        const index = pad ? i.toString().padStart(2, '0') : i;
+        const response = await fetch(`${baseUrl}${filename}.part${index}`);
+        if (!response.ok) throw new Error("Failed to fetch part " + index);
+        parts.push(await response.arrayBuffer());
+      }
+      const blob = new Blob(parts, { type: "application/octet-stream" });
+      return URL.createObjectURL(blob);
+    }
+
+    try {
+      const [wasmUrl, dataUrl] = await Promise.all([
+        fetchAndMerge("FinalBuild.wasm", 2, false),
+        fetchAndMerge("FinalBuild.data", 20, true)
+      ]);
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        var canvas = document.querySelector("#unity-canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
+        document.body.style.textAlign = "left";
+      }
+
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: dataUrl,
+        frameworkUrl: baseUrl + "FinalBuild.framework.js",
+        codeUrl: wasmUrl,
+        streamingAssetsUrl: baseUrl + "../StreamingAssets",
+        companyName: "DVloper",
+        productName: "Granny 3",
+        productVersion: "1.2",
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  })();
+</script>
+</body>
+</html>
