@@ -51,7 +51,7 @@ function populategxmes(sectionId, gxmesList) {
     // Build the whole grid's markup once and assign it in a single write —
     // the old `grid.innerHTML += ...` inside the loop re-parsed the entire
     // accumulated HTML on every iteration, which is O(n^2) and was a large
-    // part of why pages with hundreds of cards (all-games, EZClasswork) lagged.
+    // part of why pages with hundreds of cards (all-games, Classroom) lagged.
     grid.innerHTML = gxmesList.map(gxme => {
         const isFavorite = favorites.includes(gxme.name);
         const sourceGroup = gxme.source || (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'Source #1' : 'Main');
@@ -90,7 +90,7 @@ fetchgxmes().then(loadedGxmes => {
     gxmes = loadedGxmes;
 
     // Every game — no matter which source it came from — just shows up under
-    // its normal genre category (EZClasswork included, since that's simply
+    // its normal genre category (Classroom included, since that's simply
     // the category all of those games share). Which source a game came from
     // is plumbing for the "hide a broken source" switch in Settings, not
     // something a visitor needs a separate tab or badge to know about.

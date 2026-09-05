@@ -119,7 +119,7 @@ function normalizeEzClassworkGames(gxmes) {
         imgsrc: ezClassworkPlaceholderImage(gxme.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${gxme.slug}`,
-        category: 'EZClasswork',
+        category: 'Classroom',
         source: EZCLASSWORK_SOURCE
     }));
 }
@@ -150,10 +150,9 @@ async function fetchgxmes() {
         ]);
         const allGames = gxmes.concat(normalizeEzClassworkGames(ezClassworkGames));
         // A downloaded/self-hosted game always wins over an embedded
-        // EZClasswork game of the same name (~17 collide, e.g. "2048",
-        // "Minesweeper", "Snake") — applied once here so every consumer
-        // (category tabs, All Games, search) sees the deduped catalog
-        // instead of the same game appearing twice.
+        // Classroom game of the same name (e.g. "2048") — applied once
+        // here so every consumer (category tabs, All Games, search) sees
+        // the deduped catalog instead of the same game appearing twice.
         return filterAvailableGames(preferMainSource(allGames));
     })();
     return catalogPromise;

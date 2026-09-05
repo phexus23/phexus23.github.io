@@ -20,7 +20,7 @@ function normalizeEzClassworkGame(item) {
         imgsrc: ezClassworkPlaceholderImage(item.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${item.slug}`,
-        category: 'EZClasswork',
+        category: 'Classroom',
         source: SOURCE_TWO
     };
 }

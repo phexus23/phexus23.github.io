@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ...game,
                 imgsrc: ezClassworkPlaceholderImage(game.name),
                 foldername: `ezclasswork-${game.slug}`,
-                category: 'EZClasswork',
+                category: 'Classroom',
                 source: 'Source #2'
             }));
             const allGames = data.concat(ezGames);
