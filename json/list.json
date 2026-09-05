@@ -726,12 +726,5 @@
         "linksrc": "/Vafor_IT/trex-runner/",
         "foldername": "trex-runner",
         "category": "Arcade"
-    },
-    {
-        "name": "Minesweeper",
-        "imgsrc": "/assets/img/emoji-minesweeper.png",
-        "linksrc": "/Vafor_IT/minesweeper/",
-        "foldername": "minesweeper",
-        "category": "Puzzle"
     }
 ]
