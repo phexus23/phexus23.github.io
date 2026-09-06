@@ -4,7 +4,6 @@ const SOURCE_TWO = 'Source #2';
 function isEzClassworkGameEntry(item) {
     return item && (item.source === SOURCE_ONE || item.source === SOURCE_TWO);
 }
-
 function ezClassworkPlaceholderImage(name) {
     let hash = 0;
     for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
@@ -19,8 +18,10 @@ function normalizeEzClassworkGame(item) {
     return {
         ...item,
         // Source #1 entries always carry a real cover ({slug}_{id}.png);
-        // Source #2 entries have covers back-filled by the scraper and only
-        // fall back to the generated placeholder when none was found.
+        // Source #2 entries carry the real thumbnail scraped from the
+        // EZClasswork site (assets/img/ezclasswork/{slug}.png) when the site
+        // showed one, and only fall back to the generated placeholder when
+        // it didn't.
         imgsrc: item.imgsrc || ezClassworkPlaceholderImage(item.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${item.slug}`,
@@ -30,7 +31,7 @@ function normalizeEzClassworkGame(item) {
 }
 
 function isAvailableSourceTwoGame(item) {
-    // Source #2 catalog entries whose wrapper file failed to download ("missing") are broken; skip them.
+    // Scraped-catalog entries flagged "missing" (dead upstream) are broken; skip them.
     return !(item && item.missing);
 }
 
@@ -41,12 +42,10 @@ function isScraperGameEntry(item) {
 }
 
 function getGameSource(item) {
-    // Source #1 and Source #2 both play through the genizymath iframe mirror:
-    // Source #2 via the wrapper file we host ourselves (assets still stream
-    // from the CDN via the wrapper's <base href>), Source #1 straight from
-    // the mirror, which serves the identical wrappers as text/html — the
-    // jsdelivr html@main copies come back as text/plain and won't render in
-    // an iframe.
+    // Source #1 (genizymath zones feed) plays through its wrapper file —
+    // self-hosted first, genizymath mirror fallback. Source #2 (EZClasswork)
+    // plays through its Apps Script embed, which serves text/html with no
+    // X-Frame-Options so it renders in an iframe.
     if (isEzClassworkGameEntry(item)) return item.file || item.embedUrl || item.gameUrl;
     return item.linksrc;
 }
@@ -143,14 +142,14 @@ async function fetchData(index) {
     try {
         const params = new URLSearchParams(window.location.search);
         const ezClassworkSlug = params.get('game');
-        // ?s=1 picks the Source #1 catalog (scraped freebuisness zones feed,
-        // played through the genizymath iframe mirror); without it the
-        // player defaults to Source #2 so existing links keep working.
+        // ?s=1 picks the Source #1 catalog (genizymath zones feed); without
+        // it the player defaults to Source #2 (EZClasswork embeds) so
+        // existing shared links keep working.
         const wantsSourceOne = params.get('s') === '1';
         let item;
 
         if (ezClassworkSlug) {
-            const catalogFile = wantsSourceOne ? '../../json/source1.json' : '../../json/source2.json';
+            const catalogFile = wantsSourceOne ? '../../json/source1.json' : '../../json/ezclasswork.json';
             const response = await fetch(catalogFile);
             const data = await response.json();
             const sourceItem = data.find(game => game.slug === ezClassworkSlug);
@@ -306,15 +305,18 @@ function sourcePriority(game) {
 
     async function fetchRecommendedGames() {
         try {
-            const [gamesResponse, ezClassworkResponse] = await Promise.all([
+            const [gamesResponse, source1Response, ezClassworkResponse] = await Promise.all([
                 fetch('../../json/list.json'),
-                fetch('../../json/source2.json')
+                fetch('../../json/source1.json'),
+                fetch('../../json/ezclasswork.json')
             ]);
-            const [data, ezClassworkGames] = await Promise.all([
+            const [data, source1Games, ezClassworkGames] = await Promise.all([
                 gamesResponse.json(),
+                source1Response.json(),
                 ezClassworkResponse.json()
             ]);
-            const allGames = data.concat(ezClassworkGames.filter(isAvailableSourceTwoGame).map(normalizeEzClassworkGame));
+            const playable = games => games.filter(isAvailableSourceTwoGame).map(normalizeEzClassworkGame);
+            const allGames = data.concat(playable(source1Games), playable(ezClassworkGames));
             const recommendedGamesContainer = document.getElementById('recommendedGames');
             recommendedGamesContainer.innerHTML = ''; 
 

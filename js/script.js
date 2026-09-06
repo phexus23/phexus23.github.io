@@ -1,6 +1,7 @@
 const SOURCE_DISABLED_KEY = 'sourceDisabled';
 const SOURCE_MAIN = 'Main';
 const SOURCE_ONE = 'Source #1';
+const SOURCE_TWO = 'Source #2';
 
 function ezClassworkPlaceholderImage(name) {
     let hash = 0;
@@ -54,6 +55,7 @@ function addSourceSettingsToModal() {
         // understand or think about.
         group.innerHTML = `
             <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_ONE}"> Hide Source #1 games</label></div>
+            <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_TWO}"> Hide Source #2 games</label></div>
         `;
         modalContent.appendChild(group);
     }
@@ -76,16 +78,18 @@ function initializeSourceSettings() {
 
 initializeSourceSettings();
 
-// Scraper-catalog entries (the merged Source #1 catalog) are always
-// explicitly source-tagged in source1.json; everything else is a Main game.
+// Scraped-catalog entries are always explicitly source-tagged in their JSON
+// (Source #1 = genizymath zones feed, Source #2 = EZClasswork site);
+// everything else is a Main game.
 function isScraperGameEntry(gxme) {
-    return gxme.source === SOURCE_ONE;
+    return gxme.source === SOURCE_ONE || gxme.source === SOURCE_TWO;
 }
 
 function getGamePageUrl(gxme) {
     if (!isScraperGameEntry(gxme)) return `/gxmes/${gxme.foldername}/`;
-    // ?s=1 picks the Source #1 catalog in the player; plain ?game= (Source #2)
-    // stays the default so existing shared links keep working.
+    // Both scraped catalogs play through the shared player: ?game=slug picks
+    // the game, &s=1 selects the Source #1 catalog (the plain ?game= form
+    // stays the Source #2 default so existing shared links keep working).
     return `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}${gxme.source === SOURCE_ONE ? '&s=1' : ''}`;
 }
 
@@ -95,9 +99,10 @@ function getGameSourceGroup(gxme) {
 
 function getSourcePriority(gxme) {
     const source = getGameSourceGroup(gxme);
-    // Main (downloaded/self-hosted) wins over Source #1, which wins over
-    // Source #2. The dedup in preferMainSource uses this to pick the best
-    // copy of a game that exists in more than one catalog.
+    // Main (downloaded/self-hosted) wins over Source #1 (genizymath), which
+    // wins over Source #2 (EZClasswork embeds). The dedup in preferMainSource
+    // uses this to pick the best copy of a game that exists in more than one
+    // catalog.
     return source === 'Main' ? 0 : source === SOURCE_ONE ? 1 : 2;
 }
 
@@ -116,14 +121,14 @@ function preferMainSource(gxmes) {
 function normalizeScraperGame(gxme) {
     return {
         ...gxme,
-        // Scrapers back-fill real covers (assets/img/{slug}_{id}.png); only
-        // entries the scraper could not find art for fall back to the
-        // generated placeholder.
+        // Scrapers back-fill real covers/art (Source #1: assets/img/{slug}_{id}.png,
+        // Source #2: assets/img/ezclasswork/{slug}.png); only entries the scraper
+        // could not find art for fall back to the generated placeholder.
         imgsrc: gxme.imgsrc || ezClassworkPlaceholderImage(gxme.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${gxme.slug}`,
         category: 'Classroom',
-        source: SOURCE_ONE
+        source: gxme.source || SOURCE_ONE
     };
 }
 
@@ -144,23 +149,24 @@ let catalogPromise = null;
 async function fetchSourceCatalog() {
     if (catalogPromise) return catalogPromise;
     catalogPromise = (async () => {
-        const [gamesResponse, source1Response] = await Promise.all([
+        const [gamesResponse, source1Response, ezResponse] = await Promise.all([
             fetch('../json/list.json'),
-            fetch('../json/source1.json')
+            fetch('../json/source1.json'),
+            fetch('../json/ezclasswork.json')
         ]);
-        const [gxmes, source1Games] = await Promise.all([
+        const [gxmes, source1Games, ezGames] = await Promise.all([
             gamesResponse.json(),
-            source1Response.json()
+            source1Response.json(),
+            ezResponse.json()
         ]);
         const available = games => games.map(normalizeScraperGame).filter(gxme => !gxme.missing);
         // Keyed by source label so callers can do catalog[SOURCE_MAIN], etc.
-        // The scraped catalog is merged: source1.json already prefers our own
-        // wrapper files and falls back to the mirror, so there is no separate
-        // Source #2 catalog here anymore (json/source2.json remains only as
-        // the scraper's id->wrapper lookup and for legacy player links).
+        // Source #1 is the genizymath zones feed (self-hosted wrapper first,
+        // mirror fallback); Source #2 is the EZClasswork site catalog.
         return {
             [SOURCE_MAIN]: gxmes,
-            [SOURCE_ONE]: available(source1Games)
+            [SOURCE_ONE]: available(source1Games),
+            [SOURCE_TWO]: available(ezGames)
         };
     })();
     return catalogPromise;
@@ -174,7 +180,8 @@ async function fetchgxmes() {
     // instead of the same game appearing twice.
     return filterAvailableGames(preferMainSource([
         ...catalog[SOURCE_MAIN],
-        ...catalog[SOURCE_ONE]
+        ...catalog[SOURCE_ONE],
+        ...catalog[SOURCE_TWO]
     ]));
 }
 

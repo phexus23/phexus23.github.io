@@ -6,7 +6,7 @@ let sourceSections = {};
 
 const defaultSections = ['Favorites', 'last-played', 'top-10', 'last-10'];
 
-const sourceSlug = source => source === SOURCE_MAIN ? 'main' : 'source-1';
+const sourceSlug = source => source === SOURCE_MAIN ? 'main' : source === SOURCE_TWO ? 'source-2' : 'source-1';
 
 function hideAllSections() {
     const sections = document.querySelectorAll('#tab-contents section');
@@ -95,7 +95,8 @@ fetchSourceCatalog().then(catalog => {
     // that exists in more than one source shows up multiple times there.
     gxmes = filterAvailableGames(preferMainSource([
         ...catalog[SOURCE_MAIN],
-        ...catalog[SOURCE_ONE]
+        ...catalog[SOURCE_ONE],
+        ...catalog[SOURCE_TWO]
     ]));
 
     // Genre tabs stay built from the downloaded Main catalog only — that's
@@ -108,7 +109,7 @@ fetchSourceCatalog().then(catalog => {
         populategxmes(`${category.toLowerCase()}-gxmes`, catalog[SOURCE_MAIN].filter(g => g.category === category));
     });
 
-    [SOURCE_MAIN, SOURCE_ONE].forEach(source => {
+    [SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO].forEach(source => {
         createSourceSection(source);
         populategxmes(`${sourceSlug(source)}-gxmes`, catalog[source]);
     });
@@ -139,6 +140,8 @@ navTabs.addEventListener('click', e => {
         showSection(`${sourceSlug(SOURCE_MAIN)}-gxmes`);
     } else if (sourceSections[SOURCE_ONE] && tabId === sourceSlug(SOURCE_ONE)) {
         showSection(`${sourceSlug(SOURCE_ONE)}-gxmes`);
+    } else if (sourceSections[SOURCE_TWO] && tabId === sourceSlug(SOURCE_TWO)) {
+        showSection(`${sourceSlug(SOURCE_TWO)}-gxmes`);
     } else if (categorySections[tabId]) {
         showSection(`${tabId}-gxmes`);
     }
