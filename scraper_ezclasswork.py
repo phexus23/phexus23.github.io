@@ -21,12 +21,16 @@ Where the data comes from:
     shell carries the SDK's gameId, and GameMonetize serves a per-game
     thumbnail at https://img.gamemonetize.com/{gameId}/512x384.jpg. The
     downloaded bytes are validated (image magic) because the image host
-    answers with an HTML error page, not a 404, for unknown ids.
+    answers with an HTML error page, not a 404, for unknown ids. As a final
+    guard, any image whose exact bytes end up assigned to several games is
+    dropped from all of them: distinct games never share byte-identical
+    thumbnails, so a duplicate means one game's art leaked onto the rest.
 
 Main games (json/list.json) and the genizymath catalog (json/source1.json,
 built by scraper.py) are NOT touched by this script.
 """
 import json
+import hashlib
 import re
 import urllib.request
 import urllib.parse
@@ -295,7 +299,12 @@ def main():
 
         got = 0
         done = 0
-        with ThreadPoolExecutor(max_workers=8) as pool:
+        # Keep concurrency modest: parallel hammering of the Apps Script
+        # embeds has been observed to make Google serve a fallback shell
+        # carrying one common gameId, which would stamp one game's art onto
+        # many pages. The content-dedup guard below catches that class of
+        # failure even if it still slips through.
+        with ThreadPoolExecutor(max_workers=5) as pool:
             futures = {pool.submit(gm_fallback, e): e for e in need_art}
             for fut in as_completed(futures):
                 slug, status = fut.result()
@@ -310,6 +319,33 @@ def main():
     for e in entries:
         if e["slug"] in ok:
             e["imgsrc"] = f"/assets/img/ezclasswork/{e['slug']}.png"
+
+    # Content-dedup guard: identical image bytes claimed by several games
+    # means one game's art leaked onto the others (a fallback embed shell
+    # served under load carried one common gameId for every request).
+    # Drop every file in such a group — a clean placeholder beats
+    # confidently wrong art. Legit distinct games do not share byte-identical
+    # thumbnails.
+    by_hash = {}
+    for e in entries:
+        if not e["imgsrc"]:
+            continue
+        path = images_dir / f"{e['slug']}.png"
+        if not path.exists():
+            e["imgsrc"] = None  # catalog references a file we don't have
+            continue
+        digest = hashlib.md5(path.read_bytes()).hexdigest()
+        by_hash.setdefault(digest, []).append(e)
+    dropped = []
+    for group in by_hash.values():
+        if len(group) > 1:
+            for e in group:
+                (images_dir / f"{e['slug']}.png").unlink(missing_ok=True)
+                e["imgsrc"] = None
+            dropped.extend(e["slug"] for e in group)
+    if dropped:
+        safe_print(f"Dropped {len(dropped)} files sharing identical art (leaked from one game): "
+                   f"{sorted(dropped)}")
 
     with open(catalog_path, "w", encoding="utf-8") as f:
         json.dump(entries, f, indent=2, ensure_ascii=False)
