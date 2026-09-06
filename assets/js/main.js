@@ -28,11 +28,11 @@ function sourceIsEnabled(source) {
 document.addEventListener('DOMContentLoaded', function() {
     Promise.all([
         fetch('json/list.json').then(response => response.json()),
-        fetch('json/source1.json').then(response => response.json()),
-        fetch('json/source2.json').then(response => response.json())
+        fetch('json/source1.json').then(response => response.json())
     ])
-        .then(([data, source1Games, source2Games]) => {
-            // Both scraped catalogs play through the shared classroom player.
+        .then(([data, source1Games]) => {
+            // The merged scraped catalog plays through the shared classroom
+            // player (source1.json already prefers our own wrapper files).
             // Skip entries whose wrapper file failed to download ("missing") —
             // they're broken on the source site too.
             const normalize = game => ({
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 foldername: `ezclasswork-${game.slug}`,
                 category: 'Classroom'
             });
-            const scraperGames = source1Games.concat(source2Games).filter(game => !game.missing).map(normalize);
+            const scraperGames = source1Games.filter(game => !game.missing).map(normalize);
             const allGames = data.concat(scraperGames);
             const gxmeGrid = document.getElementById('gxmeGrid');
             const availableGames = allGames.filter(gxme => sourceIsEnabled(gxme.source));
@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             randomgxmes.forEach(gxme => {
                 let gxmeLink = document.createElement('a');
-                gxmeLink.href = gxme.source === 'Source #1' || gxme.source === 'Source #2'
-                    ? `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}${gxme.source === 'Source #1' ? '&s=1' : ''}`
+                gxmeLink.href = gxme.source === 'Source #1'
+                    ? `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}&s=1`
                     : "/gxmes/" + gxme.foldername + "/";
                 gxmeLink.style.textDecoration = 'none';
                 gxmeLink.style.color = 'inherit';
@@ -97,7 +97,7 @@ function preferMainSource(gxmes) {
 }
 
 function sourcePriority(gxme) {
-    return gxme.source === 'Source #1' ? 1 : gxme.source === 'Source #2' ? 2 : 0;
+    return gxme.source === 'Source #1' ? 1 : 0;
 }
 
 function randombutton() {

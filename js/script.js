@@ -1,7 +1,6 @@
 const SOURCE_DISABLED_KEY = 'sourceDisabled';
 const SOURCE_MAIN = 'Main';
 const SOURCE_ONE = 'Source #1';
-const SOURCE_TWO = 'Source #2';
 
 function ezClassworkPlaceholderImage(name) {
     let hash = 0;
@@ -55,7 +54,6 @@ function addSourceSettingsToModal() {
         // understand or think about.
         group.innerHTML = `
             <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_ONE}"> Hide Source #1 games</label></div>
-            <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_TWO}"> Hide Source #2 games</label></div>
         `;
         modalContent.appendChild(group);
     }
@@ -78,10 +76,10 @@ function initializeSourceSettings() {
 
 initializeSourceSettings();
 
-// Scraper-catalog entries (Source #1 and Source #2) are always explicitly
-// source-tagged by their JSON files; everything else is a Main game.
+// Scraper-catalog entries (the merged Source #1 catalog) are always
+// explicitly source-tagged in source1.json; everything else is a Main game.
 function isScraperGameEntry(gxme) {
-    return gxme.source === SOURCE_ONE || gxme.source === SOURCE_TWO;
+    return gxme.source === SOURCE_ONE;
 }
 
 function getGamePageUrl(gxme) {
@@ -125,7 +123,7 @@ function normalizeScraperGame(gxme) {
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${gxme.slug}`,
         category: 'Classroom',
-        source: gxme.source === SOURCE_ONE ? SOURCE_ONE : SOURCE_TWO
+        source: SOURCE_ONE
     };
 }
 
@@ -146,22 +144,23 @@ let catalogPromise = null;
 async function fetchSourceCatalog() {
     if (catalogPromise) return catalogPromise;
     catalogPromise = (async () => {
-        const [gamesResponse, source1Response, source2Response] = await Promise.all([
+        const [gamesResponse, source1Response] = await Promise.all([
             fetch('../json/list.json'),
-            fetch('../json/source1.json'),
-            fetch('../json/source2.json')
+            fetch('../json/source1.json')
         ]);
-        const [gxmes, source1Games, source2Games] = await Promise.all([
+        const [gxmes, source1Games] = await Promise.all([
             gamesResponse.json(),
-            source1Response.json(),
-            source2Response.json()
+            source1Response.json()
         ]);
         const available = games => games.map(normalizeScraperGame).filter(gxme => !gxme.missing);
         // Keyed by source label so callers can do catalog[SOURCE_MAIN], etc.
+        // The scraped catalog is merged: source1.json already prefers our own
+        // wrapper files and falls back to the mirror, so there is no separate
+        // Source #2 catalog here anymore (json/source2.json remains only as
+        // the scraper's id->wrapper lookup and for legacy player links).
         return {
             [SOURCE_MAIN]: gxmes,
-            [SOURCE_ONE]: available(source1Games),
-            [SOURCE_TWO]: available(source2Games)
+            [SOURCE_ONE]: available(source1Games)
         };
     })();
     return catalogPromise;
@@ -175,8 +174,7 @@ async function fetchgxmes() {
     // instead of the same game appearing twice.
     return filterAvailableGames(preferMainSource([
         ...catalog[SOURCE_MAIN],
-        ...catalog[SOURCE_ONE],
-        ...catalog[SOURCE_TWO]
+        ...catalog[SOURCE_ONE]
     ]));
 }
 

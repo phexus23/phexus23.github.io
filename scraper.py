@@ -1,24 +1,22 @@
 """
-Rebuilds the two scraped game-source catalogs from the freebuisness zones feed.
+Rebuilds the merged scraped game catalog from the freebuisness zones feed.
 
-Source #1 -> json/source1.json
-    Every zone in zones.json becomes an entry with:
+json/source1.json
+    Every zone in zones.json becomes one entry with:
       - a cover image downloaded into assets/img/{slug}_{id}.png
-      - a play URL on the genizymath.github.io/iframe/ mirror.
-    The wrapper files on that mirror are byte-identical to the freebuisness/html
-    repo (same zone ids), but genizymath serves them as text/html so iframes
-    actually render them — the jsdelivr html@main copies come back as
-    text/plain and browsers refuse to frame them.
-
-Source #2 -> json/source2.json
-    The wrapper files in Vafor_IT/source2/ (downloaded by download_source2.py)
-    keep their catalog as-is, but any entry without a real cover gets the same
-    covers@main/{id}.png art back-filled, keyed by zone id. Source #1 and
-    Source #2 entries for the same zone share one image file.
+      - a play URL: the self-hosted wrapper in Vafor_IT/source2/ when
+        download_source2.py has fetched one for that zone id (more reliable —
+        it lives in this repo), otherwise the genizymath.github.io/iframe/
+        mirror URL for the same wrapper (the mirror serves the freebuisness/html
+        files as text/html so iframes render them; the jsdelivr html@main
+        copies come back text/plain and browsers refuse to frame those).
+    Both routes serve byte-identical wrappers keyed by zone id, so the two
+    former catalogs (source1/source2) were the same games twice — they are
+    one merged catalog now.
 
 Main games (json/list.json, local folders in gxmes/ and Vafor_IT/) are NOT
-touched by this script. Run download_source2.py separately to refresh the
-Source #2 wrapper files themselves.
+touched by this script. json/source2.json is kept as the id->wrapper-file
+lookup this script reads; refresh it with download_source2.py.
 """
 import json
 import os
@@ -95,9 +93,23 @@ def load_json(path, fallback):
     return fallback
 
 
-def build_source1(zones):
+def wrapper_is_junk(url):
+    """True when the mirror has no real wrapper for this zone (404 or the
+    "Couldn't find" stub page) — same heuristic download_source2.py uses.
+    Such games are dead upstream and get flagged missing so the site skips
+    them instead of showing "This game is unavailable"."""
+    try:
+        html = fetch_text(url)
+    except Exception:
+        return True
+    return "Couldn't find" in html[:200]
+
+
+def build_source1(zones, wrapper_files):
+    """wrapper_files maps zone id -> local wrapper path (/Vafor_IT/source2/...)"""
     entries = []
     covers = []  # (zone_id, slug, cover_url)
+    junk_zones = []
     used_slugs = {}
 
     for zone in zones:
@@ -119,6 +131,10 @@ def build_source1(zones):
         folder = slug if n == 0 else f"{slug}-{n}"
         cover_url = zone.get("cover", "").replace("{COVER_URL}", cover_base).replace("{COVER_URL}/", cover_base + "/")
 
+        # Prefer our own wrapper file when download_source2.py fetched one;
+        # fall back to the mirror URL for zones it missed or failed on.
+        play_url = wrapper_files.get(zone_id) or IFRAME_BASE.format(file=file)
+
         entries.append({
             "source": "Source #1",
             "id": zone_id,
@@ -127,11 +143,23 @@ def build_source1(zones):
             "foldername": folder,
             "imgsrc": None,  # filled in once covers are downloaded
             "linksrc": "/gxmes/",
-            "file": IFRAME_BASE.format(file=file),
+            "file": play_url,
             "category": "Classroom",
         })
         if cover_url:
             covers.append((zone_id, slug, cover_url))
+
+    # Zones with no self-hosted wrapper may be dead upstream (the mirror
+    # 404s or serves its "Couldn't find" stub). Probe just those few and
+    # flag the dead ones missing so the site filters them out.
+    mirror_only = [e for e in entries if not e["file"].startswith("/Vafor_IT/")]
+    for entry in mirror_only:
+        if wrapper_is_junk(entry["file"]):
+            entry["missing"] = True
+            junk_zones.append(entry["name"])
+            safe_print(f"  Missing upstream: {entry['name']} ({entry['file']})")
+    if junk_zones:
+        safe_print(f"Flagged {len(junk_zones)} games missing (dead upstream): {junk_zones}")
 
     return entries, covers
 
@@ -168,28 +196,26 @@ def download_covers(covers):
     return found
 
 
-def backfill_source2_covers(source2_games, available_covers):
-    """Give Source #2 entries a real cover keyed by zone id; same files Source #1 uses."""
-    updated = 0
-    for game in source2_games:
-        zone_id = game.get("id")
-        slug = game.get("slug")
-        if zone_id is None or not slug:
-            continue
-        filename = f"{slug}_{zone_id}.png"
-        if filename in available_covers and not (game.get("imgsrc") or "").startswith("/assets/img/"):
-            game["imgsrc"] = f"/assets/img/{filename}"
-            updated += 1
-    return updated
-
-
 def main():
     safe_print("Fetching zones.json...")
     zones = json.loads(fetch_text(zones_url))
     safe_print(f"Found {len(zones)} zones")
 
-    source1_entries, covers = build_source1(zones)
-    safe_print(f"Source #1 catalog: {len(source1_entries)} playable games, {len(covers)} covers to fetch")
+    # Zone id -> local wrapper file, from the download_source2.py catalog.
+    # Zones with a wrapper here play from our own hosting; the rest fall
+    # back to the genizymath mirror URL.
+    source2_games = load_json(source2_path, [])
+    wrapper_files = {
+        g["id"]: g["file"]
+        for g in source2_games
+        if g.get("id") is not None and g.get("file") and not g.get("missing")
+    }
+    safe_print(f"Self-hosted wrappers available: {len(wrapper_files)}")
+
+    source1_entries, covers = build_source1(zones, wrapper_files)
+    from_wrapper = sum(1 for e in source1_entries if e["file"].startswith("/Vafor_IT/"))
+    from_mirror = len(source1_entries) - from_wrapper
+    safe_print(f"Merged catalog: {len(source1_entries)} playable games ({from_wrapper} self-hosted, {from_mirror} via mirror), {len(covers)} covers to fetch")
 
     available_covers = download_covers(covers)
     safe_print(f"Covers present: {len(available_covers)}")
@@ -202,14 +228,6 @@ def main():
     with open(source1_path, "w", encoding="utf-8") as f:
         json.dump(source1_entries, f, indent=2, ensure_ascii=False)
     safe_print(f"Wrote {source1_path.name} ({len(source1_entries)} games)")
-
-    source2_games = load_json(source2_path, [])
-    if source2_games:
-        updated = backfill_source2_covers(source2_games, available_covers)
-        with open(source2_path, "w", encoding="utf-8") as f:
-            json.dump(source2_games, f, indent=2, ensure_ascii=False)
-        with_real = sum(1 for g in source2_games if (g.get("imgsrc") or "").startswith("/assets/img/"))
-        safe_print(f"Source #2: back-filled {updated} covers ({with_real}/{len(source2_games)} entries now have real art)")
 
     safe_print("\nDone. No new game pages were created, so the sitemap is unchanged.")
 
