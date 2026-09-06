@@ -24,10 +24,10 @@ function readSourceState(key, fallback) {
     }
 }
 
-// A whole source is only ever hidden by an explicit, manual toggle here — never
-// by an automated reachability probe. Probing a single representative game to
-// decide a whole source's fate is fragile: if that one game happens to be down,
-// every other (perfectly working) game from that source got hidden forever.
+// A source can be hidden two ways: an explicit manual toggle (the Settings
+// checkbox below) or an automated health probe that detected the whole source
+// was unreachable (see probeSourceUp). A single broken game never hides its
+// whole source — per-game removal is handled separately on the player page.
 function sourceIsBlocked(source) {
     return readSourceState(SOURCE_DISABLED_KEY, {})[source] === true;
 }
@@ -38,6 +38,21 @@ function renderSourceSettings() {
     const disabled = readSourceState(SOURCE_DISABLED_KEY, {});
     group.querySelectorAll('[data-source-setting]').forEach(input => {
         input.checked = disabled[input.dataset.sourceSetting] === true;
+    });
+}
+
+// The per-source status lines live inside the settings group. They are
+// appended here rather than only baked into the group's innerHTML because the
+// group is also present as static HTML in gxmes/index.html — whichever way
+// the group came into existence, the status lines need to end up in it.
+function ensureSourceStatusLines(group) {
+    [SOURCE_ONE, SOURCE_TWO].forEach(source => {
+        const id = `source-status-${source === SOURCE_ONE ? 'source-1' : 'source-2'}`;
+        if (document.getElementById(id)) return;
+        const line = document.createElement('div');
+        line.id = id;
+        line.className = 'modal-item source-status';
+        group.appendChild(line);
     });
 }
 
@@ -52,23 +67,28 @@ function addSourceSettingsToModal() {
         group.className = 'modal-group';
         // Deliberately quiet and unlabeled with jargon — this is just a quick
         // kill switch for troubleshooting, not something a visitor needs to
-        // understand or think about.
+        // understand or think about. The per-source status lines only say
+        // something when a source actually failed (probe/blocked/unreachable).
         group.innerHTML = `
             <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_ONE}"> Hide Source #1 games</label></div>
+            <div class="modal-item source-status" id="source-status-source-1"></div>
             <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_TWO}"> Hide Source #2 games</label></div>
+            <div class="modal-item source-status" id="source-status-source-2"></div>
         `;
         modalContent.appendChild(group);
     }
-    if (group.dataset.sourceSettingsBound === 'true') return;
-    group.dataset.sourceSettingsBound = 'true';
-
-    group.querySelectorAll('[data-source-setting]').forEach(input => input.addEventListener('change', () => {
-        const disabled = readSourceState(SOURCE_DISABLED_KEY, {});
-        disabled[input.dataset.sourceSetting] = input.checked;
-        localStorage.setItem(SOURCE_DISABLED_KEY, JSON.stringify(disabled));
-        window.location.reload();
-    }));
-    renderSourceSettings();
+    if (group.dataset.sourceSettingsBound !== 'true') {
+        group.dataset.sourceSettingsBound = 'true';
+        group.querySelectorAll('[data-source-setting]').forEach(input => input.addEventListener('change', () => {
+            const disabled = readSourceState(SOURCE_DISABLED_KEY, {});
+            disabled[input.dataset.sourceSetting] = input.checked;
+            localStorage.setItem(SOURCE_DISABLED_KEY, JSON.stringify(disabled));
+            window.location.reload();
+        }));
+        renderSourceSettings();
+    }
+    ensureSourceStatusLines(group);
+    renderSourceStatus();
 }
 
 function initializeSourceSettings() {
@@ -139,45 +159,151 @@ function filterAvailableGames(gxmes) {
     });
 }
 
+// Response validation for catalog fetches. A blocked/filtered request (e.g.
+// jsdelivr-style proxies, school filters) often succeeds at the network level
+// but returns an empty body or a stub HTML page instead of the JSON catalog —
+// so "200 OK" alone proves nothing. Treat anything that isn't a non-empty
+// JSON array as a failed load.
+function validateCatalogResponse(text) {
+    if (!text || !text.trim()) return null;
+    try {
+        const parsed = JSON.parse(text);
+        return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+    } catch {
+        return null;
+    }
+}
+
+async function fetchJsonCatalog(url) {
+    const response = await fetch(url, { cache: 'no-store' });
+    const text = await response.text();
+    if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
+    const parsed = validateCatalogResponse(text);
+    if (!parsed) throw new Error(`${url} -> empty or non-JSON body`);
+    return parsed;
+}
+
 // Every widget on this page (top 10, all games, recently added, favorites,
 // search, category tabs, the per-source sidebar tabs...) needs the same
 // combined catalog. Fetching and normalizing it separately for each one is
 // what made the page lag — this memoizes it so the ~1700-game catalog is
 // fetched, parsed and normalized exactly once per page load no matter how
 // many features ask for it.
+//
+// Each catalog loads independently (Promise.allSettled): one dead source
+// degrades to just its own games being absent instead of rejecting the whole
+// fetch chain and blanking the entire hub. Main is the curated local shelf,
+// so its failure is still fatal to the page — fetchgxmes() callers surface
+// that as an error rather than silently showing an empty site.
 let catalogPromise = null;
+let catalogHealth = { [SOURCE_MAIN]: true, [SOURCE_ONE]: true, [SOURCE_TWO]: true };
+
+function catalogLoaded(health, source) {
+    return Boolean(health && health[source]);
+}
+
+function getCatalogHealth() {
+    return { ...catalogHealth };
+}
+
 async function fetchSourceCatalog() {
     if (catalogPromise) return catalogPromise;
     catalogPromise = (async () => {
-        const [gamesResponse, source1Response, ezResponse] = await Promise.all([
-            fetch('../json/list.json'),
-            fetch('../json/source1.json'),
-            fetch('../json/ezclasswork.json')
-        ]);
-        const [gxmes, source1Games, ezGames] = await Promise.all([
-            gamesResponse.json(),
-            source1Response.json(),
-            ezResponse.json()
+        const settled = await Promise.allSettled([
+            fetchJsonCatalog('../json/list.json'),
+            fetchJsonCatalog('../json/source1.json'),
+            fetchJsonCatalog('../json/ezclasswork.json')
         ]);
         const available = games => games.map(normalizeScraperGame).filter(gxme => !gxme.missing);
+
+        const value = (index, fallback) => settled[index].status === 'fulfilled' ? settled[index].value : fallback;
+        catalogHealth = {
+            [SOURCE_MAIN]: settled[0].status === 'fulfilled',
+            [SOURCE_ONE]: settled[1].status === 'fulfilled',
+            [SOURCE_TWO]: settled[2].status === 'fulfilled'
+        };
+        [SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO].forEach(source => {
+            if (!catalogHealth[source]) console.warn(`[catalog] ${source} failed to load; its content is hidden this page load.`, settled[[SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO].indexOf(source)].reason);
+        });
+
         // Keyed by source label so callers can do catalog[SOURCE_MAIN], etc.
         // Source #1 is the genizymath zones feed (self-hosted wrapper first,
         // mirror fallback); Source #2 is the EZClasswork site catalog.
+        // A failed source resolves as an empty list — filtered out of the
+        // combined catalog and its tab never renders.
         return {
-            [SOURCE_MAIN]: gxmes,
-            [SOURCE_ONE]: available(source1Games),
-            [SOURCE_TWO]: available(ezGames)
+            [SOURCE_MAIN]: value(0, []),
+            [SOURCE_ONE]: available(value(1, [])),
+            [SOURCE_TWO]: available(value(2, []))
         };
     })();
     return catalogPromise;
 }
 
+// Runtime health probe for a source. Detects two failure modes:
+//  1. unreachable: network error / HTTP error / timeout, and
+//  2. blocked-but-responding: a filter (school proxy, jsdelivr outage mode)
+//     that returns 200 with an empty body or a useless stub page.
+// Either mode returns false (source down); a page that looks like a real
+// game shell returns true. CORS-blocked reads are inconclusive -> true,
+// because the iframe may still render fine when the fetch cannot read it.
+const SOURCE_PROBE_TIMEOUT_MS = 8000;
+
+function bodyLooksLikeGameShell(html) {
+    const text = (html || '').trim().toLowerCase();
+    if (!text) return false;
+    if (text === 'not found' || text === 'error' || text === 'null') return false;
+    // A real game wrapper/page has actual markup; a stub typically doesn't.
+    return text.includes('<') && (text.includes('<body') || text.includes('<div') || text.includes('<script') || text.includes('<iframe'));
+}
+
+async function probeSourceUp(probeUrl) {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), SOURCE_PROBE_TIMEOUT_MS);
+    try {
+        const response = await fetch(probeUrl, { cache: 'no-store', signal: controller.signal });
+        if (!response.ok) return false;
+        const body = await response.text();
+        return bodyLooksLikeGameShell(body);
+    } catch {
+        // Abort (timeout) is a real failure; a CORS/network read error is
+        // inconclusive — the iframe may still work, so stay optimistic.
+        return true;
+    } finally {
+        window.clearTimeout(timer);
+    }
+}
+
+// Keeps the Settings modal's per-source status line current. Quiet by design:
+// it only says anything when a source actually failed to load or its probe
+// found it unreachable.
+function setSourceStatus(source, up) {
+    // sourceSlug lives in tabs.js; both are classic scripts on the same page,
+    // but guard anyway so an early call can't throw.
+    const slug = typeof sourceSlug === 'function' ? sourceSlug(source) : source === SOURCE_ONE ? 'source-1' : 'source-2';
+    const line = document.getElementById(`source-status-${slug}`);
+    if (!line) return;
+    line.textContent = up ? '' : `${source} is currently unavailable — its games are hidden.`;
+}
+
+function renderSourceStatus() {
+    const health = getCatalogHealth();
+    [SOURCE_ONE, SOURCE_TWO].forEach(source => setSourceStatus(source, health[source]));
+}
+
 async function fetchgxmes() {
     const catalog = await fetchSourceCatalog();
+    // Main is the curated local shelf every other widget assumes exists; if
+    // even it failed (site broken, not just one source), fail loudly instead
+    // of silently rendering an empty site.
+    if (!catalogLoaded(catalogHealth, SOURCE_MAIN)) {
+        throw new Error('Main game catalog failed to load.');
+    }
     // A downloaded/self-hosted game always wins over an embedded copy of
     // the same name (e.g. "2048") — applied once here so every consumer
     // (category tabs, All Games, search) sees the deduped catalog
-    // instead of the same game appearing twice.
+    // instead of the same game appearing twice. Sources that failed to
+    // load resolve as empty lists, so they simply don't contribute.
     return filterAvailableGames(preferMainSource([
         ...catalog[SOURCE_MAIN],
         ...catalog[SOURCE_ONE],

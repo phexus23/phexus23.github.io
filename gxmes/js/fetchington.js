@@ -303,18 +303,31 @@ function sourcePriority(game) {
     return game.source === SOURCE_ONE ? 1 : game.source === SOURCE_TWO ? 2 : 0;
 }
 
+    // Blocked/broken requests can return HTTP 200 with an empty body or a
+    // stub page instead of the JSON catalog (school filters do this, and so
+    // do CDN outages), so every catalog is validated as a non-empty JSON
+    // array. Any failure resolves as an empty list rather than rejecting the
+    // whole fetch — one dead source just contributes no games.
+    async function settleJson(url) {
+        try {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) return [];
+            const text = await response.text();
+            const parsed = JSON.parse(text);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    }
+
     async function fetchRecommendedGames() {
         try {
-            const [gamesResponse, source1Response, ezClassworkResponse] = await Promise.all([
-                fetch('../../json/list.json'),
-                fetch('../../json/source1.json'),
-                fetch('../../json/ezclasswork.json')
-            ]);
             const [data, source1Games, ezClassworkGames] = await Promise.all([
-                gamesResponse.json(),
-                source1Response.json(),
-                ezClassworkResponse.json()
+                settleJson('../../json/list.json'),
+                settleJson('../../json/source1.json'),
+                settleJson('../../json/ezclasswork.json')
             ]);
+            if (!data.length) throw new Error('Main game catalog failed to load.');
             const playable = games => games.filter(isAvailableSourceTwoGame).map(normalizeEzClassworkGame);
             const allGames = data.concat(playable(source1Games), playable(ezClassworkGames));
             const recommendedGamesContainer = document.getElementById('recommendedGames');

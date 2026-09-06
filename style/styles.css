@@ -541,3 +541,16 @@ a:hover {
     text-align: center;
     margin: 20px 0;
 }
+
+/* Per-source health status lines inside the Settings modal. Quiet by
+   design: they only render text when a source failed to load or its
+   reachability probe found it down/blocked. */
+.modal-item.source-status {
+    background: transparent;
+    padding: 2px 15px 6px;
+    color: #e8b0a8;
+    font-size: 0.85rem;
+}
+.modal-item.source-status:empty {
+    display: none;
+}

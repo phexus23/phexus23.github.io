@@ -17,21 +17,42 @@ function readSourceState(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; }
 }
 
-// Same manual, per-browser toggle used on the games hub Settings modal — no
-// automatic reachability probing. Probing a single representative game to
-// decide a whole source's fate used to hang page load for seconds and could
-// wrongly hide an entire source over one broken file.
+// Same manual, per-browser toggle used on the games hub Settings modal —
+// the home-page showcase itself never probes upstreams; it only shows games
+// whose catalog actually loaded. (The hub page additionally probes one
+// representative game per source to decide whether its tab should exist.)
 function sourceIsEnabled(source) {
     return readSourceState(SOURCE_DISABLED_KEY, {})[source] !== true;
 }
 
+// Response validation shared with the hub: a blocked request can succeed at
+// the network level yet return an empty body or a stub page instead of the
+// JSON catalog, so "200 OK" alone proves nothing.
+function validateCatalogResponse(text) {
+    if (!text || !text.trim()) return null;
+    try {
+        const parsed = JSON.parse(text);
+        return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+    } catch {
+        return null;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    Promise.all([
-        fetch('json/list.json').then(response => response.json()),
-        fetch('json/source1.json').then(response => response.json()),
-        fetch('json/ezclasswork.json').then(response => response.json())
+    // Each catalog loads independently (allSettled): a dead or filtered
+    // source degrades to its games being absent from the showcase instead of
+    // rejecting the whole chain and leaving the front page empty.
+    Promise.allSettled([
+        fetch('json/list.json', { cache: 'no-store' }).then(response => response.text()).then(validateCatalogResponse),
+        fetch('json/source1.json', { cache: 'no-store' }).then(response => response.text()).then(validateCatalogResponse),
+        fetch('json/ezclasswork.json', { cache: 'no-store' }).then(response => response.text()).then(validateCatalogResponse)
     ])
-        .then(([data, source1Games, ezGames]) => {
+        .then(results => {
+            const value = i => results[i].status === 'fulfilled' && results[i].value ? results[i].value : [];
+            const data = value(0);
+            const source1Games = value(1);
+            const ezGames = value(2);
+            if (!data.length) throw new Error('Main game catalog failed to load.');
             // Both scraped catalogs play through the shared classroom player
             // (source1.json prefers our own wrapper files). Skip entries
             // flagged "missing" — they're broken on the source site too.

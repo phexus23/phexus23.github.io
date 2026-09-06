@@ -8,6 +8,28 @@ const defaultSections = ['Favorites', 'last-played', 'top-10', 'last-10'];
 
 const sourceSlug = source => source === SOURCE_MAIN ? 'main' : source === SOURCE_TWO ? 'source-2' : 'source-1';
 
+// The source nav tabs are removable: a source whose catalog failed to load
+// (or whose runtime probe found it unreachable/blocked) gets its tab and
+// section taken back out instead of dead-ending visitors on an empty grid.
+function removeSourceTab(source) {
+    const li = document.getElementById(sourceSlug(source));
+    if (li) li.remove();
+    const section = sourceSections[source];
+    if (section) {
+        // If the visitor is staring at that section right now, drop back to
+        // the home view instead of leaving them on a just-emptied page.
+        if (section.style.display === 'block') {
+            hideAllSections();
+            defaultSections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'block';
+            });
+        }
+        section.remove();
+        delete sourceSections[source];
+    }
+}
+
 function hideAllSections() {
     const sections = document.querySelectorAll('#tab-contents section');
     sections.forEach(section => section.style.display = 'none');
@@ -63,7 +85,8 @@ function createSourceSection(source) {
     const li = document.createElement('li');
     li.id = sourceSlug(source);
     li.innerHTML = `<a>${source}</a>`;
-    navTabs.insertBefore(li, document.getElementById('all-gxmes'));
+    const before = document.getElementById('all-gxmes');
+    if (before) navTabs.insertBefore(li, before); else navTabs.appendChild(li);
 
     li.querySelector('a').addEventListener('click', () => {
         showSection(sectionId);
@@ -89,6 +112,42 @@ function populategxmes(sectionId, gxmesList) {
     });
 }
 
+// A source only gets a sidebar tab if its catalog actually loaded with
+// playable games. Sources whose JSON failed (404, empty/stub body from a
+// filter, malformed JSON) resolve as empty lists — this is where they get
+// skipped instead of rendering an empty grid.
+function sourceHasGames(catalog, source) {
+    return catalogLoaded(getCatalogHealth(), source) && catalog[source] && catalog[source].length > 0;
+}
+
+// Runtime reachability check per source. The catalog JSONs are served by this
+// same site, so them loading only proves the *catalog* arrived — the games
+// themselves live upstream (Source #1 wrappers, Source #2 Apps Script embeds)
+// and can be down or filtered while the hub still loads fine. One
+// representative game per source is probed; unreachable or blocked-to-nothing
+// sources lose their tab for this page load.
+const SOURCE_PROBE_URLS = {
+    [SOURCE_ONE]: '/Vafor_IT/source2/bowmasters.html',
+    [SOURCE_TWO]: 'https://script.google.com/macros/s/AKfycbw73xjm9WWdI_rMibzPh2MImZBf6tsNOoUnhotODbh0qEG5jHf5UvD4K5uDVwtgEnQw8Q/exec'
+};
+
+function probeSourceTabs(catalog) {
+    const sources = [SOURCE_ONE, SOURCE_TWO].filter(source => sourceHasGames(catalog, source));
+    if (!sources.length) return;
+
+    Promise.allSettled(sources.map(source => probeSourceUp(SOURCE_PROBE_URLS[source]))).then(results => {
+        results.forEach((result, i) => {
+            const source = sources[i];
+            const up = result.status === 'fulfilled' && result.value === true;
+            if (!up) {
+                console.warn(`[source] ${source} probe failed; hiding its tab this page load.`, result.reason || '');
+                removeSourceTab(source);
+            }
+            setSourceStatus(source, up);
+        });
+    });
+}
+
 fetchSourceCatalog().then(catalog => {
     // The module-level gxmes feeds name-keyed features like the Favorites
     // listing, so it must be the deduped combined catalog — otherwise a game
@@ -110,6 +169,7 @@ fetchSourceCatalog().then(catalog => {
     });
 
     [SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO].forEach(source => {
+        if (!sourceHasGames(catalog, source)) return;
         createSourceSection(source);
         populategxmes(`${sourceSlug(source)}-gxmes`, catalog[source]);
     });
@@ -119,6 +179,13 @@ fetchSourceCatalog().then(catalog => {
         const section = document.getElementById(id);
         if (section) section.style.display = 'block';
     });
+
+    probeSourceTabs(catalog);
+}).catch(error => {
+    // One dead source never blanks the whole page anymore (the catalog
+    // fetch is allSettled); this catch only fires if the browser itself
+    // is too old for allSettled or something truly unexpected throws.
+    console.error('[tabs] Sidebar failed to build:', error);
 });
 
 navTabs.addEventListener('click', e => {
