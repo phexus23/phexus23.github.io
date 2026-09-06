@@ -16,6 +16,12 @@ Where the data comes from:
     Deployments rarely change, so embed URLs are reused from the previous
     json/ezclasswork.json and only newly-discovered games require a fetch of
     their game page to extract the macro URL.
+  - Art fallback: games the content grids don't show (mostly older pages)
+    still get art when their embed is a GameMonetize SDK setup. The embed
+    shell carries the SDK's gameId, and GameMonetize serves a per-game
+    thumbnail at https://img.gamemonetize.com/{gameId}/512x384.jpg. The
+    downloaded bytes are validated (image magic) because the image host
+    answers with an HTML error page, not a 404, for unknown ids.
 
 Main games (json/list.json) and the genizymath catalog (json/source1.json,
 built by scraper.py) are NOT touched by this script.
@@ -27,6 +33,8 @@ import urllib.parse
 import ssl
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
+
+GM_THUMB_URL = "https://img.gamemonetize.com/{game_id}/512x384.jpg"
 
 HERE = Path(__file__).resolve().parent
 SITE_BASE = "https://sites.google.com/view/ezclasswork"
@@ -59,6 +67,10 @@ GRID_PAIR_RE = re.compile(
 )
 # Apps Script deployment URL embedded in a game page (inside gameXmlUrl=...).
 EMBED_RE = re.compile(r"(https://script\.google\.com/macros/s/[A-Za-z0-9_-]+/exec)")
+# GameMonetize SDK setup inside the Apps Script shell: `gameId: \x22<32 id>\x22`
+# with the quotes hex-escaped in the raw HTML ("x22" literally appears before
+# the id). GameMonetize ids are 32 lowercase alphanumerics.
+GM_GAMEID_RE = re.compile(r"gameId:.{0,20}?x22([a-z0-9]{32})")
 
 
 def fetch_text(url):
@@ -139,19 +151,44 @@ def fetch_embed_url(slug):
         return None
 
 
+def fetch_game_id(embed_url):
+    """GameMonetize gameId from an embed shell, or None when the embed uses
+    some other loading mechanism."""
+    try:
+        page = fetch_text(embed_url)
+    except Exception:
+        return None
+    m = GM_GAMEID_RE.search(page)
+    return m.group(1) if m else None
+
+
+def looks_like_image(data):
+    # The gamemonetize image host answers unknown ids with an HTML error page
+    # and HTTP 200, so the status code alone proves nothing.
+    return data[:3] == b"\xff\xd8\xff" or data[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+def download_bytes(url):
+    req = urllib.request.Request(url, headers=HEADERS)
+    with urllib.request.urlopen(req, context=ssl_ctx, timeout=20) as resp:
+        return resp.read()
+
+
 def download_thumb(slug, url):
     path = images_dir / f"{slug}.png"
     if path.exists():
         return slug, "exists"
-    # Serve cards a modest 400px render of the thumbnail (=wNNNN controls it).
+    # lh3 thumbnails take a size suffix (=wNNNN); serve cards a modest 400px
+    # render. Other hosts (gamemonetize) pass through unmodified.
     url = re.sub(r"=w\d+", "=w400", url)
-    req = urllib.request.Request(url, headers=HEADERS)
     try:
-        with urllib.request.urlopen(req, context=ssl_ctx, timeout=20) as resp:
-            tmp = path.with_suffix(".part")
-            with open(tmp, "wb") as f:
-                f.write(resp.read())
-            tmp.replace(path)
+        data = download_bytes(url)
+        if not looks_like_image(data):
+            raise ValueError("not an image (host error page?)")
+        tmp = path.with_suffix(".part")
+        with open(tmp, "wb") as f:
+            f.write(data)
+        tmp.replace(path)
         return slug, "downloaded"
     except Exception as e:
         safe_print(f"  thumbnail failed for {slug}: {e}")
@@ -199,10 +236,10 @@ def main():
             "imgsrc": f"/assets/img/ezclasswork/{slug}.png" if slug in thumbs else None,
         })
 
-    # Thumbnails (only for entries that have one) download in parallel.
+    # Stage 1: thumbnails from the site's content grids.
     images_dir.mkdir(parents=True, exist_ok=True)
     todo = [(e["slug"], thumbs[e["slug"]]) for e in entries if e["slug"] in thumbs]
-    safe_print(f"Downloading {len(todo)} thumbnails ...")
+    safe_print(f"Downloading {len(todo)} site thumbnails ...")
     ok = set()
     done = 0
     with ThreadPoolExecutor(max_workers=16) as pool:
@@ -211,12 +248,68 @@ def main():
             slug, status = fut.result()
             done += 1
             if done % 50 == 0:
-                safe_print(f"  thumbnails: {done}/{len(todo)}")
+                safe_print(f"  site thumbnails: {done}/{len(todo)}")
             if status != "failed":
                 ok.add(slug)
     for e in entries:
         if e["slug"] not in ok:
-            e["imgsrc"] = None  # failed download -> site placeholder instead
+            e["imgsrc"] = None  # failed download -> try the fallback below
+
+    # Stage 2 fallback: games the site grids don't show still usually carry a
+    # GameMonetize gameId inside their embed shell, and GameMonetize serves a
+    # real thumbnail for that id. Only entries without art so far are probed.
+    # An embed shared by several catalog pages hosts ONE game, so its art is
+    # only correct for one of them — those pages are skipped rather than
+    # labeled with a stranger's thumbnail.
+    need_art = [e for e in entries if not e["imgsrc"]]
+    embed_counts = {}
+    for e in entries:
+        embed_counts[e["embedUrl"]] = embed_counts.get(e["embedUrl"], 0) + 1
+    shared = [e for e in need_art if embed_counts[e["embedUrl"]] > 1]
+    if shared:
+        safe_print(f"Skipping {len(shared)} shared-embed pages (art would be wrong for all but one)")
+    need_art = [e for e in need_art if embed_counts[e["embedUrl"]] == 1]
+    if need_art:
+        safe_print(f"Probing GameMonetize art for {len(need_art)} games without site art ...")
+
+        def gm_fallback(entry):
+            slug = entry["slug"]
+            game_id = fetch_game_id(entry["embedUrl"])
+            if not game_id:
+                return slug, "no-gameid"
+            path = images_dir / f"{slug}.png"
+            if path.exists():
+                return slug, "exists"
+            try:
+                data = download_bytes(GM_THUMB_URL.format(game_id=game_id))
+                if not looks_like_image(data):
+                    raise ValueError("not an image")
+                tmp = path.with_suffix(".part")
+                with open(tmp, "wb") as f:
+                    f.write(data)
+                tmp.replace(path)
+                return slug, "downloaded"
+            except Exception as e:
+                safe_print(f"  gm art failed for {slug}: {e}")
+                return slug, "failed"
+
+        got = 0
+        done = 0
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            futures = {pool.submit(gm_fallback, e): e for e in need_art}
+            for fut in as_completed(futures):
+                slug, status = fut.result()
+                done += 1
+                if done % 50 == 0:
+                    safe_print(f"  gm art: {done}/{len(need_art)}")
+                if status in ("downloaded", "exists"):
+                    ok.add(slug)
+                    got += 1
+        safe_print(f"GameMonetize fallback recovered art for {got}/{len(need_art)} games")
+
+    for e in entries:
+        if e["slug"] in ok:
+            e["imgsrc"] = f"/assets/img/ezclasswork/{e['slug']}.png"
 
     with open(catalog_path, "w", encoding="utf-8") as f:
         json.dump(entries, f, indent=2, ensure_ascii=False)
@@ -224,7 +317,7 @@ def main():
     with_art = sum(1 for e in entries if e["imgsrc"])
     safe_print(f"Wrote {catalog_path.name}: {len(entries)} games "
                f"({have_embed - len(entries)} dropped without embedUrl, "
-               f"{with_art} with real thumbnails)")
+               f"{with_art} with real art)")
 
 
 if __name__ == "__main__":
