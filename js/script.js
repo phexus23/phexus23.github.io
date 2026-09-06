@@ -195,40 +195,98 @@ async function fetchTop10FolderNames() {
     return data[0].Top10; 
 }
 
+// Big grids (All Games, the Source #1/#2 tabs — up to ~835 cards each) are
+// rendered in chunks of this size, with an IntersectionObserver sentinel
+// appending the next chunk as the visitor scrolls. Instantly rendering a
+// thousand-plus cards made the hub janky on low-end devices; now only the
+// first few screens' worth of DOM nodes and image requests exist until the
+// visitor actually scrolls. Small grids (Top 10, favorites...) render whole.
+const GRID_CHUNK_SIZE = 120;
+
+function makeCardHTML(gxme, favorites) {
+    const isFavorite = favorites.includes(gxme.name);
+    return `
+        <div class="gxme-card" data-game-source="${getGameSourceGroup(gxme)}" data-gxme-name="${gxme.name}" ${isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
+            <button class="favorite-btn ${isFavorite ? 'active' : ''}">
+                <i class="fas fa-star"></i>
+            </button>
+            <img loading="lazy" src="${gxme.imgsrc}" alt="${gxme.name}">
+            <h3>${gxme.name}</h3>
+            <a href="${getGamePageUrl(gxme)}" class="play-link">Play Now</a>
+        </div>
+    `;
+}
+
+function attachOneCard(card, gxme, opts = {}) {
+    card.querySelector('.favorite-btn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (opts.onFavorite) opts.onFavorite(this, gxme);
+        else toggleFavorite(this, gxme);
+    });
+    card.querySelector('.play-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        updateLastPlayed(gxme);
+        window.location.href = e.currentTarget.href;
+    });
+}
+
+// Renders gxmesList into container and wires up card handlers, chunking the
+// work when the list is big. opts.favorites drives the star buttons;
+// opts.decorate (optional) receives each card's HTML so callers can prepend
+// badges. Returns the rendered card elements in list order.
+function renderGamesGrid(container, gxmesList, opts = {}) {
+    // opts.favorites may be an array or a getter; a getter keeps lazily
+    // appended chunks in sync with stars toggled since the initial render.
+    const favoritesOf = typeof opts.favorites === 'function' ? opts.favorites : () => opts.favorites || [];
+    const decorate = opts.decorate || (html => html);
+    const cardHTML = gxme => decorate(makeCardHTML(gxme, favoritesOf()));
+
+    if (gxmesList.length <= GRID_CHUNK_SIZE) {
+        container.innerHTML = gxmesList.map(cardHTML).join('');
+    } else {
+        // Chunked path. A single sentinel div rides at the end of the grid;
+        // when it scrolls within 600px of the viewport the next chunk is
+        // appended and handlers are attached to just the new cards.
+        container.innerHTML = gxmesList.slice(0, GRID_CHUNK_SIZE).map(cardHTML).join('')
+            + '<div class="grid-sentinel"></div>';
+        const sentinel = container.querySelector('.grid-sentinel');
+        let rendered = GRID_CHUNK_SIZE;
+
+        const appendChunk = () => {
+            const chunk = gxmesList.slice(rendered, rendered + GRID_CHUNK_SIZE);
+            if (!chunk.length) return;
+            const frag = document.createElement('template');
+            frag.innerHTML = chunk.map(cardHTML).join('');
+            const newCards = Array.from(frag.content.querySelectorAll('.gxme-card'));
+            sentinel.before(frag.content);
+            newCards.forEach((card, i) => attachOneCard(card, chunk[i], opts));
+            rendered += chunk.length;
+            if (rendered >= gxmesList.length) {
+                observer.disconnect();
+                sentinel.remove();
+            }
+        };
+
+        const observer = new IntersectionObserver(entries => {
+            if (entries.some(e => e.isIntersecting)) appendChunk();
+        }, { rootMargin: '600px' });
+        observer.observe(sentinel);
+    }
+
+    const cards = Array.from(container.querySelectorAll('.gxme-card'));
+    cards.forEach((card, i) => attachOneCard(card, gxmesList[i], opts));
+    return cards;
+}
+
 function rendergxmes(gxmes, containerId, badge) {
     const container = document.getElementById(containerId);
     gxmes = filterAvailableGames(gxmes);
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const badgeHTML = badge ? `<span class="game-badge badge-${badge.toLowerCase()}">${badge}</span>` : '';
 
-    container.innerHTML = gxmes.map(gxme => {
-        const isFavorite = favorites.includes(gxme.name);
-        return `
-            <div class="gxme-card" data-game-source="${getGameSourceGroup(gxme)}" data-gxme-name="${gxme.name}" ${isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
-                ${badgeHTML}
-                <button class="favorite-btn ${isFavorite ? 'active' : ''}">
-                    <i class="fas fa-star"></i>
-                </button>
-                <img src="${gxme.imgsrc}" alt="${gxme.name}">
-                <h3>${gxme.name}</h3>
-                <a href="${getGamePageUrl(gxme)}" class="play-link">Play Now</a>
-            </div>
-        `;
-    }).join('');
-
-    // Attach handlers by zipping with the source array (same order the markup
-    // was built in) instead of round-tripping every game through JSON in a
-    // data attribute — cheaper, and immune to names containing quotes.
-    container.querySelectorAll('.gxme-card').forEach((card, i) => {
-        const gxme = gxmes[i];
-        card.querySelector('.favorite-btn').addEventListener('click', function () {
-            toggleFavorite(this, gxme);
-        });
-        card.querySelector('.play-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            updateLastPlayed(gxme);
-            window.location.href = e.currentTarget.href;
-        });
+    renderGamesGrid(container, gxmes, {
+        favorites: () => JSON.parse(localStorage.getItem('favorites')) || [],
+        // Bordered grids (Top 10, Recently Added) prepend a badge to every card.
+        decorate: badge ? html => badgeHTML + html : undefined
     });
 }
 

@@ -129,6 +129,15 @@ main {
     padding: 20px;
 }
 
+/* Sentinel div for the chunked (lazy) grids: invisible, spans one full row
+   slot, and the IntersectionObserver in script.js appends the next batch of
+   cards when this scrolls near the viewport. */
+.grid-sentinel {
+    grid-column: 1 / -1;
+    height: 1px;
+    pointer-events: none;
+}
+
 .gxme-card {
     background-color: #444;
     border-radius: 10px;
