@@ -1,7 +1,6 @@
 const SOURCE_DISABLED_KEY = 'sourceDisabled';
 const SOURCE_ONE = 'Source #1';
 const SOURCE_TWO = 'Source #2';
-const EZCLASSWORK_SOURCE = SOURCE_TWO;
 
 function ezClassworkPlaceholderImage(name) {
     let hash = 0;
@@ -53,7 +52,10 @@ function addSourceSettingsToModal() {
         // Deliberately quiet and unlabeled with jargon — this is just a quick
         // kill switch for troubleshooting, not something a visitor needs to
         // understand or think about.
-        group.innerHTML = `<div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_TWO}"> Hide classroom games</label></div>`;
+        group.innerHTML = `
+            <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_ONE}"> Hide Source #1 games</label></div>
+            <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_TWO}"> Hide Source #2 games</label></div>
+        `;
         modalContent.appendChild(group);
     }
     if (group.dataset.sourceSettingsBound === 'true') return;
@@ -75,21 +77,17 @@ function initializeSourceSettings() {
 
 initializeSourceSettings();
 
+// Scraper-catalog entries (Source #1 and Source #2) are always explicitly
+// source-tagged by their JSON files; everything else is a Main game.
 function isScraperGameEntry(gxme) {
-    if (gxme.source === EZCLASSWORK_SOURCE || typeof gxme.linksrc !== 'string' || !gxme.linksrc.startsWith('/gxmes/')) {
-        return false;
-    }
-
-    const imageSource = typeof gxme.imgsrc === 'string' ? gxme.imgsrc : '';
-    return gxme.source === SOURCE_ONE ||
-        /\/covers@main\/\d+\.png(?:[?#].*)?$/.test(imageSource) ||
-        /_\d+\.(?:png|jpe?g|webp)(?:[?#].*)?$/i.test(imageSource);
+    return gxme.source === SOURCE_ONE || gxme.source === SOURCE_TWO;
 }
 
 function getGamePageUrl(gxme) {
-    return gxme.source === EZCLASSWORK_SOURCE
-        ? `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}`
-        : `/gxmes/${gxme.foldername}/`;
+    if (!isScraperGameEntry(gxme)) return `/gxmes/${gxme.foldername}/`;
+    // ?s=1 picks the Source #1 catalog in the player; plain ?game= (Source #2)
+    // stays the default so existing shared links keep working.
+    return `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}${gxme.source === SOURCE_ONE ? '&s=1' : ''}`;
 }
 
 function getGameSourceGroup(gxme) {
@@ -98,6 +96,9 @@ function getGameSourceGroup(gxme) {
 
 function getSourcePriority(gxme) {
     const source = getGameSourceGroup(gxme);
+    // Main (downloaded/self-hosted) wins over Source #1, which wins over
+    // Source #2. The dedup in preferMainSource uses this to pick the best
+    // copy of a game that exists in more than one catalog.
     return source === 'Main' ? 0 : source === SOURCE_ONE ? 1 : 2;
 }
 
@@ -113,16 +114,18 @@ function preferMainSource(gxmes) {
     return [...preferred.values()];
 }
 
-function normalizeEzClassworkGames(gxmes) {
-    // Skip entries whose wrapper file failed to download ("missing") — they're broken on the source site too.
-    return gxmes.filter(gxme => !gxme.missing).map(gxme => ({
+function normalizeScraperGame(gxme) {
+    return {
         ...gxme,
-        imgsrc: ezClassworkPlaceholderImage(gxme.name),
+        // Scrapers back-fill real covers (assets/img/{slug}_{id}.png); only
+        // entries the scraper could not find art for fall back to the
+        // generated placeholder.
+        imgsrc: gxme.imgsrc || ezClassworkPlaceholderImage(gxme.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${gxme.slug}`,
         category: 'Classroom',
-        source: EZCLASSWORK_SOURCE
-    }));
+        source: gxme.source === SOURCE_ONE ? SOURCE_ONE : SOURCE_TWO
+    };
 }
 
 function filterAvailableGames(gxmes) {
@@ -133,30 +136,46 @@ function filterAvailableGames(gxmes) {
 }
 
 // Every widget on this page (top 10, all games, recently added, favorites,
-// search, category tabs...) needs the same combined catalog. Fetching and
-// normalizing it separately for each one is what made the page lag — this
-// memoizes it so the ~660-game catalog is fetched, parsed and normalized
-// exactly once per page load no matter how many features ask for it.
+// search, category tabs, the per-source sidebar tabs...) needs the same
+// combined catalog. Fetching and normalizing it separately for each one is
+// what made the page lag — this memoizes it so the ~1700-game catalog is
+// fetched, parsed and normalized exactly once per page load no matter how
+// many features ask for it.
 let catalogPromise = null;
-async function fetchgxmes() {
+async function fetchSourceCatalog() {
     if (catalogPromise) return catalogPromise;
     catalogPromise = (async () => {
-        const [gamesResponse, ezClassworkResponse] = await Promise.all([
+        const [gamesResponse, source1Response, source2Response] = await Promise.all([
             fetch('../json/list.json'),
+            fetch('../json/source1.json'),
             fetch('../json/source2.json')
         ]);
-        const [gxmes, ezClassworkGames] = await Promise.all([
+        const [gxmes, source1Games, source2Games] = await Promise.all([
             gamesResponse.json(),
-            ezClassworkResponse.json()
+            source1Response.json(),
+            source2Response.json()
         ]);
-        const allGames = gxmes.concat(normalizeEzClassworkGames(ezClassworkGames));
-        // A downloaded/self-hosted game always wins over an embedded
-        // Classroom game of the same name (e.g. "2048") — applied once
-        // here so every consumer (category tabs, All Games, search) sees
-        // the deduped catalog instead of the same game appearing twice.
-        return filterAvailableGames(preferMainSource(allGames));
+        const available = games => games.map(normalizeScraperGame).filter(gxme => !gxme.missing);
+        return {
+            main: gxmes,
+            [SOURCE_ONE]: available(source1Games),
+            [SOURCE_TWO]: available(source2Games)
+        };
     })();
     return catalogPromise;
+}
+
+async function fetchgxmes() {
+    const catalog = await fetchSourceCatalog();
+    // A downloaded/self-hosted game always wins over an embedded copy of
+    // the same name (e.g. "2048") — applied once here so every consumer
+    // (category tabs, All Games, search) sees the deduped catalog
+    // instead of the same game appearing twice.
+    return filterAvailableGames(preferMainSource([
+        ...catalog.main,
+        ...catalog[SOURCE_ONE],
+        ...catalog[SOURCE_TWO]
+    ]));
 }
 
 function renderLastPlayed() {

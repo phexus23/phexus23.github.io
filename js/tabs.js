@@ -2,8 +2,11 @@ const navTabs = document.getElementById('nav-tabs');
 const tabContents = document.getElementById('tab-contents');
 let gxmes = [];
 let categorySections = {};
+let sourceSections = {};
 
 const defaultSections = ['Favorites', 'last-played', 'top-10', 'last-10'];
+
+const sourceSlug = source => source === SOURCE_ONE ? 'source-1' : 'source-2';
 
 function hideAllSections() {
     const sections = document.querySelectorAll('#tab-contents section');
@@ -41,6 +44,32 @@ function createCategorySection(category) {
     });
 }
 
+function createSourceSection(source) {
+    const sectionId = `${sourceSlug(source)}-gxmes`;
+    if (sourceSections[source]) return;
+
+    const section = document.createElement('section');
+    section.id = sectionId;
+    section.className = 'tab-content';
+    section.innerHTML = `
+        <h2>${source} gxmes</h2>
+        <div class="gxmes-grid"></div>
+    `;
+    tabContents.appendChild(section);
+    sourceSections[source] = section;
+
+    section.style.display = 'none';
+
+    const li = document.createElement('li');
+    li.id = sourceSlug(source);
+    li.innerHTML = `<a>${source}</a>`;
+    navTabs.insertBefore(li, document.getElementById('all-gxmes'));
+
+    li.querySelector('a').addEventListener('click', () => {
+        showSection(sectionId);
+    });
+}
+
 function populategxmes(sectionId, gxmesList) {
     const section = document.getElementById(sectionId);
     if (!section) return;
@@ -51,12 +80,14 @@ function populategxmes(sectionId, gxmesList) {
     // Build the whole grid's markup once and assign it in a single write —
     // the old `grid.innerHTML += ...` inside the loop re-parsed the entire
     // accumulated HTML on every iteration, which is O(n^2) and was a large
-    // part of why pages with hundreds of cards (all-games, Classroom) lagged.
+    // part of why pages with hundreds of cards (all-games, the Source tabs)
+    // lagged.
     grid.innerHTML = gxmesList.map(gxme => {
         const isFavorite = favorites.includes(gxme.name);
-        const sourceGroup = gxme.source || (typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'Source #1' : 'Main');
+        const sourceGroup = typeof getGameSourceGroup === 'function' ? getGameSourceGroup(gxme) : (gxme.source || 'Main');
+        const isScraper = typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme);
         return `
-            <div class="gxme-card" data-game-source="${sourceGroup}" data-gxme-name="${gxme.name}" ${typeof isScraperGameEntry === 'function' && isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
+            <div class="gxme-card" data-game-source="${sourceGroup}" data-gxme-name="${gxme.name}" ${isScraper ? 'data-scraper-game="true"' : ''}>
                 <button class="favorite-btn ${isFavorite ? 'active' : ''}">
                     <i class="fas fa-star"></i>
                 </button>
@@ -86,18 +117,22 @@ function populategxmes(sectionId, gxmesList) {
     });
 }
 
-fetchgxmes().then(loadedGxmes => {
-    gxmes = loadedGxmes;
+fetchSourceCatalog().then(catalog => {
+    gxmes = [...catalog.main, ...catalog[SOURCE_ONE], ...catalog[SOURCE_TWO]];
 
-    // Every game — no matter which source it came from — just shows up under
-    // its normal genre category (Classroom included, since that's simply
-    // the category all of those games share). Which source a game came from
-    // is plumbing for the "hide a broken source" switch in Settings, not
-    // something a visitor needs a separate tab or badge to know about.
-    const categories = [...new Set(gxmes.map(g => g.category))];
+    // Genre tabs stay built from the downloaded Main catalog only — that's
+    // the curated shelf. The two scraped catalogs get one dedicated sidebar
+    // tab each so they're still one click away without flooding the genre
+    // tabs with duplicate copies of games.
+    const categories = [...new Set(catalog.main.map(g => g.category))];
     categories.forEach(category => {
         createCategorySection(category);
-        populategxmes(`${category.toLowerCase()}-gxmes`, gxmes.filter(g => g.category === category));
+        populategxmes(`${category.toLowerCase()}-gxmes`, catalog.main.filter(g => g.category === category));
+    });
+
+    [SOURCE_ONE, SOURCE_TWO].forEach(source => {
+        createSourceSection(source);
+        populategxmes(`${sourceSlug(source)}-gxmes`, catalog[source]);
     });
 
     hideAllSections();
@@ -122,6 +157,10 @@ navTabs.addEventListener('click', e => {
         diffrentname();
     } else if (tabId === 'all-gxmes') {
         showSection('all-gxmes2');
+    } else if (sourceSections[SOURCE_ONE] && tabId === sourceSlug(SOURCE_ONE)) {
+        showSection(`${sourceSlug(SOURCE_ONE)}-gxmes`);
+    } else if (sourceSections[SOURCE_TWO] && tabId === sourceSlug(SOURCE_TWO)) {
+        showSection(`${sourceSlug(SOURCE_TWO)}-gxmes`);
     } else if (categorySections[tabId]) {
         showSection(`${tabId}-gxmes`);
     }

@@ -2,7 +2,7 @@ const SOURCE_ONE = 'Source #1';
 const SOURCE_TWO = 'Source #2';
 
 function isEzClassworkGameEntry(item) {
-    return item && item.source === SOURCE_TWO;
+    return item && (item.source === SOURCE_ONE || item.source === SOURCE_TWO);
 }
 
 function ezClassworkPlaceholderImage(name) {
@@ -15,13 +15,17 @@ function ezClassworkPlaceholderImage(name) {
 }
 
 function normalizeEzClassworkGame(item) {
+    const source = item.source === SOURCE_ONE ? SOURCE_ONE : SOURCE_TWO;
     return {
         ...item,
-        imgsrc: ezClassworkPlaceholderImage(item.name),
+        // Source #1 entries always carry a real cover ({slug}_{id}.png);
+        // Source #2 entries have covers back-filled by the scraper and only
+        // fall back to the generated placeholder when none was found.
+        imgsrc: item.imgsrc || ezClassworkPlaceholderImage(item.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${item.slug}`,
         category: 'Classroom',
-        source: SOURCE_TWO
+        source
     };
 }
 
@@ -31,28 +35,20 @@ function isAvailableSourceTwoGame(item) {
 }
 
 function isScraperGameEntry(item) {
-    if (isEzClassworkGameEntry(item) || typeof item.linksrc !== 'string' || !item.linksrc.startsWith('/gxmes/')) {
-        return false;
-    }
-
-    const imageSource = typeof item.imgsrc === 'string' ? item.imgsrc : '';
-    return item.source === SOURCE_ONE ||
-        /\/covers@main\/\d+\.png(?:[?#].*)?$/.test(imageSource) ||
-        /_\d+\.(?:png|jpe?g|webp)(?:[?#].*)?$/i.test(imageSource);
+    // Both scraped catalogs are explicitly source-tagged in their JSON;
+    // anything else (list.json Main games) is never scraper content.
+    return isEzClassworkGameEntry(item);
 }
 
 function getGameSource(item) {
-    // Source #2 games are self-hosted: prefer the downloaded wrapper file we
-    // host ourselves over the third-party embed URL (its assets still stream
-    // from the jsdelivr CDN via the wrapper's <base href>).
+    // Source #1 and Source #2 both play through the genizymath iframe mirror:
+    // Source #2 via the wrapper file we host ourselves (assets still stream
+    // from the CDN via the wrapper's <base href>), Source #1 straight from
+    // the mirror, which serves the identical wrappers as text/html — the
+    // jsdelivr html@main copies come back as text/plain and won't render in
+    // an iframe.
     if (isEzClassworkGameEntry(item)) return item.file || item.embedUrl || item.gameUrl;
-    // cdnfile is only set when our own URL slug (foldername) was cleaned up
-    // (e.g. to drop "game"/"unblocked") and no longer matches the filename
-    // the upstream freebuisness/html CDN actually hosts the game under.
-    const cdnKey = item.cdnfile || item.foldername;
-    return isScraperGameEntry(item) && cdnKey
-        ? `https://cdn.jsdelivr.net/gh/freebuisness/html@main/${encodeURIComponent(cdnKey)}.html`
-        : item.linksrc;
+    return item.linksrc;
 }
 
 const SOURCE_DISABLED_KEY = 'sourceDisabled';
@@ -145,11 +141,17 @@ async function validateCdnGame(src) {
 
 async function fetchData(index) {
     try {
-        const ezClassworkSlug = new URLSearchParams(window.location.search).get('game');
+        const params = new URLSearchParams(window.location.search);
+        const ezClassworkSlug = params.get('game');
+        // ?s=1 picks the Source #1 catalog (scraped freebuisness zones feed,
+        // played through the genizymath iframe mirror); without it the
+        // player defaults to Source #2 so existing links keep working.
+        const wantsSourceOne = params.get('s') === '1';
         let item;
 
         if (ezClassworkSlug) {
-            const response = await fetch('../../json/source2.json');
+            const catalogFile = wantsSourceOne ? '../../json/source1.json' : '../../json/source2.json';
+            const response = await fetch(catalogFile);
             const data = await response.json();
             const sourceItem = data.find(game => game.slug === ezClassworkSlug);
             if (!sourceItem || sourceItem.missing) throw new Error('Classroom game not found');
@@ -275,6 +277,17 @@ async function fetchData(index) {
     }
 }
 
+function getGamePageUrl(game) {
+    // Scraped-catalog games (Source #1/#2) open through the shared player;
+    // ?s=1 selects the Source #1 catalog, the plain ?game= form stays the
+    // Source #2 default so existing shared links keep working.
+    if (isEzClassworkGameEntry(game)) {
+        const sourceParam = game.source === SOURCE_ONE ? '&s=1' : '';
+        return `/gxmes/ezclasswork/?game=${encodeURIComponent(game.slug)}${sourceParam}`;
+    }
+    return `/gxmes/${game.foldername}/`;
+}
+
 function preferMainSource(games) {
     const preferred = new Map();
     games.forEach(game => {
@@ -322,12 +335,12 @@ function sourcePriority(game) {
             shuffledGames.forEach(game => {
                 const gameCard = document.createElement('div');
                 gameCard.className = 'game-card';
-                gameCard.dataset.gameSource = game.source || (isScraperGameEntry(game) ? SOURCE_ONE : 'original');
+                gameCard.dataset.gameSource = game.source || 'original';
                 if (isScraperGameEntry(game) && game.foldername) {
                     gameCard.dataset.scraperGame = 'true';
                 }
                 gameCard.innerHTML = `
-                    <a href="${isEzClassworkGameEntry(game) ? `/gxmes/ezclasswork/?game=${encodeURIComponent(game.slug)}` : `/gxmes/${game.foldername}/`}">
+                    <a href="${getGamePageUrl(game)}">
                     <img src="${game.imgsrc}" alt="${game.name}">
                     <p>${game.name}</p>
                     </a>

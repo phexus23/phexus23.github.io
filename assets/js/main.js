@@ -28,30 +28,33 @@ function sourceIsEnabled(source) {
 document.addEventListener('DOMContentLoaded', function() {
     Promise.all([
         fetch('json/list.json').then(response => response.json()),
+        fetch('json/source1.json').then(response => response.json()),
         fetch('json/source2.json').then(response => response.json())
     ])
-        .then(([data, ezClassworkGames]) => {
-            // Skip entries whose wrapper file failed to download ("missing") — they're broken on the source site too.
-            const ezGames = ezClassworkGames.filter(game => !game.missing).map(game => ({
+        .then(([data, source1Games, source2Games]) => {
+            // Both scraped catalogs play through the shared classroom player.
+            // Skip entries whose wrapper file failed to download ("missing") —
+            // they're broken on the source site too.
+            const normalize = game => ({
                 ...game,
-                imgsrc: ezClassworkPlaceholderImage(game.name),
+                imgsrc: game.imgsrc || ezClassworkPlaceholderImage(game.name),
                 foldername: `ezclasswork-${game.slug}`,
-                category: 'Classroom',
-                source: 'Source #2'
-            }));
-            const allGames = data.concat(ezGames);
+                category: 'Classroom'
+            });
+            const scraperGames = source1Games.concat(source2Games).filter(game => !game.missing).map(normalize);
+            const allGames = data.concat(scraperGames);
             const gxmeGrid = document.getElementById('gxmeGrid');
             const availableGames = allGames.filter(gxme => sourceIsEnabled(gxme.source));
             // This is the first thing most visitors see, so only promote
             // games with a real picture — not the generated placeholder used
-            // for EZClasswork games that have no artwork of their own.
+            // for scraper games that have no artwork of their own.
             const showcaseGames = preferMainSource(availableGames).filter(hasRealImage);
             const randomgxmes = showcaseGames.sort(() => 0.5 - Math.random()).slice(0, 4);
 
             randomgxmes.forEach(gxme => {
                 let gxmeLink = document.createElement('a');
-                gxmeLink.href = gxme.source === 'Source #2'
-                    ? `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}`
+                gxmeLink.href = gxme.source === 'Source #1' || gxme.source === 'Source #2'
+                    ? `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}${gxme.source === 'Source #1' ? '&s=1' : ''}`
                     : "/gxmes/" + gxme.foldername + "/";
                 gxmeLink.style.textDecoration = 'none';
                 gxmeLink.style.color = 'inherit';
