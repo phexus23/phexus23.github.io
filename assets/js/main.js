@@ -1,33 +1,15 @@
-const SOURCE_DISABLED_KEY = 'sourceDisabled';
-
-function ezClassworkPlaceholderImage(name) {
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
-    const hue = hash % 360;
-    const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="hsl(${hue},45%,35%)"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="72" fill="hsl(${hue},60%,88%)" text-anchor="middle" dominant-baseline="central">${initials}</text></svg>`;
-    return 'data:image/svg+xml,' + encodeURIComponent(svg);
-}
+// Home page "Featured gxmes" showcase. Features only the Main
+// (downloaded/self-hosted) catalog — Source #1/#2 games live behind their own
+// tabs on the games hub instead of taking over the front page.
 
 function hasRealImage(gxme) {
     return !(gxme.imgsrc || '').startsWith('data:image/svg+xml');
 }
 
-function readSourceState(key, fallback) {
-    try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; }
-}
-
-// Same manual, per-browser toggle used on the games hub Settings modal —
-// the home-page showcase itself never probes upstreams; it only shows games
-// whose catalog actually loaded. (The hub page additionally probes one
-// representative game per source to decide whether its tab should exist.)
-function sourceIsEnabled(source) {
-    return readSourceState(SOURCE_DISABLED_KEY, {})[source] !== true;
-}
-
-// Response validation shared with the hub: a blocked request can succeed at
-// the network level yet return an empty body or a stub page instead of the
-// JSON catalog, so "200 OK" alone proves nothing.
+// Blocked requests can return HTTP 200 with an empty body or a stub page
+// instead of the JSON catalog (school filters do this, and so do CDN
+// outages), so the response is validated as a non-empty JSON array before
+// it's trusted.
 function validateCatalogResponse(text) {
     if (!text || !text.trim()) return null;
     try {
@@ -39,47 +21,20 @@ function validateCatalogResponse(text) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Each catalog loads independently (allSettled): a dead or filtered
-    // source degrades to its games being absent from the showcase instead of
-    // rejecting the whole chain and leaving the front page empty.
-    Promise.allSettled([
-        fetch('json/list.json', { cache: 'no-store' }).then(response => response.text()).then(validateCatalogResponse),
-        fetch('json/source1.json', { cache: 'no-store' }).then(response => response.text()).then(validateCatalogResponse),
-        fetch('json/ezclasswork.json', { cache: 'no-store' }).then(response => response.text()).then(validateCatalogResponse)
-    ])
-        .then(results => {
-            const value = i => results[i].status === 'fulfilled' && results[i].value ? results[i].value : [];
-            const data = value(0);
-            const source1Games = value(1);
-            const ezGames = value(2);
-            if (!data.length) throw new Error('Main game catalog failed to load.');
-            // Both scraped catalogs play through the shared classroom player
-            // (source1.json prefers our own wrapper files). Skip entries
-            // flagged "missing" — they're broken on the source site too.
-            const normalize = game => ({
-                ...game,
-                imgsrc: game.imgsrc || ezClassworkPlaceholderImage(game.name),
-                foldername: `ezclasswork-${game.slug}`,
-                category: 'Classroom'
-            });
-            const playable = games => games.filter(game => !game.missing).map(normalize);
-            const scraperGames = playable(source1Games).concat(playable(ezGames));
-            const allGames = data.concat(scraperGames);
+    fetch('json/list.json', { cache: 'no-store' })
+        .then(response => response.text())
+        .then(validateCatalogResponse)
+        .then(gxmes => {
+            if (!gxmes) throw new Error('Main game catalog failed to load.');
             const gxmeGrid = document.getElementById('gxmeGrid');
-            const availableGames = allGames.filter(gxme => sourceIsEnabled(gxme.source));
-            // This is the first thing most visitors see, so only promote
-            // games with a real picture — not the generated placeholder used
-            // for scraper games that have no artwork of their own.
-            const showcaseGames = preferMainSource(availableGames).filter(hasRealImage);
-            const randomgxmes = showcaseGames.sort(() => 0.5 - Math.random()).slice(0, 4);
+            // Only Main games are featured, and only ones with a real
+            // picture — never a generated placeholder.
+            const featured = gxmes.filter(hasRealImage);
+            const randomgxmes = featured.sort(() => 0.5 - Math.random()).slice(0, 4);
 
             randomgxmes.forEach(gxme => {
                 let gxmeLink = document.createElement('a');
-                gxmeLink.href = gxme.source === 'Source #1'
-                    ? `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}&s=1`
-                    : gxme.source === 'Source #2'
-                    ? `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}`
-                    : "/gxmes/" + gxme.foldername + "/";
+                gxmeLink.href = "/gxmes/" + gxme.foldername + "/";
                 gxmeLink.style.textDecoration = 'none';
                 gxmeLink.style.color = 'inherit';
 
@@ -91,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 let img = document.createElement('img');
                 img.src = gxme.imgsrc;
                 img.alt = gxme.name;
+                img.loading = 'lazy';
                 img.style.height = "145px";
                 img.style.width = "145px";
 
@@ -104,27 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         })
         .catch(error => {
-            console.error('Error loading the list.json:', error);
+            console.error('Error loading featured gxmes:', error);
         });
 });
-
-function preferMainSource(gxmes) {
-    const preferred = new Map();
-    gxmes.forEach(gxme => {
-        const key = String(gxme.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
-        const current = preferred.get(key);
-        if (!current || sourcePriority(gxme) < sourcePriority(current)) {
-            preferred.set(key, gxme);
-        }
-    });
-    return [...preferred.values()];
-}
-
-function sourcePriority(gxme) {
-    // Main (no source tag) wins over Source #1, which wins over Source #2 —
-    // same ordering the games hub uses for dedup.
-    return gxme.source === 'Source #1' ? 1 : gxme.source === 'Source #2' ? 2 : 0;
-}
 
 function randombutton() {
     window.location.href = '/gxmes';
