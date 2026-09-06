@@ -205,10 +205,11 @@ async function fetchTop10FolderNames() {
 // visitor actually scrolls. Small grids (Top 10, favorites...) render whole.
 const GRID_CHUNK_SIZE = 120;
 
-function makeCardHTML(gxme, favorites) {
+function makeCardHTML(gxme, favorites, badgeHTML = '') {
     const isFavorite = favorites.includes(gxme.name);
     return `
         <div class="gxme-card" data-game-source="${getGameSourceGroup(gxme)}" data-gxme-name="${gxme.name}" ${isScraperGameEntry(gxme) ? 'data-scraper-game="true"' : ''}>
+            ${badgeHTML}
             <button class="favorite-btn ${isFavorite ? 'active' : ''}">
                 <i class="fas fa-star"></i>
             </button>
@@ -233,15 +234,15 @@ function attachOneCard(card, gxme, opts = {}) {
 }
 
 // Renders gxmesList into container and wires up card handlers, chunking the
-// work when the list is big. opts.favorites drives the star buttons;
-// opts.decorate (optional) receives each card's HTML so callers can prepend
-// badges. Returns the rendered card elements in list order.
+// work when the list is big. opts.favorites drives the star buttons and
+// opts.badgeHTML (TOP/NEW) renders inside each card. Returns the rendered
+// card elements in list order.
 function renderGamesGrid(container, gxmesList, opts = {}) {
     // opts.favorites may be an array or a getter; a getter keeps lazily
     // appended chunks in sync with stars toggled since the initial render.
     const favoritesOf = typeof opts.favorites === 'function' ? opts.favorites : () => opts.favorites || [];
-    const decorate = opts.decorate || (html => html);
-    const cardHTML = gxme => decorate(makeCardHTML(gxme, favoritesOf()));
+    // opts.badgeHTML (TOP/NEW) is rendered inside each card, top-left corner.
+    const cardHTML = gxme => makeCardHTML(gxme, favoritesOf(), opts.badgeHTML);
 
     if (gxmesList.length <= GRID_CHUNK_SIZE) {
         container.innerHTML = gxmesList.map(cardHTML).join('');
@@ -287,8 +288,7 @@ function rendergxmes(gxmes, containerId, badge) {
 
     renderGamesGrid(container, gxmes, {
         favorites: () => JSON.parse(localStorage.getItem('favorites')) || [],
-        // Bordered grids (Top 10, Recently Added) prepend a badge to every card.
-        decorate: badge ? html => badgeHTML + html : undefined
+        badgeHTML
     });
 }
 
