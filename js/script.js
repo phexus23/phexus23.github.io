@@ -1,4 +1,5 @@
 const SOURCE_DISABLED_KEY = 'sourceDisabled';
+const SOURCE_MAIN = 'Main';
 const SOURCE_ONE = 'Source #1';
 const SOURCE_TWO = 'Source #2';
 
@@ -156,8 +157,9 @@ async function fetchSourceCatalog() {
             source2Response.json()
         ]);
         const available = games => games.map(normalizeScraperGame).filter(gxme => !gxme.missing);
+        // Keyed by source label so callers can do catalog[SOURCE_MAIN], etc.
         return {
-            main: gxmes,
+            [SOURCE_MAIN]: gxmes,
             [SOURCE_ONE]: available(source1Games),
             [SOURCE_TWO]: available(source2Games)
         };
@@ -172,7 +174,7 @@ async function fetchgxmes() {
     // (category tabs, All Games, search) sees the deduped catalog
     // instead of the same game appearing twice.
     return filterAvailableGames(preferMainSource([
-        ...catalog.main,
+        ...catalog[SOURCE_MAIN],
         ...catalog[SOURCE_ONE],
         ...catalog[SOURCE_TWO]
     ]));

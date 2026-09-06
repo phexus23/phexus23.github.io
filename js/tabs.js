@@ -6,7 +6,7 @@ let sourceSections = {};
 
 const defaultSections = ['Favorites', 'last-played', 'top-10', 'last-10'];
 
-const sourceSlug = source => source === SOURCE_ONE ? 'source-1' : 'source-2';
+const sourceSlug = source => source === SOURCE_MAIN ? 'main' : source === SOURCE_ONE ? 'source-1' : 'source-2';
 
 function hideAllSections() {
     const sections = document.querySelectorAll('#tab-contents section');
@@ -94,7 +94,7 @@ fetchSourceCatalog().then(catalog => {
     // listing, so it must be the deduped combined catalog — otherwise a game
     // that exists in more than one source shows up multiple times there.
     gxmes = filterAvailableGames(preferMainSource([
-        ...catalog.main,
+        ...catalog[SOURCE_MAIN],
         ...catalog[SOURCE_ONE],
         ...catalog[SOURCE_TWO]
     ]));
@@ -103,13 +103,13 @@ fetchSourceCatalog().then(catalog => {
     // the curated shelf. The two scraped catalogs get one dedicated sidebar
     // tab each so they're still one click away without flooding the genre
     // tabs with duplicate copies of games.
-    const categories = [...new Set(catalog.main.map(g => g.category))];
+    const categories = [...new Set(catalog[SOURCE_MAIN].map(g => g.category))];
     categories.forEach(category => {
         createCategorySection(category);
-        populategxmes(`${category.toLowerCase()}-gxmes`, catalog.main.filter(g => g.category === category));
+        populategxmes(`${category.toLowerCase()}-gxmes`, catalog[SOURCE_MAIN].filter(g => g.category === category));
     });
 
-    [SOURCE_ONE, SOURCE_TWO].forEach(source => {
+    [SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO].forEach(source => {
         createSourceSection(source);
         populategxmes(`${sourceSlug(source)}-gxmes`, catalog[source]);
     });
@@ -136,6 +136,8 @@ navTabs.addEventListener('click', e => {
         diffrentname();
     } else if (tabId === 'all-gxmes') {
         showSection('all-gxmes2');
+    } else if (sourceSections[SOURCE_MAIN] && tabId === sourceSlug(SOURCE_MAIN)) {
+        showSection(`${sourceSlug(SOURCE_MAIN)}-gxmes`);
     } else if (sourceSections[SOURCE_ONE] && tabId === sourceSlug(SOURCE_ONE)) {
         showSection(`${sourceSlug(SOURCE_ONE)}-gxmes`);
     } else if (sourceSections[SOURCE_TWO] && tabId === sourceSlug(SOURCE_TWO)) {
