@@ -1,0 +1,99 @@
+/*!
+ * ytgame-shim.js — drop-in replacement for the YouTube Playables Web SDK (ytgame.js).
+ *
+ * The scraped "youtube-playables" wrappers ship a real ytgame.js plus an
+ * obfuscated ad / anti-tamper blob. Off YouTube, the real SDK's ad + data calls
+ * post to a parent frame that never answers, so they hang; that blob worked
+ * around it by loading a third-party ad script and showing interstitial,
+ * sidebar and popup ads.
+ *
+ * strip_ads.py removes the blob and swaps ytgame.js for this file. Result:
+ *   - ad calls resolve instantly (no ad shown)
+ *   - saveData/loadData actually work, backed by localStorage
+ *   - every other call is a safe no-op
+ *   - unknown calls can't throw (Proxy fallback)
+ */
+(function () {
+  'use strict';
+  var KEY = 'ytg:' + (location.pathname || 'game');
+  var res = function (v) { return Promise.resolve(v); };
+  var noop = function () {};
+  var listeners = {};
+
+  function store(get, val) {
+    try {
+      if (get) return localStorage.getItem(KEY);
+      if (val == null) localStorage.removeItem(KEY);
+      else localStorage.setItem(KEY, String(val));
+    } catch (e) {}
+    return null;
+  }
+
+  var game = {
+    firstFrameReady: noop,
+    gameReady: noop,
+    loadingProgress: noop,
+    hasLoadingUI: function () { return false; },
+    onPause: function (cb) { listeners.pause = cb; },
+    onResume: function (cb) { listeners.resume = cb; },
+    saveData: function (d) { store(false, d); return res(); },
+    loadData: function () { return res(store(true) || ''); },
+    getData: function () { return store(true) || ''; }
+  };
+
+  var ads = {
+    requestInterstitialAd: function () { return res(); },
+    requestRewardedAd: function () { return res(); },
+    adBreak: function () { return res(); }
+  };
+
+  var system = {
+    getEngagementType: function () { return 'PLAYING'; },
+    getConfig: function () { return { engagementType: 'PLAYING' }; },
+    isAudioEnabled: function () { return true; },
+    onAudioEnabledChange: noop,
+    getLanguage: function () { return (navigator.language || 'en').slice(0, 2); },
+    getSurface: function () { return 'BROWSER'; }
+  };
+
+  var engagement = { sendAbandonment: noop };
+  var health = { logError: noop, logWarning: noop, stuck: noop, unstuck: noop };
+
+  // Any property/method we didn't define returns a chainable no-op that also
+  // works as a resolved promise, so `ytgame.whatever.foo().then(...)` never throws.
+  function chainNoop() {
+    var f = function () { return res(); };
+    return new Proxy(f, {
+      get: function (t, p) {
+        if (p === 'then' || p === 'catch' || p === 'finally') return undefined;
+        return chainNoop();
+      },
+      apply: function () { return res(); }
+    });
+  }
+  function wrap(obj) {
+    return new Proxy(obj, {
+      get: function (t, p) {
+        if (p in t) return t[p];
+        if (typeof p === 'symbol') return t[p];
+        return chainNoop();
+      }
+    });
+  }
+
+  var ytgame = {
+    SDK_VERSION: '1.7.0-shim',
+    IN_PLAYABLES_ENV: false,
+    game: wrap(game),
+    ads: wrap(ads),
+    system: wrap(system),
+    engagement: wrap(engagement),
+    health: wrap(health)
+  };
+
+  try { Object.defineProperty(window, 'ytgame', { value: wrap(ytgame), writable: false, configurable: true }); }
+  catch (e) { window.ytgame = wrap(ytgame); }
+
+  // Fire resume once, in case a game waits for it before starting.
+  setTimeout(function () { try { if (listeners.resume) listeners.resume(); } catch (e) {} }, 0);
+})();
