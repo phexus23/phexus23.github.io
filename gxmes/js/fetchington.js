@@ -677,6 +677,14 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="game-info">
                 <h2 id="gameTitle">Loading...</h2>
             </div>
+            <div class="top-game-ad" style="max-width:970px;margin:0 auto 10px;min-height:90px;text-align:center;">
+                <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-3858578074050552"
+                data-ad-slot="3894434525"
+                data-ad-format="horizontal"
+                data-full-width-responsive="true"></ins>
+            </div>
             <div class="game-frame-wrap">
                 <span id="game-status" class="game-status" data-scraper-game-status="loading">Loading game...</span>
                 <iframe id="game-iframe" class="game-iframe" src=""></iframe>
