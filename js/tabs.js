@@ -159,20 +159,24 @@ fetchSourceCatalog().then(catalog => {
     ]));
 
     // Genre tabs stay built from the downloaded Main catalog only — that's
-    // the curated shelf. The merged scraped catalog gets one dedicated
-    // sidebar tab so it's still one click away without flooding the genre
-    // tabs with duplicate copies of games.
+    // the curated shelf. The scraped Source #1/#2 catalogs don't get genre
+    // tabs (no per-game category data) or a tab of their own — they're
+    // reachable through "All gxmes" and search, same as everything else.
     const categories = [...new Set(catalog[SOURCE_MAIN].map(g => g.category))];
     categories.forEach(category => {
         createCategorySection(category);
         populategxmes(`${category.toLowerCase()}-gxmes`, catalog[SOURCE_MAIN].filter(g => g.category === category));
     });
 
-    [SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO].forEach(source => {
-        if (!sourceHasGames(catalog, source)) return;
-        createSourceSection(source);
-        populategxmes(`${sourceSlug(source)}-gxmes`, catalog[source]);
-    });
+    // Source #1/#2 no longer get their own dedicated sidebar tab - they're
+    // scraped/bulk sources, already folded into "All gxmes" and search via
+    // the combined `gxmes` list above, so a separate tab just duplicated
+    // that without adding anything. Main still gets one (curated shelf,
+    // worth a flat view in addition to its genre tabs).
+    if (sourceHasGames(catalog, SOURCE_MAIN)) {
+        createSourceSection(SOURCE_MAIN);
+        populategxmes(`${sourceSlug(SOURCE_MAIN)}-gxmes`, catalog[SOURCE_MAIN]);
+    }
 
     hideAllSections();
     defaultSections.forEach(id => {
@@ -205,10 +209,6 @@ navTabs.addEventListener('click', e => {
         showSection('all-gxmes2');
     } else if (sourceSections[SOURCE_MAIN] && tabId === sourceSlug(SOURCE_MAIN)) {
         showSection(`${sourceSlug(SOURCE_MAIN)}-gxmes`);
-    } else if (sourceSections[SOURCE_ONE] && tabId === sourceSlug(SOURCE_ONE)) {
-        showSection(`${sourceSlug(SOURCE_ONE)}-gxmes`);
-    } else if (sourceSections[SOURCE_TWO] && tabId === sourceSlug(SOURCE_TWO)) {
-        showSection(`${sourceSlug(SOURCE_TWO)}-gxmes`);
     } else if (categorySections[tabId]) {
         showSection(`${tabId}-gxmes`);
     }
