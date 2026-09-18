@@ -92,14 +92,22 @@ function initializeGameAds() {
         document.head.appendChild(adScript);
     }
 
-    adSlots.forEach((ins) => {
-        if (ins.dataset.adsbygoogleStatus) return;
-        try {
-            adQueue.push({});
-        } catch (e) {
-            console.error('AdSense push failed:', e);
-        }
-    });
+    // initializeGameAds() runs right after body.innerHTML is set, before the
+    // browser has necessarily finished layout on the freshly-inserted DOM -
+    // pushing immediately could measure a not-yet-laid-out slot as 0px wide
+    // ("No slot size for availableWidth=0") and permanently fail it, even
+    // though the slot is really a normal width a frame later. Two rAFs
+    // reliably lands after the browser's next layout/paint.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        adSlots.forEach((ins) => {
+            if (ins.dataset.adsbygoogleStatus) return;
+            try {
+                adQueue.push({});
+            } catch (e) {
+                console.error('AdSense push failed:', e);
+            }
+        });
+    }));
 }
 
 function hideGameStatus(status) {
@@ -622,25 +630,32 @@ document.addEventListener("DOMContentLoaded", function () {
             .center-adsense {
                 text-align: center;
             }
-          .unique-sidebar { 
-            width:10%; 
-            background: #444; 
-            padding: 20px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
-            position: absolute; 
-            top: 170px; 
+          .unique-sidebar {
+            /* Fixed px, not a % of the viewport - at 10% + 20px padding
+               (border-box, so the padding ate INTO that 10%) the actual
+               ad container was landing at ~109px wide on ordinary desktop
+               widths, below AdSense's viable minimum, so the slot always
+               failed to fill ("No slot size for availableWidth=109" /
+               "=0" on the very first push before layout even settled).
+               200px fixed matches vafor-lite's own working rail-ad width. */
+            width:200px;
+            background: #444;
+            padding: 8px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: 170px;
             height: 70vh;
-            box-sizing: border-box; 
+            box-sizing: border-box;
         }
         .unique-sidebar .ad-preview {
-            background: #333; 
-            color: #eaeaea; 
-            padding: 10px; 
-            margin-top: 10px; 
-            border-radius: 8px; 
-            text-align: center; 
-            margin: 10px 0; 
+            background: #333;
+            color: #eaeaea;
+            padding: 6px;
+            margin-top: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 10px 0;
         }
         .adbar-left {
             left:0;
@@ -686,7 +701,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="game-info">
                 <h2 id="gameTitle">Loading...</h2>
             </div>
-            <div class="top-game-ad" style="max-width:970px;margin:0 auto 10px;min-height:90px;text-align:center;">
+            <div class="top-game-ad" style="width:100%;max-width:970px;margin:0 auto 10px;min-height:90px;text-align:center;">
                 <ins class="adsbygoogle"
                 style="display:block"
                 data-ad-client="ca-pub-3858578074050552"
