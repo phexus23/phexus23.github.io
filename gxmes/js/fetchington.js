@@ -1,8 +1,9 @@
 const SOURCE_ONE = 'Source #1';
 const SOURCE_TWO = 'Source #2';
+const SOURCE_THREE = 'Source #3';
 
 function isEzClassworkGameEntry(item) {
-    return item && (item.source === SOURCE_ONE || item.source === SOURCE_TWO);
+    return item && (item.source === SOURCE_ONE || item.source === SOURCE_TWO || item.source === SOURCE_THREE);
 }
 function ezClassworkPlaceholderImage(name) {
     let hash = 0;
@@ -14,14 +15,15 @@ function ezClassworkPlaceholderImage(name) {
 }
 
 function normalizeEzClassworkGame(item) {
-    const source = item.source === SOURCE_ONE ? SOURCE_ONE : SOURCE_TWO;
+    const source = item.source === SOURCE_ONE ? SOURCE_ONE : item.source === SOURCE_THREE ? SOURCE_THREE : SOURCE_TWO;
     return {
         ...item,
         // Source #1 entries always carry a real cover ({slug}_{id}.png);
         // Source #2 entries carry the real thumbnail scraped from the
         // EZClasswork site (assets/img/ezclasswork/{slug}.png) when the site
-        // showed one, and only fall back to the generated placeholder when
-        // it didn't.
+        // showed one; Source #3 (the vafor-lite import) already carries an
+        // absolute imgsrc for every entry. All three fall back to the
+        // generated placeholder only if their own imgsrc is missing.
         imgsrc: item.imgsrc || ezClassworkPlaceholderImage(item.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${item.slug}`,
@@ -142,14 +144,16 @@ async function fetchData(index) {
     try {
         const params = new URLSearchParams(window.location.search);
         const ezClassworkSlug = params.get('game');
-        // ?s=1 picks the Source #1 catalog (genizymath zones feed); without
-        // it the player defaults to Source #2 (EZClasswork embeds) so
-        // existing shared links keep working.
-        const wantsSourceOne = params.get('s') === '1';
+        // ?s=1 picks the Source #1 catalog (genizymath zones feed), ?s=2
+        // picks Source #3 (the vafor-lite import); without either the player
+        // defaults to Source #2 (EZClasswork embeds) so existing shared
+        // links keep working.
+        const sParam = params.get('s');
+        const catalogFileFor = { '1': '../../json/source1.json', '2': '../../json/source3.json' };
         let item;
 
         if (ezClassworkSlug) {
-            const catalogFile = wantsSourceOne ? '../../json/source1.json' : '../../json/ezclasswork.json';
+            const catalogFile = catalogFileFor[sParam] || '../../json/ezclasswork.json';
             const response = await fetch(catalogFile);
             const data = await response.json();
             const sourceItem = data.find(game => game.slug === ezClassworkSlug);
@@ -277,11 +281,12 @@ async function fetchData(index) {
 }
 
 function getGamePageUrl(game) {
-    // Scraped-catalog games (Source #1/#2) open through the shared player;
-    // ?s=1 selects the Source #1 catalog, the plain ?game= form stays the
-    // Source #2 default so existing shared links keep working.
+    // Scraped-catalog games (Source #1/#2/#3) open through the shared
+    // player; ?s=1 selects Source #1, ?s=2 selects Source #3, the plain
+    // ?game= form stays the Source #2 default so existing shared links keep
+    // working.
     if (isEzClassworkGameEntry(game)) {
-        const sourceParam = game.source === SOURCE_ONE ? '&s=1' : '';
+        const sourceParam = game.source === SOURCE_ONE ? '&s=1' : game.source === SOURCE_THREE ? '&s=2' : '';
         return `/gxmes/ezclasswork/?game=${encodeURIComponent(game.slug)}${sourceParam}`;
     }
     return `/gxmes/${game.foldername}/`;
@@ -300,7 +305,10 @@ function preferMainSource(games) {
 }
 
 function sourcePriority(game) {
-    return game.source === SOURCE_ONE ? 1 : game.source === SOURCE_TWO ? 2 : 0;
+    // Main wins over Source #1, which wins over Source #2, which wins over
+    // Source #3 (the large vafor-lite bulk import — lowest priority, only
+    // shown when nothing better already covers that game name).
+    return game.source === SOURCE_ONE ? 1 : game.source === SOURCE_TWO ? 2 : game.source === SOURCE_THREE ? 3 : 0;
 }
 
     // Blocked/broken requests can return HTTP 200 with an empty body or a
@@ -322,14 +330,15 @@ function sourcePriority(game) {
 
     async function fetchRecommendedGames() {
         try {
-            const [data, source1Games, ezClassworkGames] = await Promise.all([
+            const [data, source1Games, ezClassworkGames, source3Games] = await Promise.all([
                 settleJson('../../json/list.json'),
                 settleJson('../../json/source1.json'),
-                settleJson('../../json/ezclasswork.json')
+                settleJson('../../json/ezclasswork.json'),
+                settleJson('../../json/source3.json')
             ]);
             if (!data.length) throw new Error('Main game catalog failed to load.');
             const playable = games => games.filter(isAvailableSourceTwoGame).map(normalizeEzClassworkGame);
-            const allGames = data.concat(playable(source1Games), playable(ezClassworkGames));
+            const allGames = data.concat(playable(source1Games), playable(ezClassworkGames), playable(source3Games));
             const recommendedGamesContainer = document.getElementById('recommendedGames');
             recommendedGamesContainer.innerHTML = ''; 
 

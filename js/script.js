@@ -2,6 +2,7 @@ const SOURCE_DISABLED_KEY = 'sourceDisabled';
 const SOURCE_MAIN = 'Main';
 const SOURCE_ONE = 'Source #1';
 const SOURCE_TWO = 'Source #2';
+const SOURCE_THREE = 'Source #3';
 
 function ezClassworkPlaceholderImage(name) {
     let hash = 0;
@@ -46,6 +47,11 @@ function renderSourceSettings() {
 // group is also present as static HTML in gxmes/index.html — whichever way
 // the group came into existence, the status lines need to end up in it.
 function ensureSourceStatusLines(group) {
+    // Source #3 has no status line: it spans dozens of unrelated hosting
+    // domains (vafor-lite's own games/ folder, script.google.com, and every
+    // domain calcsolver/duckmath games came from), so a single up/down probe
+    // wouldn't mean anything for it the way one representative URL does for
+    // Source #1/#2. Its "Hide" checkbox still works fine without one.
     [SOURCE_ONE, SOURCE_TWO].forEach(source => {
         const id = `source-status-${source === SOURCE_ONE ? 'source-1' : 'source-2'}`;
         if (document.getElementById(id)) return;
@@ -74,6 +80,7 @@ function addSourceSettingsToModal() {
             <div class="modal-item source-status" id="source-status-source-1"></div>
             <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_TWO}"> Hide Source #2 games</label></div>
             <div class="modal-item source-status" id="source-status-source-2"></div>
+            <div class="modal-item"><label><input type="checkbox" data-source-setting="${SOURCE_THREE}"> Hide Source #3 games</label></div>
         `;
         modalContent.appendChild(group);
     }
@@ -99,18 +106,20 @@ function initializeSourceSettings() {
 initializeSourceSettings();
 
 // Scraped-catalog entries are always explicitly source-tagged in their JSON
-// (Source #1 = genizymath zones feed, Source #2 = EZClasswork site);
-// everything else is a Main game.
+// (Source #1 = genizymath zones feed, Source #2 = EZClasswork site,
+// Source #3 = the vafor-lite import); everything else is a Main game.
 function isScraperGameEntry(gxme) {
-    return gxme.source === SOURCE_ONE || gxme.source === SOURCE_TWO;
+    return gxme.source === SOURCE_ONE || gxme.source === SOURCE_TWO || gxme.source === SOURCE_THREE;
 }
 
 function getGamePageUrl(gxme) {
     if (!isScraperGameEntry(gxme)) return `/gxmes/${gxme.foldername}/`;
-    // Both scraped catalogs play through the shared player: ?game=slug picks
-    // the game, &s=1 selects the Source #1 catalog (the plain ?game= form
-    // stays the Source #2 default so existing shared links keep working).
-    return `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}${gxme.source === SOURCE_ONE ? '&s=1' : ''}`;
+    // All three scraped catalogs play through the shared player: ?game=slug
+    // picks the game, &s=1 selects Source #1, &s=2 selects Source #3 (the
+    // plain ?game= form stays the Source #2 default so existing shared
+    // links keep working).
+    const sourceParam = gxme.source === SOURCE_ONE ? '&s=1' : gxme.source === SOURCE_THREE ? '&s=2' : '';
+    return `/gxmes/ezclasswork/?game=${encodeURIComponent(gxme.slug)}${sourceParam}`;
 }
 
 function getGameSourceGroup(gxme) {
@@ -120,10 +129,12 @@ function getGameSourceGroup(gxme) {
 function getSourcePriority(gxme) {
     const source = getGameSourceGroup(gxme);
     // Main (downloaded/self-hosted) wins over Source #1 (genizymath), which
-    // wins over Source #2 (EZClasswork embeds). The dedup in preferMainSource
+    // wins over Source #2 (EZClasswork embeds), which wins over Source #3
+    // (the vafor-lite import — lowest priority, only shown when nothing
+    // better already covers that game name). The dedup in preferMainSource
     // uses this to pick the best copy of a game that exists in more than one
     // catalog.
-    return source === 'Main' ? 0 : source === SOURCE_ONE ? 1 : 2;
+    return source === 'Main' ? 0 : source === SOURCE_ONE ? 1 : source === SOURCE_TWO ? 2 : 3;
 }
 
 function preferMainSource(gxmes) {
@@ -142,8 +153,10 @@ function normalizeScraperGame(gxme) {
     return {
         ...gxme,
         // Scrapers back-fill real covers/art (Source #1: assets/img/{slug}_{id}.png,
-        // Source #2: assets/img/ezclasswork/{slug}.png); only entries the scraper
-        // could not find art for fall back to the generated placeholder.
+        // Source #2: assets/img/ezclasswork/{slug}.png); Source #3 already
+        // carries an absolute imgsrc for every entry (built straight from
+        // vafor-lite's own catalog). Only entries with no art at all fall
+        // back to the generated placeholder.
         imgsrc: gxme.imgsrc || ezClassworkPlaceholderImage(gxme.name),
         linksrc: '/gxmes/ezclasswork/',
         foldername: `ezclasswork-${gxme.slug}`,
@@ -196,7 +209,7 @@ async function fetchJsonCatalog(url) {
 // so its failure is still fatal to the page — fetchgxmes() callers surface
 // that as an error rather than silently showing an empty site.
 let catalogPromise = null;
-let catalogHealth = { [SOURCE_MAIN]: true, [SOURCE_ONE]: true, [SOURCE_TWO]: true };
+let catalogHealth = { [SOURCE_MAIN]: true, [SOURCE_ONE]: true, [SOURCE_TWO]: true, [SOURCE_THREE]: true };
 
 function catalogLoaded(health, source) {
     return Boolean(health && health[source]);
@@ -212,7 +225,8 @@ async function fetchSourceCatalog() {
         const settled = await Promise.allSettled([
             fetchJsonCatalog('../json/list.json'),
             fetchJsonCatalog('../json/source1.json'),
-            fetchJsonCatalog('../json/ezclasswork.json')
+            fetchJsonCatalog('../json/ezclasswork.json'),
+            fetchJsonCatalog('../json/source3.json')
         ]);
         const available = games => games.map(normalizeScraperGame).filter(gxme => !gxme.missing);
 
@@ -220,21 +234,26 @@ async function fetchSourceCatalog() {
         catalogHealth = {
             [SOURCE_MAIN]: settled[0].status === 'fulfilled',
             [SOURCE_ONE]: settled[1].status === 'fulfilled',
-            [SOURCE_TWO]: settled[2].status === 'fulfilled'
+            [SOURCE_TWO]: settled[2].status === 'fulfilled',
+            [SOURCE_THREE]: settled[3].status === 'fulfilled'
         };
-        [SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO].forEach(source => {
-            if (!catalogHealth[source]) console.warn(`[catalog] ${source} failed to load; its content is hidden this page load.`, settled[[SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO].indexOf(source)].reason);
+        [SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO, SOURCE_THREE].forEach(source => {
+            if (!catalogHealth[source]) console.warn(`[catalog] ${source} failed to load; its content is hidden this page load.`, settled[[SOURCE_MAIN, SOURCE_ONE, SOURCE_TWO, SOURCE_THREE].indexOf(source)].reason);
         });
 
         // Keyed by source label so callers can do catalog[SOURCE_MAIN], etc.
         // Source #1 is the genizymath zones feed (self-hosted wrapper first,
-        // mirror fallback); Source #2 is the EZClasswork site catalog.
+        // mirror fallback); Source #2 is the EZClasswork site catalog;
+        // Source #3 is the vafor-lite (v4for.gitlab.io) import — its own
+        // catalog.json's local wrappers, Apps Script embeds and external
+        // iframes (calcsolver.net, duckmath) all flattened into one list.
         // A failed source resolves as an empty list — filtered out of the
         // combined catalog and its tab never renders.
         return {
             [SOURCE_MAIN]: value(0, []),
             [SOURCE_ONE]: available(value(1, [])),
-            [SOURCE_TWO]: available(value(2, []))
+            [SOURCE_TWO]: available(value(2, [])),
+            [SOURCE_THREE]: available(value(3, []))
         };
     })();
     return catalogPromise;
@@ -307,7 +326,8 @@ async function fetchgxmes() {
     return filterAvailableGames(preferMainSource([
         ...catalog[SOURCE_MAIN],
         ...catalog[SOURCE_ONE],
-        ...catalog[SOURCE_TWO]
+        ...catalog[SOURCE_TWO],
+        ...catalog[SOURCE_THREE]
     ]));
 }
 

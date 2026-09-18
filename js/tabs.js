@@ -6,7 +6,7 @@ let sourceSections = {};
 
 const defaultSections = ['Favorites', 'last-played', 'top-10', 'last-10'];
 
-const sourceSlug = source => source === SOURCE_MAIN ? 'main' : source === SOURCE_TWO ? 'source-2' : 'source-1';
+const sourceSlug = source => source === SOURCE_MAIN ? 'main' : source === SOURCE_TWO ? 'source-2' : source === SOURCE_THREE ? 'source-3' : 'source-1';
 
 // The source nav tabs are removable: a source whose catalog failed to load
 // (or whose runtime probe found it unreachable/blocked) gets its tab and
@@ -155,7 +155,8 @@ fetchSourceCatalog().then(catalog => {
     gxmes = filterAvailableGames(preferMainSource([
         ...catalog[SOURCE_MAIN],
         ...catalog[SOURCE_ONE],
-        ...catalog[SOURCE_TWO]
+        ...catalog[SOURCE_TWO],
+        ...catalog[SOURCE_THREE]
     ]));
 
     // Genre tabs stay built from the downloaded Main catalog only — that's
