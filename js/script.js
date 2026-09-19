@@ -47,13 +47,19 @@ function renderSourceSettings() {
 // group is also present as static HTML in gxmes/index.html — whichever way
 // the group came into existence, the status lines need to end up in it.
 function ensureSourceStatusLines(group) {
-    // Source #3 has no status line: it spans dozens of unrelated hosting
+    // Source #3's line is filled in by renderSource3Status(), not
+    // setSourceStatus() below - it spans dozens of unrelated hosting
     // domains (vafor-lite's own games/ folder, script.google.com, and every
-    // domain calcsolver/duckmath games came from), so a single up/down probe
-    // wouldn't mean anything for it the way one representative URL does for
-    // Source #1/#2. Its "Hide" checkbox still works fine without one.
-    [SOURCE_ONE, SOURCE_TWO].forEach(source => {
-        const id = `source-status-${source === SOURCE_ONE ? 'source-1' : 'source-2'}`;
+    // domain calcsolver/duckmath games came from), so unlike Source #1/#2's
+    // single representative-URL probe, it reports "N games on M host(s)"
+    // once the per-domain checks (checkAllDomainsInBackground) finish,
+    // rather than one up/down verdict for the whole label.
+    [
+        [SOURCE_ONE, 'source-1'],
+        [SOURCE_TWO, 'source-2'],
+        [SOURCE_THREE, 'source-3']
+    ].forEach(([, slug]) => {
+        const id = `source-status-${slug}`;
         if (document.getElementById(id)) return;
         const line = document.createElement('div');
         line.id = id;
@@ -168,8 +174,101 @@ function normalizeScraperGame(gxme) {
 function filterAvailableGames(gxmes) {
     return gxmes.filter(gxme => {
         const source = getGameSourceGroup(gxme);
-        return !sourceIsBlocked(source);
+        if (sourceIsBlocked(source)) return false;
+        return !isGameOnDownDomain(gxme);
     });
+}
+
+// ---- per-domain reachability ------------------------------------------
+// The manual "Hide Source #X" toggle above is a single switch for an
+// entire label - fine for Source #1/#2 (one real host each), but Source #3
+// alone is a dozen-plus unrelated domains (vafor-lite's own games/, Apps
+// Script, and every domain calcsolver/duckmath games came from). Flipping
+// one checkbox can't express "just the games on this one dead host" - so
+// this discovers every distinct external host any game in the combined
+// catalog actually uses and checks each one individually, then hides only
+// the specific games on a host that's actually down. A host with no
+// entry yet (still checking, or nothing to check) counts as working.
+let domainStatus = {};
+const downHosts = new Set();
+
+// GitHub/GitLab Pages hosts send Access-Control-Allow-Origin: * (confirmed
+// for the ones actually in this catalog), so those get a real content
+// check like probeSourceUp() above. Everything else gets a no-cors probe
+// instead - fetch() can't read an opaque cross-origin response, but the
+// promise still rejects on a genuine network-level block (DNS/TCP
+// refusal, how most school filters actually work), so it still catches
+// the common case even without CORS.
+const DOMAIN_CORS_OK_HOSTS = { 'ubg1000.gitlab.io': 1, '23azostore.github.io': 1, 'v4for.gitlab.io': 1 };
+
+// The host a specific game actually loads from, or null for anything that
+// plays same-origin (Main's local folders, Source #1's own /Vafor_IT/...
+// wrapper) - those can't go down independent of the whole site.
+function gameHost(gxme) {
+    if (!isScraperGameEntry(gxme)) return null;
+    const src = gxme.file || gxme.embedUrl || gxme.gameUrl;
+    if (!src) return null;
+    try {
+        const host = new URL(src, location.href).hostname;
+        return host === location.hostname ? null : host;
+    } catch {
+        return null;
+    }
+}
+
+function isGameOnDownDomain(gxme) {
+    const host = gameHost(gxme);
+    return !!host && downHosts.has(host);
+}
+
+function pingDomainHost(url, corsOk) {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), SOURCE_PROBE_TIMEOUT_MS);
+    return fetch(url + (url.includes('?') ? '&' : '?') + '_=' + Date.now(),
+        { cache: 'no-store', mode: corsOk ? 'cors' : 'no-cors', signal: controller.signal })
+        .then(r => {
+            if (!corsOk) return true; // opaque response = the request reached the server at all
+            if (!r.ok) return false;
+            return r.text().then(body => !!body && body.trim().length > 0);
+        })
+        .catch(() => false)
+        .finally(() => window.clearTimeout(timer));
+}
+
+// Runs in the background, never awaited by the initial render - blocking
+// first paint on a dozen-plus network probes is exactly the "atrocious
+// load time" regression the old single-source probe caused (see git log).
+// Instead: render immediately assuming everything works, then quietly
+// remove just the specific games whose own host actually turns out down.
+function checkAllDomainsInBackground(allGames) {
+    const samples = {};
+    allGames.forEach(g => {
+        const host = gameHost(g);
+        if (host && !samples[host]) samples[host] = g.file || g.embedUrl || g.gameUrl;
+    });
+    const hosts = Object.keys(samples);
+    if (!hosts.length) return;
+
+    Promise.all(hosts.map(h => pingDomainHost(samples[h], !!DOMAIN_CORS_OK_HOSTS[h]))).then(results => {
+        hosts.forEach((h, i) => {
+            domainStatus[h] = results[i];
+            if (!results[i]) downHosts.add(h);
+        });
+        if (downHosts.size) removeGamesFromDownHosts();
+    });
+}
+
+// Sweeps every card already on the page (any tab, any grid - cards carry
+// data-gxme-name regardless of which section rendered them) and pulls the
+// specific ones whose game turned out to be on a now-confirmed-down host.
+// Mirrors removeScraperGames() on the player page: react to a live
+// failure rather than gate on a slow up-front check.
+function removeGamesFromDownHosts() {
+    document.querySelectorAll('.gxme-card[data-scraper-game="true"]').forEach(card => {
+        const gxme = gxmes.find(g => g.name === card.dataset.gxmeName);
+        if (gxme && isGameOnDownDomain(gxme)) card.remove();
+    });
+    renderSourceStatus();
 }
 
 // Response validation for catalog fetches. A blocked/filtered request (e.g.
@@ -249,12 +348,21 @@ async function fetchSourceCatalog() {
         // iframes (calcsolver.net, duckmath) all flattened into one list.
         // A failed source resolves as an empty list — filtered out of the
         // combined catalog and its tab never renders.
-        return {
+        const catalog = {
             [SOURCE_MAIN]: value(0, []),
             [SOURCE_ONE]: available(value(1, [])),
             [SOURCE_TWO]: available(value(2, [])),
             [SOURCE_THREE]: available(value(3, []))
         };
+
+        // Fire-and-forget: do NOT await this. Per-domain checks (see below)
+        // run in the background and resolve well after this function has
+        // already returned, so first render is never held up waiting on
+        // them - only the specific games on a host that turns out down get
+        // pulled from the page once the checks actually finish.
+        checkAllDomainsInBackground([...catalog[SOURCE_MAIN], ...catalog[SOURCE_ONE], ...catalog[SOURCE_TWO], ...catalog[SOURCE_THREE]]);
+
+        return catalog;
     })();
     return catalogPromise;
 }
@@ -308,6 +416,22 @@ function setSourceStatus(source, up) {
 function renderSourceStatus() {
     const health = getCatalogHealth();
     [SOURCE_ONE, SOURCE_TWO].forEach(source => setSourceStatus(source, health[source]));
+    renderSource3Status();
+}
+
+// Source #3's status line reports the actual per-domain check results
+// (checkAllDomainsInBackground/downHosts) instead of a single up/down
+// verdict - "3 games are unavailable (host down)" tells you something
+// real about a source with a dozen-plus unrelated hosts, where "Source #3
+// is unavailable" would not (most of it is still fine).
+function renderSource3Status() {
+    const line = document.getElementById('source-status-source-3');
+    if (!line) return;
+    if (!downHosts.size) { line.textContent = ''; return; }
+    const affected = gxmes.filter(isGameOnDownDomain).length;
+    const hostWord = downHosts.size === 1 ? 'host' : 'hosts';
+    const gameWord = affected === 1 ? 'game is' : 'games are';
+    line.textContent = `${affected} ${gameWord} currently unavailable (${downHosts.size} ${hostWord} unreachable).`;
 }
 
 async function fetchgxmes() {
@@ -394,27 +518,40 @@ function renderGamesGrid(container, gxmesList, opts = {}) {
     const favoritesOf = typeof opts.favorites === 'function' ? opts.favorites : () => opts.favorites || [];
     // opts.badgeHTML (TOP/NEW) is rendered inside each card, top-left corner.
     const cardHTML = gxme => makeCardHTML(gxme, favoritesOf(), opts.badgeHTML);
+    // Re-checked here (not just once, by the filterAvailableGames() call a
+    // caller made before handing us this list), because checkAllDomainsInBackground()
+    // runs in the background and can discover a host is down well after
+    // that list was built - including while a chunk further down in a big
+    // grid hasn't scrolled into view yet. Filtering again right before each
+    // chunk actually gets built keeps a card for that game from ever
+    // reaching the DOM in the first place, rather than relying only on
+    // removeGamesFromDownHosts() to sweep it back out afterward.
+    const isAvailable = gxme => !isGameOnDownDomain(gxme);
 
     if (gxmesList.length <= GRID_CHUNK_SIZE) {
+        gxmesList = gxmesList.filter(isAvailable);
         container.innerHTML = gxmesList.map(cardHTML).join('');
     } else {
         // Chunked path. A single sentinel div rides at the end of the grid;
         // when it scrolls within 600px of the viewport the next chunk is
         // appended and handlers are attached to just the new cards.
-        container.innerHTML = gxmesList.slice(0, GRID_CHUNK_SIZE).map(cardHTML).join('')
-            + '<div class="grid-sentinel"></div>';
+        const firstChunk = gxmesList.slice(0, GRID_CHUNK_SIZE).filter(isAvailable);
+        container.innerHTML = firstChunk.map(cardHTML).join('') + '<div class="grid-sentinel"></div>';
         const sentinel = container.querySelector('.grid-sentinel');
         let rendered = GRID_CHUNK_SIZE;
 
         const appendChunk = () => {
-            const chunk = gxmesList.slice(rendered, rendered + GRID_CHUNK_SIZE);
-            if (!chunk.length) return;
-            const frag = document.createElement('template');
-            frag.innerHTML = chunk.map(cardHTML).join('');
-            const newCards = Array.from(frag.content.querySelectorAll('.gxme-card'));
-            sentinel.before(frag.content);
-            newCards.forEach((card, i) => attachOneCard(card, chunk[i], opts));
-            rendered += chunk.length;
+            const rawChunk = gxmesList.slice(rendered, rendered + GRID_CHUNK_SIZE);
+            if (!rawChunk.length) return;
+            rendered += rawChunk.length;
+            const chunk = rawChunk.filter(isAvailable);
+            if (chunk.length) {
+                const frag = document.createElement('template');
+                frag.innerHTML = chunk.map(cardHTML).join('');
+                const newCards = Array.from(frag.content.querySelectorAll('.gxme-card'));
+                sentinel.before(frag.content);
+                newCards.forEach((card, i) => attachOneCard(card, chunk[i], opts));
+            }
             if (rendered >= gxmesList.length) {
                 observer.disconnect();
                 sentinel.remove();
@@ -425,6 +562,11 @@ function renderGamesGrid(container, gxmesList, opts = {}) {
             if (entries.some(e => e.isIntersecting)) appendChunk();
         }, { rootMargin: '600px' });
         observer.observe(sentinel);
+
+        // Only the first chunk is actually in the DOM at this point (later
+        // chunks attach their own handlers above, inside appendChunk) - the
+        // zip below needs to line up with that, not the full source list.
+        gxmesList = firstChunk;
     }
 
     const cards = Array.from(container.querySelectorAll('.gxme-card'));
