@@ -43,12 +43,15 @@ function isScraperGameEntry(item) {
     return isEzClassworkGameEntry(item);
 }
 
-function getGameSource(item) {
-    // Source #1 (genizymath zones feed) plays through its wrapper file —
-    // self-hosted first, genizymath mirror fallback. Source #2 (EZClasswork)
-    // plays through its Apps Script embed, which serves text/html with no
-    // X-Frame-Options so it renders in an iframe.
-    if (isEzClassworkGameEntry(item)) return item.file || item.embedUrl || item.gameUrl;
+// The actual embeddable URL for ANY catalog entry, Main or scraper alike.
+// Source #1 (genizymath zones feed) plays through its wrapper file -
+// self-hosted first, genizymath mirror fallback. Source #2/#3 play through
+// their Apps Script embed / stored URL. Normalized scraper entries always
+// carry a `linksrc` too, but it's just the internal /gxmes/ezclasswork/
+// page path (for site routing), not a playable asset - so scraper entries
+// must be checked first, same as the original getGameSource() did.
+function candidateUrl(item) {
+    if (isScraperGameEntry(item)) return item.file || item.embedUrl || item.gameUrl;
     return item.linksrc;
 }
 
@@ -70,8 +73,8 @@ function hasRealImage(item) {
 // never by an automatic reachability probe. Probing (or lazily flagging) one
 // game and using the result to hide an entire source is fragile: one broken
 // file used to wrongly hide every other, perfectly working game from that
-// source. A specific broken game is instead removed from just the page it's
-// on, by removeScraperGames() below, when its own iframe turns out blank.
+// source. A specific broken copy of a game is instead just skipped in favor
+// of another catalogued copy, via playCandidate() below.
 function sourceIsBlocked(source) {
     return readSourceState(SOURCE_DISABLED_KEY, {})[source] === true;
 }
@@ -114,22 +117,16 @@ function hideGameStatus(status) {
     if (status) status.remove();
 }
 
-function removeScraperGames() {
-    // Only removes this specific broken game from the current page — it does
-    // not touch any global "Source #1 is blocked" state, so one dead file on
-    // jsdelivr can no longer take every other Source #1 game down with it.
-    const gamesToRemove = new Set();
-
-    document.querySelectorAll('[data-scraper-game="true"]').forEach(element => {
-        const game = element.closest('.game-frame-wrap, .game-card, .gxme-card, .search-game-card') || element;
-        gamesToRemove.add(game);
-    });
-
-    gamesToRemove.forEach(game => game.remove());
+// Terminal state: every known copy of this game (across all four
+// catalogs) either failed its check or failed live in the iframe. Shown
+// only after playCandidate() has actually run out of candidates to try.
+function showGameUnavailable(name) {
+    document.getElementById('game-iframe')?.closest('.game-frame-wrap')?.remove();
     document.querySelector('.fullscreen-strip')?.remove();
-
+    const status = document.getElementById('game-status');
+    if (status) status.textContent = `${name} is currently unavailable.`;
     const title = document.getElementById('gameTitle');
-    if (title) title.textContent = 'This game is unavailable.';
+    if (title) title.textContent = `${name} is currently unavailable.`;
 }
 
 async function validateCdnGame(src) {
@@ -146,6 +143,135 @@ async function validateCdnGame(src) {
         // A CORS/network read failure is inconclusive; the iframe may still load.
         return null;
     }
+}
+
+// ---- multi-source fallback ---------------------------------------------
+// A game can have real, independently-hosted copies scattered across every
+// catalog (Main, Source #1/#2/#3) - historically the site just picked
+// whichever copy had the highest-priority source label and stuck with it
+// even if that exact copy had gone dead, silently hiding perfectly good
+// duplicates elsewhere in the catalog (Gun Spin: Main and Source #1 both
+// still pointed at a dead copy while Source #3 quietly had a working one).
+// Instead: find every copy of the requested game, check them, and actually
+// play whichever one works right now - caching the answer so most plays
+// skip straight to a known-good copy instead of re-checking every time.
+
+const GAME_SOURCE_CACHE_KEY = 'gameSourceCache';
+const GAME_SOURCE_CACHE_MS = 3 * 24 * 60 * 60 * 1000; // 3 days
+
+function nameKey(name) {
+    return String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
+function readGameSourceCache() {
+    try { return JSON.parse(localStorage.getItem(GAME_SOURCE_CACHE_KEY)) || {}; } catch { return {}; }
+}
+
+function writeGameSourceCache(key, url) {
+    try {
+        const cache = readGameSourceCache();
+        cache[key] = { url, checkedAt: Date.now() };
+        localStorage.setItem(GAME_SOURCE_CACHE_KEY, JSON.stringify(cache));
+    } catch {}
+}
+
+// Every entry across all four catalogs that shares this game's normalized
+// name, in default priority order (Main > Source #1 > Source #2 >
+// Source #3), deduped by URL - the same physical copy can legitimately be
+// catalogued more than once (e.g. Source #3 mirrors games that also exist
+// in Main).
+async function findCandidates(name) {
+    const key = nameKey(name);
+    const [main, s1, ez, s3] = await Promise.all([
+        settleJson('../../json/list.json'),
+        settleJson('../../json/source1.json'),
+        settleJson('../../json/ezclasswork.json'),
+        settleJson('../../json/source3.json')
+    ]);
+    const tagged = [
+        ...main,
+        ...s1.filter(isAvailableSourceTwoGame).map(normalizeEzClassworkGame),
+        ...ez.filter(isAvailableSourceTwoGame).map(normalizeEzClassworkGame),
+        ...s3.filter(isAvailableSourceTwoGame).map(normalizeEzClassworkGame)
+    ];
+    const seenUrls = new Set();
+    const candidates = [];
+    tagged.forEach(entry => {
+        if (nameKey(entry.name) !== key) return;
+        const url = candidateUrl(entry);
+        if (!url || seenUrls.has(url)) return;
+        seenUrls.add(url);
+        candidates.push({ entry, url });
+    });
+    return candidates;
+}
+
+// Cheap parallel pre-check (one HTTP fetch each, run together - N copies
+// costs roughly one check's worth of time, not N) to weed out anything
+// confirmed broken before ever touching the iframe. null (CORS-blocked
+// read) and true both count as viable, same lenient rule validateCdnGame
+// has always used - only an explicit false is disqualifying. If literally
+// everything comes back false, still hand back the original list rather
+// than giving up outright: the fetch-based check can have its own false
+// negatives that the real iframe won't share.
+async function viableCandidates(candidates) {
+    if (candidates.length <= 1) return candidates;
+    const results = await Promise.all(candidates.map(c => validateCdnGame(c.url)));
+    const viable = candidates.filter((c, i) => results[i] !== false);
+    return viable.length ? viable : candidates;
+}
+
+// Actually loads candidateList[i] into the iframe and applies its page
+// metadata once it proves out live (the real, final check - a pre-check
+// pass is a fast filter, not a guarantee). On a load timeout or an error
+// event, moves on to candidateList[i + 1] automatically; only shows the
+// "unavailable" state once every pre-vetted candidate has also failed
+// live. Whichever candidate actually succeeds gets cached so the next
+// visit skips straight to it.
+function playCandidate(candidateList, i, key, requestedName, meta) {
+    if (i >= candidateList.length) {
+        showGameUnavailable(requestedName);
+        return;
+    }
+
+    const { entry: item, url: src } = candidateList[i];
+    const iframe = document.getElementById('game-iframe');
+    const status = document.getElementById('game-status');
+    const isScraperGame = isScraperGameEntry(item) && Boolean(item.foldername);
+
+    iframe.removeAttribute('src');
+    if (isScraperGame) {
+        iframe.dataset.scraperGame = 'true';
+        iframe.closest('.game-frame-wrap')?.setAttribute('data-scraper-game', 'true');
+    } else {
+        delete iframe.dataset.scraperGame;
+        iframe.closest('.game-frame-wrap')?.removeAttribute('data-scraper-game');
+    }
+
+    let settled = false;
+    const timeout = window.setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        playCandidate(candidateList, i + 1, key, requestedName, meta);
+    }, 10000);
+
+    iframe.addEventListener('load', function onLoad() {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        hideGameStatus(status);
+        writeGameSourceCache(key, src);
+        meta(item, src);
+    }, { once: true });
+
+    iframe.addEventListener('error', function onError() {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        playCandidate(candidateList, i + 1, key, requestedName, meta);
+    }, { once: true });
+
+    iframe.src = src;
 }
 
 async function fetchData(index) {
@@ -176,113 +302,114 @@ async function fetchData(index) {
         if (!item) throw new Error('Game not found');
         const name1 = item.name;
         const imgsrc = item.imgsrc;
-        const src = getGameSource(item);
 
         console.log("name", name1);
-        console.log("src", src);
         var allowedsites = ["maxwellstevenson.com", "phexus.netlify.app", "ph4xus.github.io", "phexus.bitbucket.io"];
 
         let windoworigin = window.location.host;
         var SiteText = "maxwellstevenson.com";
-        
+
         if (allowedsites.includes(windoworigin)) {
             SiteText = window.location.host
             console.log(SiteText)
         }
-        const iframe = document.getElementById('game-iframe');
         const status = document.getElementById('game-status');
-        const isScraperGame = isScraperGameEntry(item) && Boolean(item.foldername);
-        const source = item.source || (isScraperGame ? SOURCE_ONE : 'Main');
-        iframe.removeAttribute('src');
 
-        if (sourceIsBlocked(source)) {
-            iframe.closest('.game-frame-wrap')?.remove();
-            document.querySelector('.fullscreen-strip')?.remove();
-            if (status) status.textContent = `${source} is unavailable.`;
-            document.getElementById('gameTitle').textContent = `${source} is unavailable.`;
-            return;
-        }
-
-        if (isScraperGame) {
-            iframe.dataset.scraperGame = 'true';
-            iframe.closest('.game-frame-wrap')?.setAttribute('data-scraper-game', 'true');
-            let iframeLoaded = false;
-            let validationComplete = false;
-            let validationValid = false;
-            const validationTimeout = window.setTimeout(() => {
-                if (!iframeLoaded) removeScraperGames();
-            }, 10000);
-
-            iframe.addEventListener('load', () => {
-                iframeLoaded = true;
-                window.clearTimeout(validationTimeout);
-                hideGameStatus(status);
-                if (validationComplete && validationValid === false) removeScraperGames();
-            }, { once: true });
-            iframe.addEventListener('error', removeScraperGames, { once: true });
-            validateCdnGame(src).then(isValid => {
-                validationComplete = true;
-                validationValid = isValid;
-                if (isValid === false) removeScraperGames();
-                else if (isValid === true) hideGameStatus(status);
-            });
-        } else {
-            hideGameStatus(status);
-        }
-
-        iframe.src = src;
-        const image = document.getElementById('bottomimage');
-        image.src = imgsrc; 
-        document.getElementById('gameTitle').textContent = 'Play ' + name1 + ' on ' + SiteText;
-        const keywords = 'game, gxmes, ' + name1 + ' unblocked, ' + name1 + ' ' + SiteText + ', Vafor, Vafor IT, ' + name1 + ', ' + name1 + ' school, github gxmes, github ' + name1;
-        var meta = document.querySelector('meta[name="description"]');
-        if (!meta) {
-            meta = document.createElement('meta');
-            meta.name = 'description';
-            document.getElementsByTagName('head')[0].appendChild(meta);
-        }
-        meta.content = 'Play ' + name1 + ' on maxwellstevenson.com';
-
-        const savedTabName = localStorage.getItem('tabName');
-        const savedTabImage = localStorage.getItem('tabImage');
-
-        if (savedTabName && savedTabImage) {
-            document.title = savedTabName;
-
-            const savedFavicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
-            savedFavicon.type = 'image/x-icon';
-            savedFavicon.rel = 'shortcut icon';
-            savedFavicon.href = savedTabImage;
-            document.head.appendChild(savedFavicon);
-        } else {
-            document.title = 'Play ' + name1 + ' on maxwellstevenson.com';
-            const imgSrc = imgsrc; document.head.appendChild(Object.assign(document.createElement('link'), { rel: 'icon', href: imgSrc, id: 'faviconLink' }));
-        }
-    
-        const keywordsArray = keywords.split(', ');
-
-        const keywordsDiv = document.querySelector('.keywords');
-
-        keywordsDiv.innerHTML = '<h3>Keywords:</h3>';
-
-        keywordsArray.forEach(keyword => {
-            const span = document.createElement('span');
-            span.textContent = keyword;
-            keywordsDiv.appendChild(span);
-        });
         if (localStorage.getItem('leaveConf') == 'true') {
             window.addEventListener('beforeunload', function(e) {
                 e.preventDefault();
-                e.returnValue = ''; 
+                e.returnValue = '';
             });
             } else {
             window.removeEventListener('beforeunload', function(e) {
                 e.preventDefault();
-                e.returnValue = ''; 
+                e.returnValue = '';
             });
         }
 
-        document.getElementById('game-iframe').focus();
+        // Metadata (title/tab/keywords/favicon) is about the GAME the user
+        // asked for, so it always reflects the originally requested item -
+        // only the iframe src changes as candidate sources are tried.
+        function applyGameMeta(_winningItem, src) {
+            console.log("src", src);
+            const image = document.getElementById('bottomimage');
+            image.src = imgsrc;
+            document.getElementById('gameTitle').textContent = 'Play ' + name1 + ' on ' + SiteText;
+            const keywords = 'game, gxmes, ' + name1 + ' unblocked, ' + name1 + ' ' + SiteText + ', Vafor, Vafor IT, ' + name1 + ', ' + name1 + ' school, github gxmes, github ' + name1;
+            var meta = document.querySelector('meta[name="description"]');
+            if (!meta) {
+                meta = document.createElement('meta');
+                meta.name = 'description';
+                document.getElementsByTagName('head')[0].appendChild(meta);
+            }
+            meta.content = 'Play ' + name1 + ' on maxwellstevenson.com';
+
+            const savedTabName = localStorage.getItem('tabName');
+            const savedTabImage = localStorage.getItem('tabImage');
+
+            if (savedTabName && savedTabImage) {
+                document.title = savedTabName;
+
+                const savedFavicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
+                savedFavicon.type = 'image/x-icon';
+                savedFavicon.rel = 'shortcut icon';
+                savedFavicon.href = savedTabImage;
+                document.head.appendChild(savedFavicon);
+            } else {
+                document.title = 'Play ' + name1 + ' on maxwellstevenson.com';
+                document.head.appendChild(Object.assign(document.createElement('link'), { rel: 'icon', href: imgsrc, id: 'faviconLink' }));
+            }
+
+            const keywordsArray = keywords.split(', ');
+            const keywordsDiv = document.querySelector('.keywords');
+            keywordsDiv.innerHTML = '<h3>Keywords:</h3>';
+            keywordsArray.forEach(keyword => {
+                const span = document.createElement('span');
+                span.textContent = keyword;
+                keywordsDiv.appendChild(span);
+            });
+
+            document.getElementById('game-iframe').focus();
+        }
+
+        // Every catalogued copy of this game, across all four catalogs, in
+        // priority order - a temporarily-blocked or dead copy of one source
+        // no longer hides a perfectly playable copy from another.
+        let candidates = await findCandidates(name1);
+        if (!candidates.length) {
+            // Name-matching found nothing (shouldn't normally happen since
+            // the requested item itself should match its own name) - fall
+            // back to just the originally resolved item.
+            candidates = [{ entry: item, url: candidateUrl(item) }];
+        }
+
+        function candidateSource(entry) {
+            return entry.source || (isScraperGameEntry(entry) && entry.foldername ? SOURCE_ONE : 'Main');
+        }
+        const unblocked = candidates.filter(c => !sourceIsBlocked(candidateSource(c.entry)));
+        if (!unblocked.length) {
+            document.getElementById('game-iframe').closest('.game-frame-wrap')?.remove();
+            document.querySelector('.fullscreen-strip')?.remove();
+            const blockedSource = candidateSource(candidates[0].entry);
+            if (status) status.textContent = `${blockedSource} is unavailable.`;
+            document.getElementById('gameTitle').textContent = `${blockedSource} is unavailable.`;
+            return;
+        }
+
+        // If a prior visit already found a working copy of this game, try
+        // that one first instead of re-checking everything from scratch.
+        const key = nameKey(name1);
+        const cached = readGameSourceCache()[key];
+        let ordered = unblocked;
+        if (cached && Date.now() - cached.checkedAt < GAME_SOURCE_CACHE_MS) {
+            const cachedIndex = unblocked.findIndex(c => c.url === cached.url);
+            if (cachedIndex > 0) {
+                ordered = [unblocked[cachedIndex], ...unblocked.slice(0, cachedIndex), ...unblocked.slice(cachedIndex + 1)];
+            }
+        }
+
+        const viable = await viableCandidates(ordered);
+        playCandidate(viable, 0, key, name1, applyGameMeta);
     } catch (error) {
         console.error('Fetch error:', error);
     }
