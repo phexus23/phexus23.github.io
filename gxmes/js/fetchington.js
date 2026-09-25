@@ -175,6 +175,104 @@ function writeGameSourceCache(key, url) {
     } catch {}
 }
 
+// ---- per-host reachability (cached across every play, every game) -------
+// viableCandidates() below already validates each individual candidate URL
+// with its own fetch - precise, but uncached, so replaying this or another
+// game sharing a host re-probes that host from scratch every time. This is
+// a cheaper, cached layer on top: one ping per distinct HOST among a game's
+// candidates, reused for 5 minutes (sessionStorage) so a host already known
+// dead is skipped instantly rather than sat out for the full per-candidate
+// timeout in playCandidate() below - the exact optimization vafor-lite's
+// own player got first (see its /play/'s boot()), ported here to match.
+const DOMAIN_CACHE_KEY = 'gxmes:domains';
+const DOMAIN_CACHE_MS = 5 * 60 * 1000;
+const DOMAIN_CORS_OK_HOSTS = { 'ubg1000.gitlab.io': 1, '23azostore.github.io': 1, 'v4for.gitlab.io': 1 };
+
+function hostOfUrl(url) {
+    try { return new URL(url, location.href).hostname; } catch { return null; }
+}
+
+// Filtering (skipping a candidate) is fully automatic with no visible way
+// for a visitor to override a wrong read, so a single transient blip wrongly
+// reading as "down" costs more than it used to - one retry, on failure only.
+function pingCandidateHost(url, corsOk, allowRedirect) {
+    return pingCandidateHostOnce(url, corsOk, allowRedirect).then(ok => ok ? ok : pingCandidateHostOnce(url, corsOk, allowRedirect));
+}
+
+// allowRedirect: Apps Script's /exec endpoint legitimately redirects to
+// script.googleusercontent.com as part of normal operation. Every other
+// sampled URL here is a direct game page with no business redirecting
+// anywhere, so an unexpected redirect to a DIFFERENT host is itself the
+// signal a filter can answer not with a 200 on the same requested URL, but
+// a transparent redirect to its own, completely different block-page
+// domain (confirmed against the user's own school network) - content
+// inspection of the requested URL alone would never see that. Only
+// checkable for CORS-readable hosts: the equivalent trick for an opaque
+// no-cors response (redirect:'manual') throws outright from a normal page
+// (verified against a real browser) - a no-cors host silently redirected
+// to a block page is still caught downstream once the candidate is
+// actually tried live and fails to load, just not by this upfront check.
+function pingCandidateHostOnce(url, corsOk, allowRedirect) {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 6000);
+    const bustUrl = url + (url.includes('?') ? '&' : '?') + '_=' + Date.now();
+
+    if (!corsOk) {
+        return fetch(bustUrl, { cache: 'no-store', mode: 'no-cors', signal: controller.signal })
+            .then(() => true)
+            .catch(() => false)
+            .finally(() => window.clearTimeout(timer));
+    }
+
+    return fetch(bustUrl, { cache: 'no-store', mode: 'cors', signal: controller.signal })
+        .then(r => {
+            if (!r.ok) return false;
+            if (!allowRedirect && r.redirected) {
+                let finalHost = null, requestHost = null;
+                try { finalHost = new URL(r.url).hostname; requestHost = new URL(url).hostname; } catch {}
+                if (finalHost && requestHost && finalHost !== requestHost) return false;
+            }
+            return r.text().then(body => !!body && body.trim().length > 0);
+        })
+        .catch(() => false)
+        .finally(() => window.clearTimeout(timer));
+}
+
+// Only pings hosts this specific game's candidates actually use - cheap
+// even on a cache miss - and reuses a fresh cache instantly regardless of
+// which candidates prompted it (a game played moments ago, or another game
+// sharing a host, already populated it).
+function checkCandidateDomains(candidates, force) {
+    if (!force) {
+        try {
+            const c = JSON.parse(sessionStorage.getItem(DOMAIN_CACHE_KEY) || 'null');
+            if (c && (Date.now() - c.t) < DOMAIN_CACHE_MS) return Promise.resolve(c.status);
+        } catch {}
+    }
+    const samples = {};
+    candidates.forEach(({ url }) => {
+        const host = hostOfUrl(url);
+        if (host && host !== location.hostname && !samples[host]) samples[host] = url;
+    });
+    const hosts = Object.keys(samples);
+    if (!hosts.length) return Promise.resolve({});
+    return Promise.all(hosts.map(h => pingCandidateHost(samples[h], !!DOMAIN_CORS_OK_HOSTS[h], h === 'script.google.com')))
+        .then(results => {
+            const status = {};
+            hosts.forEach((h, i) => { status[h] = results[i]; });
+            try { sessionStorage.setItem(DOMAIN_CACHE_KEY, JSON.stringify({ status, t: Date.now() })); } catch {}
+            return status;
+        });
+}
+
+// A same-origin candidate (Main's own /gxmes/<foldername>/ page) can't be
+// "down" independent of the whole site, and was never sampled above either.
+function candidateHostWorks(url, status) {
+    const host = hostOfUrl(url);
+    if (!host || host === location.hostname) return true;
+    return status[host] !== false;
+}
+
 // Every entry across all four catalogs that shares this game's normalized
 // name, in default priority order (Main > Source #1 > Source #2 >
 // Source #3), deduped by URL - the same physical copy can legitimately be
@@ -223,12 +321,13 @@ async function viableCandidates(candidates) {
 
 // Actually loads candidateList[i] into the iframe and applies its page
 // metadata once it proves out live (the real, final check - a pre-check
-// pass is a fast filter, not a guarantee). On a load timeout or an error
-// event, moves on to candidateList[i + 1] automatically; only shows the
-// "unavailable" state once every pre-vetted candidate has also failed
-// live. Whichever candidate actually succeeds gets cached so the next
-// visit skips straight to it.
-function playCandidate(candidateList, i, key, requestedName, meta) {
+// pass is a fast filter, not a guarantee). Any of: a confirmed-dead host
+// (domainCheck, racing this attempt - see checkCandidateDomains above), a
+// load timeout, or an iframe error event moves on to candidateList[i + 1]
+// automatically; only shows the "unavailable" state once every pre-vetted
+// candidate has also failed live. Whichever candidate actually succeeds
+// gets cached so the next visit skips straight to it.
+function playCandidate(candidateList, i, key, requestedName, meta, domainCheck) {
     if (i >= candidateList.length) {
         showGameUnavailable(requestedName);
         return;
@@ -249,11 +348,17 @@ function playCandidate(candidateList, i, key, requestedName, meta) {
     }
 
     let settled = false;
-    const timeout = window.setTimeout(() => {
+    function advance() {
         if (settled) return;
         settled = true;
-        playCandidate(candidateList, i + 1, key, requestedName, meta);
-    }, 10000);
+        playCandidate(candidateList, i + 1, key, requestedName, meta, domainCheck);
+    }
+
+    domainCheck.then(hostStatus => {
+        if (!settled && !candidateHostWorks(src, hostStatus)) advance();
+    });
+
+    const timeout = window.setTimeout(advance, 10000);
 
     iframe.addEventListener('load', function onLoad() {
         if (settled) return;
@@ -268,7 +373,7 @@ function playCandidate(candidateList, i, key, requestedName, meta) {
         if (settled) return;
         settled = true;
         window.clearTimeout(timeout);
-        playCandidate(candidateList, i + 1, key, requestedName, meta);
+        advance();
     }, { once: true });
 
     iframe.src = src;
@@ -396,6 +501,13 @@ async function fetchData(index) {
             return;
         }
 
+        // Kicked off as early as possible (and reused verbatim from a fresh
+        // session cache when one already exists), running in parallel with
+        // the per-URL pre-check below so it's as likely as possible to have
+        // already resolved by the time playCandidate() races it against the
+        // first live attempt.
+        const domainCheck = checkCandidateDomains(unblocked);
+
         // If a prior visit already found a working copy of this game, try
         // that one first instead of re-checking everything from scratch.
         const key = nameKey(name1);
@@ -409,7 +521,7 @@ async function fetchData(index) {
         }
 
         const viable = await viableCandidates(ordered);
-        playCandidate(viable, 0, key, name1, applyGameMeta);
+        playCandidate(viable, 0, key, name1, applyGameMeta, domainCheck);
     } catch (error) {
         console.error('Fetch error:', error);
     }

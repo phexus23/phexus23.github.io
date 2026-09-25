@@ -150,9 +150,9 @@ function probeSourceTabs(catalog) {
 
 fetchSourceCatalog().then(catalog => {
     // The module-level gxmes feeds name-keyed features like the Favorites
-    // listing, so it must be the deduped combined catalog — otherwise a game
+    // listing, so it must be the grouped combined catalog — otherwise a game
     // that exists in more than one source shows up multiple times there.
-    gxmes = filterAvailableGames(preferMainSource([
+    gxmes = filterAvailableGames(groupGxmes([
         ...catalog[SOURCE_MAIN],
         ...catalog[SOURCE_ONE],
         ...catalog[SOURCE_TWO],

@@ -17,6 +17,127 @@ function hasRealImage(gxme) {
     return !(gxme.imgsrc || '').startsWith('data:image/svg+xml');
 }
 
+// ---- Source #3 cover-art fallback ------------------------------------
+// Main/Source #1/#2 images are root-relative (`/assets/img/...`), served
+// same-origin from this site - not at risk here. Source #3 (the vafor-lite
+// import) is the one catalog whose imgsrc is an absolute cdn.jsdelivr.net
+// URL, same architecture as vafor-lite's own site - so it gets the same
+// two-tier fallback (jsDelivr -> raw.githubusercontent.com -> the existing
+// generated gradient+initials placeholder above) and the same defenses
+// against a filter that answers 200 with tampered content instead of
+// refusing the connection outright.
+const IMG_JSDELIVR_PREFIX = 'https://cdn.jsdelivr.net/gh/phexus23/phexus23.github.io@main/';
+const IMG_RAW_PREFIX = 'https://raw.githubusercontent.com/phexus23/phexus23.github.io/main/';
+let imgTier0Blocked = false, imgTier1Blocked = false;
+
+function imgFallback(img) {
+    const tier = +img.getAttribute('data-tier');
+    if (tier === 0 && !imgTier1Blocked) {
+        img.setAttribute('data-tier', '1');
+        img.src = IMG_RAW_PREFIX + img.getAttribute('data-img');
+    } else {
+        img.src = ezClassworkPlaceholderImage(img.alt || 'Game');
+    }
+}
+
+// A blocked host sometimes answers image requests with 200 + a tiny generic
+// placeholder square instead of refusing the connection - that never fires
+// onerror, it "succeeds" with useless pixels. Once a real image decodes,
+// check its size and run it through the same fallback chain if it's
+// suspiciously small. Real cover art here runs well into three figures; a
+// placeholder observed in the wild (a different school's filter, reported
+// against vafor-lite, same jsDelivr repo this site's images live in too)
+// was 79x79 - comfortably under any legitimate cover.
+const MIN_IMG_DIM = 120;
+function imgLoadCheck(img) {
+    if (img.naturalWidth > 0 && img.naturalWidth < MIN_IMG_DIM && img.naturalHeight < MIN_IMG_DIM) {
+        imgFallback(img);
+    }
+}
+
+function imgTagHTML(gxme) {
+    const src = gxme.imgsrc || '';
+    if (!src.startsWith(IMG_JSDELIVR_PREFIX)) {
+        return `<img loading="lazy" src="${src}" alt="${gxme.name}">`;
+    }
+    if (imgTier1Blocked) {
+        // Both known-good tiers already proved compromised this session -
+        // don't even try, straight to the generated placeholder.
+        return `<img loading="lazy" src="${ezClassworkPlaceholderImage(gxme.name)}" alt="${gxme.name}">`;
+    }
+    const rel = src.slice(IMG_JSDELIVR_PREFIX.length);
+    const tier = imgTier0Blocked ? 1 : 0;
+    const useSrc = tier === 1 ? IMG_RAW_PREFIX + rel : src;
+    return `<img loading="lazy" data-tier="${tier}" data-img="${rel}" src="${useSrc}" alt="${gxme.name}" onerror="imgFallback(this)" onload="imgLoadCheck(this)">`;
+}
+
+// ---- image-CDN duplicate-swap canary ---------------------------------
+// A subtler version of the trick imgLoadCheck() above guards against:
+// instead of blocking image requests outright, a filter can let every
+// request "succeed" while silently substituting one generic placeholder
+// graphic for all of them. Different games never legitimately share cover
+// art, so: fetch two different, unrelated Source #3 games' covers from a
+// given tier and compare the actual bytes. Identical bytes means that tier
+// is being swapped - skip it for the rest of the session. Already-rendered
+// cards on the compromised tier get fixed up in place; new cards render
+// past it.
+const IMG_HEALTH_CACHE_MS = 5 * 60 * 1000;
+
+function bufEqual(a, b) {
+    if (a.byteLength !== b.byteLength) return false;
+    const ua = new Uint8Array(a), ub = new Uint8Array(b);
+    for (let i = 0; i < ua.length; i++) if (ua[i] !== ub[i]) return false;
+    return true;
+}
+
+function checkImgTier(source3Games, base, cacheKey, force) {
+    if (!force) {
+        try {
+            const c = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
+            if (c && (Date.now() - c.t) < IMG_HEALTH_CACHE_MS) return Promise.resolve(c.ok);
+        } catch {}
+    }
+    const pool = source3Games.filter(g => g.imgsrc && g.imgsrc.startsWith(IMG_JSDELIVR_PREFIX));
+    if (pool.length < 2) return Promise.resolve(true);
+    const a = pool[(Math.random() * pool.length) | 0];
+    let b;
+    do { b = pool[(Math.random() * pool.length) | 0]; } while (b === a);
+    const rel = g => g.imgsrc.slice(IMG_JSDELIVR_PREFIX.length);
+    const fetchOne = (g, bust) => fetch(base + rel(g) + '?_=' + bust, { cache: 'no-store' })
+        .then(r => r.ok ? r.arrayBuffer() : null)
+        .catch(() => null);
+    return Promise.all([fetchOne(a, Date.now()), fetchOne(b, Date.now() + 1)]).then(bufs => {
+        // Both probes failing outright (network error, or a CORS error
+        // because a substitute response rarely bothers replicating the
+        // real CDN's Access-Control-Allow-Origin header) is itself
+        // suspicious, not a clean bill of health - fail closed, same
+        // reasoning as vafor-lite's own version of this check.
+        const ok = !!(bufs[0] && bufs[1]) && !bufEqual(bufs[0], bufs[1]);
+        try { sessionStorage.setItem(cacheKey, JSON.stringify({ ok, t: Date.now() })); } catch {}
+        return ok;
+    });
+}
+
+function fixRenderedImgTier(tier) {
+    document.querySelectorAll(`img[data-tier="${tier}"]`).forEach(imgFallback);
+}
+
+// Call once with the loaded catalog. Checks jsDelivr first; only bothers
+// checking the raw.githubusercontent.com fallback tier if jsDelivr itself
+// turned out compromised (no point spending the extra round trip otherwise).
+function watchImgCdn(source3Games) {
+    checkImgTier(source3Games, IMG_JSDELIVR_PREFIX, 'gxmes:imgtier0').then(ok0 => {
+        if (ok0) return;
+        imgTier0Blocked = true;
+        fixRenderedImgTier(0);
+        checkImgTier(source3Games, IMG_RAW_PREFIX, 'gxmes:imgtier1').then(ok1 => {
+            if (ok1) return;
+            imgTier1Blocked = true;
+            fixRenderedImgTier(1);
+        });
+    });
+}
+
 function readSourceState(key, fallback) {
     try {
         return JSON.parse(localStorage.getItem(key)) || fallback;
@@ -136,23 +257,35 @@ function getSourcePriority(gxme) {
     const source = getGameSourceGroup(gxme);
     // Main (downloaded/self-hosted) wins over Source #1 (genizymath), which
     // wins over Source #2 (EZClasswork embeds), which wins over Source #3
-    // (the vafor-lite import — lowest priority, only shown when nothing
-    // better already covers that game name). The dedup in preferMainSource
-    // uses this to pick the best copy of a game that exists in more than one
-    // catalog.
+    // (the vafor-lite import — lowest priority). groupGxmes uses this to
+    // pick which copy of a game (that exists in more than one catalog)
+    // represents its card - the others still ride along as fallbacks.
     return source === 'Main' ? 0 : source === SOURCE_ONE ? 1 : source === SOURCE_TWO ? 2 : 3;
 }
 
-function preferMainSource(gxmes) {
-    const preferred = new Map();
+// Multiple catalog entries can legitimately describe the same game (the
+// same title scraped from several different sources) - that redundancy is
+// deliberate and never thrown away: if one source is blocked or down at a
+// given school, another copy of the exact same game keeps working. One
+// card still shows per game (using whichever source is fastest/most
+// reliable for its own display - same priority order getSourcePriority
+// already used), but every other copy rides along on `.more` as a fallback
+// candidate. The player (gxmes/js/fetchington.js) already tries every
+// catalogued copy of a requested game on its own; this keeps the hub's own
+// idea of "is this game currently available" in sync with that instead of
+// only ever looking at the one entry a plain dedup would have kept.
+function groupGxmes(gxmes) {
+    const groups = new Map();
     gxmes.forEach(gxme => {
         const key = String(gxme.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
-        const current = preferred.get(key);
-        if (!current || getSourcePriority(gxme) < getSourcePriority(current)) {
-            preferred.set(key, gxme);
-        }
+        if (!key) return;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(gxme);
     });
-    return [...preferred.values()];
+    return [...groups.values()].map(list => {
+        const sorted = [...list].sort((a, b) => getSourcePriority(a) - getSourcePriority(b));
+        return { ...sorted[0], more: sorted };
+    });
 }
 
 function normalizeScraperGame(gxme) {
@@ -171,12 +304,23 @@ function normalizeScraperGame(gxme) {
     };
 }
 
+function candidateAvailable(gxme) {
+    const source = getGameSourceGroup(gxme);
+    if (sourceIsBlocked(source)) return false;
+    return !isGameOnDownDomain(gxme);
+}
+
+// A grouped entry (see groupGxmes) only counts as unavailable once every
+// one of its redundant copies is blocked or down - a game shouldn't
+// disappear just because its fastest/primary source is, when another
+// catalogued copy of the same game would still work.
+function groupAvailable(gxme) {
+    const list = gxme.more && gxme.more.length ? gxme.more : [gxme];
+    return list.some(candidateAvailable);
+}
+
 function filterAvailableGames(gxmes) {
-    return gxmes.filter(gxme => {
-        const source = getGameSourceGroup(gxme);
-        if (sourceIsBlocked(source)) return false;
-        return !isGameOnDownDomain(gxme);
-    });
+    return gxmes.filter(groupAvailable);
 }
 
 // ---- per-domain reachability ------------------------------------------
@@ -221,14 +365,49 @@ function isGameOnDownDomain(gxme) {
     return !!host && downHosts.has(host);
 }
 
-function pingDomainHost(url, corsOk) {
+// Filtering silently removes cards with no visible way for a visitor to
+// override it, so a single transient blip (not an actual block) wrongly
+// reading as "down" costs more than it used to - one retry, on failure
+// only, catches most of those.
+function pingDomainHost(url, corsOk, allowRedirect) {
+    return pingDomainHostOnce(url, corsOk, allowRedirect).then(ok => ok ? ok : pingDomainHostOnce(url, corsOk, allowRedirect));
+}
+
+// allowRedirect: Apps Script's /exec endpoint legitimately redirects to
+// script.googleusercontent.com as part of normal operation - pass true for
+// that host specifically. Every other sample here is a direct game/page URL
+// that has no business redirecting anywhere, so an unexpected redirect to a
+// different host is itself the signal: a filter can answer not with a 200
+// on the same requested URL, but a transparent redirect to its own,
+// completely different block-page domain (confirmed against the user's own
+// school network) - content inspection of the requested URL alone would
+// never see that. Only checkable for CORS-readable hosts, though: reading
+// redirect info needs a readable response, and the equivalent trick for an
+// opaque no-cors response (redirect:'manual') throws outright from a normal
+// page - verified against a real browser, not just Node's fetch (which
+// doesn't enforce this restriction and would have given false confidence).
+// A no-cors host silently redirected to a block page is still caught
+// downstream once the game itself is actually tried live and fails to load.
+function pingDomainHostOnce(url, corsOk, allowRedirect) {
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), SOURCE_PROBE_TIMEOUT_MS);
-    return fetch(url + (url.includes('?') ? '&' : '?') + '_=' + Date.now(),
-        { cache: 'no-store', mode: corsOk ? 'cors' : 'no-cors', signal: controller.signal })
+    const bustUrl = url + (url.includes('?') ? '&' : '?') + '_=' + Date.now();
+
+    if (!corsOk) {
+        return fetch(bustUrl, { cache: 'no-store', mode: 'no-cors', signal: controller.signal })
+            .then(() => true) // opaque response = the request reached the server at all
+            .catch(() => false)
+            .finally(() => window.clearTimeout(timer));
+    }
+
+    return fetch(bustUrl, { cache: 'no-store', mode: 'cors', signal: controller.signal })
         .then(r => {
-            if (!corsOk) return true; // opaque response = the request reached the server at all
             if (!r.ok) return false;
+            if (!allowRedirect && r.redirected) {
+                let finalHost = null, requestHost = null;
+                try { finalHost = new URL(r.url).hostname; requestHost = new URL(url).hostname; } catch {}
+                if (finalHost && requestHost && finalHost !== requestHost) return false;
+            }
             return r.text().then(body => !!body && body.trim().length > 0);
         })
         .catch(() => false)
@@ -249,7 +428,7 @@ function checkAllDomainsInBackground(allGames) {
     const hosts = Object.keys(samples);
     if (!hosts.length) return;
 
-    Promise.all(hosts.map(h => pingDomainHost(samples[h], !!DOMAIN_CORS_OK_HOSTS[h]))).then(results => {
+    Promise.all(hosts.map(h => pingDomainHost(samples[h], !!DOMAIN_CORS_OK_HOSTS[h], h === 'script.google.com'))).then(results => {
         hosts.forEach((h, i) => {
             domainStatus[h] = results[i];
             if (!results[i]) downHosts.add(h);
@@ -266,7 +445,10 @@ function checkAllDomainsInBackground(allGames) {
 function removeGamesFromDownHosts() {
     document.querySelectorAll('.gxme-card[data-scraper-game="true"]').forEach(card => {
         const gxme = gxmes.find(g => g.name === card.dataset.gxmeName);
-        if (gxme && isGameOnDownDomain(gxme)) card.remove();
+        // groupAvailable, not the single-entry isGameOnDownDomain: this
+        // card's own primary copy can be on a down host while another
+        // catalogued copy of the same game still works, and should stay.
+        if (gxme && !groupAvailable(gxme)) card.remove();
     });
     renderSourceStatus();
 }
@@ -361,6 +543,7 @@ async function fetchSourceCatalog() {
         // them - only the specific games on a host that turns out down get
         // pulled from the page once the checks actually finish.
         checkAllDomainsInBackground([...catalog[SOURCE_MAIN], ...catalog[SOURCE_ONE], ...catalog[SOURCE_TWO], ...catalog[SOURCE_THREE]]);
+        watchImgCdn(catalog[SOURCE_THREE]); // cover-art duplicate-swap canary (jsDelivr -> raw -> placeholder)
 
         return catalog;
     })();
@@ -428,7 +611,12 @@ function renderSource3Status() {
     const line = document.getElementById('source-status-source-3');
     if (!line) return;
     if (!downHosts.size) { line.textContent = ''; return; }
-    const affected = gxmes.filter(isGameOnDownDomain).length;
+    // Games, not raw catalog entries: an entry sitting on a down host
+    // doesn't actually affect anything if another copy of that same game
+    // still works, so counting groupAvailable() false is what's actually
+    // true for the visitor, not how many rows happen to reference a dead
+    // host.
+    const affected = gxmes.filter(gxme => !groupAvailable(gxme)).length;
     const hostWord = downHosts.size === 1 ? 'host' : 'hosts';
     const gameWord = affected === 1 ? 'game is' : 'games are';
     line.textContent = `${affected} ${gameWord} currently unavailable (${downHosts.size} ${hostWord} unreachable).`;
@@ -442,12 +630,13 @@ async function fetchgxmes() {
     if (!catalogLoaded(catalogHealth, SOURCE_MAIN)) {
         throw new Error('Main game catalog failed to load.');
     }
-    // A downloaded/self-hosted game always wins over an embedded copy of
-    // the same name (e.g. "2048") — applied once here so every consumer
-    // (category tabs, All Games, search) sees the deduped catalog
-    // instead of the same game appearing twice. Sources that failed to
-    // load resolve as empty lists, so they simply don't contribute.
-    return filterAvailableGames(preferMainSource([
+    // A downloaded/self-hosted game shows as its own card over an embedded
+    // copy of the same name (e.g. "2048") — grouped once here so every
+    // consumer (category tabs, All Games, search) sees one card per game
+    // instead of the same game appearing twice, while every other copy
+    // stays attached as a fallback (see groupGxmes). Sources that failed
+    // to load resolve as empty lists, so they simply don't contribute.
+    return filterAvailableGames(groupGxmes([
         ...catalog[SOURCE_MAIN],
         ...catalog[SOURCE_ONE],
         ...catalog[SOURCE_TWO],
@@ -488,7 +677,7 @@ function makeCardHTML(gxme, favorites, badgeHTML = '') {
             <button class="favorite-btn ${isFavorite ? 'active' : ''}">
                 <i class="fas fa-star"></i>
             </button>
-            <img loading="lazy" src="${gxme.imgsrc}" alt="${gxme.name}">
+            ${imgTagHTML(gxme)}
             <h3>${gxme.name}</h3>
             <a href="${getGamePageUrl(gxme)}" class="play-link">Play Now</a>
         </div>
@@ -526,7 +715,7 @@ function renderGamesGrid(container, gxmesList, opts = {}) {
     // chunk actually gets built keeps a card for that game from ever
     // reaching the DOM in the first place, rather than relying only on
     // removeGamesFromDownHosts() to sweep it back out afterward.
-    const isAvailable = gxme => !isGameOnDownDomain(gxme);
+    const isAvailable = groupAvailable;
 
     if (gxmesList.length <= GRID_CHUNK_SIZE) {
         gxmesList = gxmesList.filter(isAvailable);
