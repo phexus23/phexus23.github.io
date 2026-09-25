@@ -1,0 +1,38 @@
+{
+    "$schema": "https://bridge.playgama.com/v2/stable/schema.json",
+    "advertisement": {
+        "interstitial": {
+            "preloadOnStart": true,
+            "placementFallback": "interstitial_warrior_factory"
+        },
+        "rewarded": {
+            "preloadOnStart": true,
+            "placementFallback": "rewarded_warrior_factory"
+        },
+        "useBuiltInErrorPopup": true,
+        "backfillId": ""
+    },
+    "payments": [],
+    "leaderboards": [],
+    "sendAnalyticsEvents": false,
+    "saas": {
+        "publicToken": "cmtbf8rv403nqmy0h441h5d8q"
+    },
+    "device": {
+        "supportedOrientations": [
+            "portrait",
+            "landscape"
+        ]
+    },
+    "platforms": {
+        "youtube": {
+            "name": "Warrior Factory",
+            "loadingSound": {
+                "url": "./playgama.mp3"
+            }
+        }
+    },
+    "forciblySetPlatformId": "youtube",
+    "disableLoadingLogo": false,
+    "showFullLoadingLogo": true
+}

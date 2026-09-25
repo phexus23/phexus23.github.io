@@ -1,0 +1,18 @@
+/* Constrain the regular banner container created by Playgama Bridge
+   (id="banner-container") to 320x50 (IAB mobile banner) on every viewport.
+   The platform's responsive picker chooses an IAB ad size that fits the
+   container's dimensions, so by capping the container at 320x50 we force
+   the small mobile banner everywhere. CrazyGames moderation explicitly
+   requested 320x50 across the board; viewport-based media queries don't
+   work reliably as a mobile/desktop distinction because phones in
+   landscape often exceed common breakpoints.
+   !important is used because Playgama Bridge sets sizes inline on the
+   element when it creates it. */
+
+#banner-container {
+    width: 320px !important;
+    height: 50px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+}

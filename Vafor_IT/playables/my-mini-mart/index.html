@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>YT Game Wrapper WebGL Template</title>
+  <link rel="stylesheet" href="TemplateData/style.css" nonce="1_4Vpf0wvgPWq0VeWLPg1Q">
+  <script>
+/*!
+ * ytgame-shim.js — drop-in replacement for the YouTube Playables Web SDK (ytgame.js).
+ *
+ * The scraped "youtube-playables" wrappers ship a real ytgame.js plus an
+ * obfuscated ad / anti-tamper blob. Off YouTube, the real SDK's ad + data calls
+ * post to a parent frame that never answers, so they hang; that blob worked
+ * around it by loading a third-party ad script and showing interstitial,
+ * sidebar and popup ads.
+ *
+ * strip_ads.py removes the blob and swaps ytgame.js for this file. Result:
+ *   - ad calls resolve instantly (no ad shown)
+ *   - saveData/loadData actually work, backed by localStorage
+ *   - every other call is a safe no-op
+ *   - unknown calls can't throw (Proxy fallback)
+ */
+(function () {
+  'use strict';
+  var KEY = 'ytg:' + (location.pathname || 'game');
+  var res = function (v) { return Promise.resolve(v); };
+  var noop = function () {};
+  var listeners = {};
+
+  function store(get, val) {
+    try {
+      if (get) return localStorage.getItem(KEY);
+      if (val == null) localStorage.removeItem(KEY);
+      else localStorage.setItem(KEY, String(val));
+    } catch (e) {}
+    return null;
+  }
+
+  var game = {
+    firstFrameReady: noop,
+    gameReady: noop,
+    loadingProgress: noop,
+    hasLoadingUI: function () { return false; },
+    onPause: function (cb) { listeners.pause = cb; },
+    onResume: function (cb) { listeners.resume = cb; },
+    saveData: function (d) { store(false, d); return res(); },
+    loadData: function () { return res(store(true) || ''); },
+    getData: function () { return store(true) || ''; }
+  };
+
+  var ads = {
+    requestInterstitialAd: function () { return res(); },
+    requestRewardedAd: function () { return res(); },
+    adBreak: function () { return res(); }
+  };
+
+  var system = {
+    getEngagementType: function () { return 'PLAYING'; },
+    getConfig: function () { return { engagementType: 'PLAYING' }; },
+    isAudioEnabled: function () { return true; },
+    onAudioEnabledChange: noop,
+    getLanguage: function () { return (navigator.language || 'en').slice(0, 2); },
+    getSurface: function () { return 'BROWSER'; }
+  };
+
+  var engagement = { sendAbandonment: noop };
+  var health = { logError: noop, logWarning: noop, stuck: noop, unstuck: noop };
+
+  // Any property/method we didn't define returns a chainable no-op that also
+  // works as a resolved promise, so `ytgame.whatever.foo().then(...)` never throws.
+  function chainNoop() {
+    var f = function () { return res(); };
+    return new Proxy(f, {
+      get: function (t, p) {
+        if (p === 'then' || p === 'catch' || p === 'finally') return undefined;
+        return chainNoop();
+      },
+      apply: function () { return res(); }
+    });
+  }
+  function wrap(obj) {
+    return new Proxy(obj, {
+      get: function (t, p) {
+        if (p in t) return t[p];
+        if (typeof p === 'symbol') return t[p];
+        return chainNoop();
+      }
+    });
+  }
+
+  var ytgame = {
+    SDK_VERSION: '1.7.0-shim',
+    IN_PLAYABLES_ENV: false,
+    game: wrap(game),
+    ads: wrap(ads),
+    system: wrap(system),
+    engagement: wrap(engagement),
+    health: wrap(health)
+  };
+
+  try { Object.defineProperty(window, 'ytgame', { value: wrap(ytgame), writable: false, configurable: true }); }
+  catch (e) { window.ytgame = wrap(ytgame); }
+
+  // Fire resume once, in case a game waits for it before starting.
+  setTimeout(function () { try { if (listeners.resume) listeners.resume(); } catch (e) {} }, 0);
+})();
+</script>
+  <link rel="shortcut icon" href="icon.png" />
+</head>
+
+<body>
+  <div id="unity-container" class="unity-desktop">
+    <canvas id="unity-canvas" width=100% height=100% tabindex="-1"></canvas>
+    <div id="unity-loading-bar">
+      <div id="unity-logo"></div>
+      <div id="unity-progress-bar-empty">
+        <div id="unity-progress-bar-full"></div>
+      </div>
+    </div>
+    <div id="unity-warning"> </div>
+  </div>
+
+  <script src="unarchiver.min.js" nonce="1_4Vpf0wvgPWq0VeWLPg1Q">// used for decompression if zip files are used</script>
+  <script nonce="1_4Vpf0wvgPWq0VeWLPg1Q"> // Logic for Unity contianer
+    var container = document.querySelector("#unity-container");
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingBar = document.querySelector("#unity-loading-bar");
+    var progressBarFull = document.querySelector("#unity-progress-bar-full");
+    var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+    var fullscreenOverlayButton = document.querySelector("#unity-overlay-fullscreen-button");
+    var quitcanvas = document.querySelector("#quit-canvas");
+    var warningBanner = document.querySelector("#unity-warning");
+
+    // For YT it is strongly encouraged that all warnings / errors show in
+    // console and banners should be in game as needed to not confuse users.
+    // 
+    // If needed please uncomment section below to show a temporary message 
+    // banner/ribbon for a few seconds, or a permanent error message on top 
+    // of the canvas if type=='error'.
+    function unityShowBanner(msg, type) {
+    }
+
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/MMM-build2.loader.js";
+    var config = {
+      dataUrl: buildUrl + "/MMM-build2.data.unityweb",
+      frameworkUrl: buildUrl + "/MMM-build2.framework.js.unityweb",
+        codeUrl: buildUrl + "/MMM-build2.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Kiseki Games",
+      productName: "My Mini Mart",
+      productVersion: "1.18.41",
+      showBanner: unityShowBanner,
+    };
+
+    // By default, Unity keeps WebGL canvas render target size matched with
+    // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+    // Set this to false if you want to decouple this synchronization from
+    // happening inside the engine, and you would instead like to size up
+    // the canvas DOM size and WebGL render target sizes yourself.
+    // config.matchWebGLToCanvasSize = false;
+
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      // Mobile device style: fill the whole browser client area with the game canvas:
+
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+      container.className = "unity-mobile";
+      canvas.className = "unity-mobile";
+
+      // To lower canvas resolution on mobile devices to gain some
+      // performance, uncomment the following line:
+      // config.devicePixelRatio = 1;
+
+    } else {
+      // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+    }
+
+    loadingBar.style.display = "block";
+
+    // loadResources is only used if you need load Zipped files for .wasm, .js, or .data and need 
+    // them to be decompressed. If the file is not zipped we bypass decompression step automatically,
+    // however its best to not trigger this if you dont used compression. 
+    // NOTE: GZip does not work ATM.  If this is needed Unarchiver will need to be updated.
+    loadResources = (callback) => {
+      const subZipStr = '.zip';
+      const subWASMStr = '.wasm';
+      const subJSStr = '.js';
+
+      var codeUrl = config.codeUrl;
+      var shouldDecompress = true;
+
+      // check if .zip already exists in the URL, if it doesnt check if a .zip file exists
+      if (!codeUrl.includes(subZipStr)) {
+        if (UrlExists(codeUrl + subZipStr)) {
+          codeUrl = codeUrl + subZipStr;
+        } else {
+          shouldDecompress = false;
+        }
+      }
+
+      // decompress if using a zip file, otherwise just load regular wasm file
+      if (shouldDecompress) {
+        // Decompress the file based on the type, WASM, JS, etc.
+        // if you need more types please add a const above and modify the type logic below.
+        var blobType = 'application/octet-stream';
+        if (codeUrl.includes(subWASMStr)){
+          blobType = 'application/wasm';
+        } else if (codeUrl.includes(subJSStr)){
+          blobType = 'text/javascript';
+        }
+
+        DecompressFile(codeUrl, blobType, (file) => {
+          config.codeUrl = file;
+          //callback();
+        });
+
+        codeUrl = config.dataUrl
+        blobType = 'application/data';
+        
+        
+        DecompressFile(codeUrl, blobType, (file) => {
+          config.dataUrl = file;
+          callback();
+        });
+      } else {
+        callback();
+      }
+    }
+
+    // Fetch/Load a file then call our callback 
+    loadZipData = (url, callback) => {
+      fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+          callback(blob);
+        });
+    }
+
+    // Check if URL / File exists
+    function UrlExists(urlToCheck)
+    {
+        var httpReq = new XMLHttpRequest();
+        httpReq.open('HEAD', urlToCheck, false);
+        httpReq.send();
+        return httpReq.status!=404;
+    }
+
+    // decompress files and call callback
+    // TODO: test and potentially switch to Compression Streams API
+    function DecompressFile(file, blobMimeType, callback) {
+      let decompressedFile;
+
+      loadZipData(file, (f) => {
+        Unarchiver.open(f).then(async function (archive) {
+          for (let entry of archive.entries) {
+            if (entry.is_file) {
+              let entryRead = await entry.read();
+              let entryData = await entryRead.arrayBuffer();
+              let dataBlob = new Blob([new Uint8Array(entryData)], { type: blobMimeType });
+              decompressedFile = window.URL.createObjectURL(dataBlob);
+            }
+          }
+          callback(decompressedFile);
+        });
+      });
+    }
+
+    var unityGameInstance = null;
+    // Setup the Unity section once zip file is downloaded and decompressed
+    function InitUnitySection() {
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+          }).then((unityInstance) => {
+            unityGameInstance = unityInstance;
+            loadingBar.style.display = "none";
+          }).catch((message) => {
+            console.error(message);
+          });
+      };
+
+      document.body.appendChild(script);
+    }
+
+    // Path 1: Use this path if no decompression of your .wasm, .data, .js files are needed
+    loadResources(InitUnitySection);
+
+    // Path 2: Use this path to Load resources (.wasm, .data, .js) that are Zipped and need to be decompressed
+    // if you dont use compresseion its best to comment out Path 1 and uncomment Path 2.
+    // loadResources(InitUnitySection);  // Uncomment this line to start Unity by loading zipped files
+
+  // window.onfocus = function() {
+  //   unityGameInstance.SendMessage("DeleteData", "SaveData");
+  // };
+  window.onblur = function() {
+    unityGameInstance.SendMessage("DeleteData", "SaveData");
+  };
+  window.ontouchcancel = function() {
+    unityGameInstance.SendMessage("DeleteData", "SaveData");
+  };
+
+  window.ontouchleave = function() {
+    unityGameInstance.SendMessage("DeleteData", "SaveData");
+  };
+  
+  window.BeforeUnloadEvent = function (){
+    unityGameInstance.SendMessage("DeleteData", "SaveData");
+    wait(1000);
+  }
+  
+  
+  </script>
+</body>
+</html>

@@ -1,0 +1,4351 @@
+{
+    "entries": [
+        {
+            "name": "",
+            "ext": "ds_store",
+            "path": ".DS_Store",
+            "fallbackExt": "ds_store",
+            "fallbackPath": "UI/.DS_Store"
+        },
+        {
+            "name": "Beige_Elegance_Handbag",
+            "ext": "glb",
+            "path": "Beige_Elegance_Handbag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Blush_Minimalist_Bag",
+            "ext": "glb",
+            "path": "Blush_Minimalist_Bag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Canvas_Tote_Bag",
+            "ext": "glb",
+            "path": "Canvas_Tote_Bag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Cat_Face_Handbag",
+            "ext": "glb",
+            "path": "Cat_Face_Handbag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Elegance_Tote",
+            "ext": "glb",
+            "path": "Elegance_Tote.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Elegant_Leather_Tote",
+            "ext": "glb",
+            "path": "Elegant_Leather_Tote.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Emerald_Handbag",
+            "ext": "glb",
+            "path": "Emerald_Handbag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Heartfelt_Bag",
+            "ext": "glb",
+            "path": "Heartfelt_Bag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Music_1",
+            "ext": "mp3",
+            "path": "Music_1.mp3",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Music_2",
+            "ext": "mp3",
+            "path": "Music_2.mp3",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Music_3",
+            "ext": "mp3",
+            "path": "Music_3.mp3",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Navy_Leather_Handbag",
+            "ext": "glb",
+            "path": "Navy_Leather_Handbag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Peach_Backpack",
+            "ext": "glb",
+            "path": "Peach_Backpack.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Quilted_Chain_Elegance",
+            "ext": "glb",
+            "path": "Quilted_Chain_Elegance.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Scarlet_Elegance",
+            "ext": "glb",
+            "path": "Scarlet_Elegance.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Silver_Elegance_Clutch",
+            "ext": "glb",
+            "path": "Silver_Elegance_Clutch.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Silver_Sequin_Elegance",
+            "ext": "glb",
+            "path": "Silver_Sequin_Elegance.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Strawberry_Handbag",
+            "ext": "glb",
+            "path": "Strawberry_Handbag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Waist_Bag",
+            "ext": "glb",
+            "path": "Waist_Bag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Woven_Circle_Bag",
+            "ext": "glb",
+            "path": "Woven_Circle_Bag.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Woven_Elegance",
+            "ext": "glb",
+            "path": "Woven_Elegance.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "streamingassets_manifest",
+            "ext": "json",
+            "path": "streamingassets_manifest.json",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bboyanim",
+            "ext": "",
+            "path": "AnimationBundles/bboyanim",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "rumbaanim",
+            "ext": "",
+            "path": "AnimationBundles/rumbaanim",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "sambanim",
+            "ext": "",
+            "path": "AnimationBundles/sambanim",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "twerkanim",
+            "ext": "",
+            "path": "AnimationBundles/twerkanim",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "wavehiphopanim",
+            "ext": "",
+            "path": "AnimationBundles/wavehiphopanim",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Attachment",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Attachment.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Attachment.glb"
+        },
+        {
+            "name": "SK_Belt",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Belt.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Belt.glb"
+        },
+        {
+            "name": "SK_Belt_Fabric",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Belt_Fabric.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Belt_Fabric.glb"
+        },
+        {
+            "name": "SK_Blouse.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Blouse.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Blouse",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Blouse.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Blouse.glb"
+        },
+        {
+            "name": "SK_Bodycon_Dress.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Bodycon_Dress.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Bodycon_Dress",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Bodycon_Dress.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Bodycon_Dress.glb"
+        },
+        {
+            "name": "SK_Boots",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Boots.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Boots.glb"
+        },
+        {
+            "name": "SK_Boots_Slit",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Boots_Slit.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Boots_Slit.glb"
+        },
+        {
+            "name": "SK_Boots_Strips",
+            "ext": "glb",
+            "path": "ClothesBundles/SK_Boots_Strips.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Boots_Wireframe",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Boots_Wireframe.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Boots_Wireframe.glb"
+        },
+        {
+            "name": "SK_Bracelet",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Bracelet.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Bracelet.glb"
+        },
+        {
+            "name": "SK_Chocker.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Chocker.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Chocker",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Chocker.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Chocker.glb"
+        },
+        {
+            "name": "SK_Dress.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Dress.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Dress",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Dress.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Dress.glb"
+        },
+        {
+            "name": "SK_Dress_Black.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Dress_Black.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Dress_Black",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Dress_Black.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Dress_Black.glb"
+        },
+        {
+            "name": "SK_Dress_Long.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Dress_Long.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Dress_Long",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Dress_Long.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Dress_Long.glb"
+        },
+        {
+            "name": "SK_Earrings_var1",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Earrings_var1.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Earrings_var1.glb"
+        },
+        {
+            "name": "SK_Earrings_var2",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Earrings_var2.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Earrings_var2.glb"
+        },
+        {
+            "name": "SK_Earrings_var3",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Earrings_var3.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Earrings_var3.glb"
+        },
+        {
+            "name": "SK_Earrings_var4",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Earrings_var4.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Earrings_var4.glb"
+        },
+        {
+            "name": "SK_Earrings_var5",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Earrings_var5.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Earrings_var5.glb"
+        },
+        {
+            "name": "SK_Earrings_var6",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Earrings_var6.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Earrings_var6.glb"
+        },
+        {
+            "name": "SK_Earrings_var7",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Earrings_var7.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Earrings_var7.glb"
+        },
+        {
+            "name": "SK_Earrings_var8",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Earrings_var8.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Earrings_var8.glb"
+        },
+        {
+            "name": "SK_FullBodyCostum.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_FullBodyCostum.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_FullBodyCostum",
+            "ext": "png",
+            "path": "ClothesIcons/SK_FullBodyCostum.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_FullBodyCostum.glb"
+        },
+        {
+            "name": "SK_Glasses_1",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Glasses_1.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Glasses_1.glb"
+        },
+        {
+            "name": "SK_Glasses_2",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Glasses_2.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Glasses_2.glb"
+        },
+        {
+            "name": "SK_Hat",
+            "ext": "glb",
+            "path": "ClothesBundles/SK_Hat.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Jacket.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Jacket.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Jacket",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Jacket.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Jacket.glb"
+        },
+        {
+            "name": "SK_Jacket_BLue.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Jacket_BLue.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Jacket_BLue",
+            "ext": "glb",
+            "path": "ClothesBundles/SK_Jacket_BLue.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Jacket_Fluffy.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Jacket_Fluffy.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Jacket_Fluffy",
+            "ext": "glb",
+            "path": "ClothesBundles/SK_Jacket_Fluffy.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Jacket_Violet.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Jacket_Violet.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Jacket_Violet",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Jacket_Violet.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Jacket_Violet.glb"
+        },
+        {
+            "name": "SK_Light_Dress.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Light_Dress.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Light_Dress",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Light_Dress.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Light_Dress.glb"
+        },
+        {
+            "name": "SK_NightDress.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_NightDress.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_NightDress",
+            "ext": "png",
+            "path": "ClothesIcons/SK_NightDress.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_NightDress.glb"
+        },
+        {
+            "name": "SK_Pants.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Pants.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Pants",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Pants.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Pants.glb"
+        },
+        {
+            "name": "SK_Sandals",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Sandals.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Sandals.glb"
+        },
+        {
+            "name": "SK_Shoes_Bottom_Fastening",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Shoes_Bottom_Fastening.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Shoes_Bottom_Fastening.glb"
+        },
+        {
+            "name": "SK_Shoes_Bow",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Shoes_Bow.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Shoes_Bow.glb"
+        },
+        {
+            "name": "SK_Shoes_Center_Fastening",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Shoes_Center_Fastening.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Shoes_Center_Fastening.glb"
+        },
+        {
+            "name": "SK_Shoes_No_Fastening",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Shoes_No_Fastening.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Shoes_No_Fastening.glb"
+        },
+        {
+            "name": "SK_Shorts_Long.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Shorts_Long.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Shorts_Long",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Shorts_Long.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Shorts_Long.glb"
+        },
+        {
+            "name": "SK_Shorts_Small.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Shorts_Small.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Shorts_Small",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Shorts_Small.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Shorts_Small.glb"
+        },
+        {
+            "name": "SK_Skarf",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Skarf.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Skarf.glb"
+        },
+        {
+            "name": "SK_Skirt.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Skirt.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Skirt",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Skirt.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Skirt.glb"
+        },
+        {
+            "name": "SK_SkirtLong.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_SkirtLong.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_SkirtLong",
+            "ext": "png",
+            "path": "ClothesIcons/SK_SkirtLong.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_SkirtLong.glb"
+        },
+        {
+            "name": "SK_Skirt_Long.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Skirt_Long.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Skirt_Long",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Skirt_Long.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Skirt_Long.glb"
+        },
+        {
+            "name": "SK_Skirt_Scalloped_Edges.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Skirt_Scalloped_Edges.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Skirt_Scalloped_Edges",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Skirt_Scalloped_Edges.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Skirt_Scalloped_Edges.glb"
+        },
+        {
+            "name": "SK_Sneakers",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Sneakers.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Sneakers.glb"
+        },
+        {
+            "name": "SK_Straight_pants.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Straight_pants.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Straight_pants",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Straight_pants.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Straight_pants.glb"
+        },
+        {
+            "name": "SK_Sweater.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Sweater.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Sweater",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Sweater.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Sweater.glb"
+        },
+        {
+            "name": "SK_Sweater_Blue.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Sweater_Blue.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Sweater_Blue",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Sweater_Blue.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Sweater_Blue.glb"
+        },
+        {
+            "name": "SK_Sweater_Strong.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Sweater_Strong.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Sweater_Strong",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Sweater_Strong.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Sweater_Strong.glb"
+        },
+        {
+            "name": "SK_Sweater_White.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Sweater_White.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Sweater_White",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Sweater_White.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Sweater_White.glb"
+        },
+        {
+            "name": "SK_Swimsuit.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Swimsuit.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Swimsuit",
+            "ext": "glb",
+            "path": "ClothesBundles/SK_Swimsuit.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_T_Shirt_Black.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_T_Shirt_Black.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_T_Shirt_Black",
+            "ext": "png",
+            "path": "ClothesIcons/SK_T_Shirt_Black.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_T_Shirt_Black.glb"
+        },
+        {
+            "name": "SK_Thick_boots",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Thick_boots.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Thick_boots.glb"
+        },
+        {
+            "name": "SK_Thin_boots",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Thin_boots.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Thin_boots.glb"
+        },
+        {
+            "name": "SK_TopCLose.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_TopCLose.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_TopCLose",
+            "ext": "png",
+            "path": "ClothesIcons/SK_TopCLose.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_TopCLose.glb"
+        },
+        {
+            "name": "SK_Top_Cage.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Top_Cage.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Top_Cage",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Top_Cage.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Top_Cage.glb"
+        },
+        {
+            "name": "SK_Top_Fabric.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Top_Fabric.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Top_Fabric",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Top_Fabric.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Top_Fabric.glb"
+        },
+        {
+            "name": "SK_Top_NeckClose.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Top_NeckClose.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Top_NeckClose",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Top_NeckClose.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Top_NeckClose.glb"
+        },
+        {
+            "name": "SK_Top_OneSleeve.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Top_OneSleeve.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Top_OneSleeve",
+            "ext": "glb",
+            "path": "ClothesBundles/SK_Top_OneSleeve.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Top_TwoSleeves.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Top_TwoSleeves.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Top_TwoSleeves",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Top_TwoSleeves.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Top_TwoSleeves.glb"
+        },
+        {
+            "name": "SK_Tshirt_White.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Tshirt_White.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Tshirt_White",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Tshirt_White.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Tshirt_White.glb"
+        },
+        {
+            "name": "SK_UGG",
+            "ext": "glb",
+            "path": "ClothesBundles/SK_UGG.glb",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Voluminous_pants.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Voluminous_pants.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Voluminous_pants",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Voluminous_pants.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Voluminous_pants.glb"
+        },
+        {
+            "name": "SK_Wedding_Dress.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_Wedding_Dress.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Wedding_Dress",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Wedding_Dress.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_Wedding_Dress.glb"
+        },
+        {
+            "name": "SK_flared_skirt.blendshapes",
+            "ext": "bytes",
+            "path": "ClothesBundles/SK_flared_skirt.blendshapes.bytes",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_flared_skirt",
+            "ext": "png",
+            "path": "ClothesIcons/SK_flared_skirt.png",
+            "fallbackExt": "glb",
+            "fallbackPath": "ClothesBundles/SK_flared_skirt.glb"
+        },
+        {
+            "name": "BG_HEAD_01",
+            "ext": "png",
+            "path": "ClothesIcons/BG_HEAD_01.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "BG_HEAD_02",
+            "ext": "png",
+            "path": "ClothesIcons/BG_HEAD_02.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_BIKINI_01_cloth",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_BIKINI_01_cloth.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_BRACELET_02",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_BRACELET_02.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_EARRINGS",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_EARRINGS.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_HAIR_BANGS_01",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_HAIR_BANGS_01.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_HAIR_BANGS_02",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_HAIR_BANGS_02.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_HAIR_BUN",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_HAIR_BUN.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_HAIR_LOOSE",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_HAIR_LOOSE.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_HAIR_PONYTAIL",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_HAIR_PONYTAIL.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_HAIR_SCALP",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_HAIR_SCALP.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_HAIR_TWINTAILS",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_HAIR_TWINTAILS.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_HAT",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_HAT.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_LEG_ACS_01",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_LEG_ACS_01.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_LEG_ACS_02",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_LEG_ACS_02.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_NAILS",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_NAILS.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_NECKLACE_01",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_NECKLACE_01.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_NECKLACE_02",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_NECKLACE_02.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_SHOES_01",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_SHOES_01.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_SHOES_02",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_SHOES_02.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_BG_SUNGLASSES",
+            "ext": "png",
+            "path": "ClothesIcons/SK_BG_SUNGLASSES.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Belt2",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Belt2.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Belt3",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Belt3.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Belt4",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Belt4.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Belt5",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Belt5.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Belt6",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Belt6.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Belt7",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Belt7.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Bouquet",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Bouquet.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Racket",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Racket.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "SK_Shorts",
+            "ext": "png",
+            "path": "ClothesIcons/SK_Shorts.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Beige_Elegance_Handbag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Beige_Elegance_Handbag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Blush_Minimalist_Bag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Blush_Minimalist_Bag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Canvas_Tote_Bag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Canvas_Tote_Bag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Cat_Face_Handbag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Cat_Face_Handbag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Elegance_Tote_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Elegance_Tote_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Elegant_Leather_Tote_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Elegant_Leather_Tote_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Emerald_Handbag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Emerald_Handbag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Heartfelt_Bag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Heartfelt_Bag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Navy_Leather_Handbag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Navy_Leather_Handbag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Peach_Backpack_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Peach_Backpack_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Quilted_Chain_Elegance_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Quilted_Chain_Elegance_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Scarlet_Elegance_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Scarlet_Elegance_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Silver_Backpack_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Silver_Backpack_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Silver_Elegance_Clutch_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Silver_Elegance_Clutch_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Silver_Sequin_Elegance_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Silver_Sequin_Elegance_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Strawberry_Handbag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Strawberry_Handbag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_ACCESSORIES_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_ACCESSORIES_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_ACCESSORIES_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_ACCESSORIES_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_ACCESSORIES_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_ACCESSORIES_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_ACCESSORIES_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_ACCESSORIES_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_01",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_01.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_01.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_02",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_02.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_02.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_03",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_03.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_03.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_04",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_04.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_04.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_05",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_05.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_05.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_06",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_06.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_06.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_07",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_07.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_07.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_08",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_08.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_08.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_09",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_09.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_09.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_10",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_10.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_10.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_11",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_11.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_11.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_12",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_12.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_12.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_13",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_13.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_13.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_14",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_14.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_14.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_BaseColor_15",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_15.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_BaseColor_15.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_MaskMap.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_MatID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_MatID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_01_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_01_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_01_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_04",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_04.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_05",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_05.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_06",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_06.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_07",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_07.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_08",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_08.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_09",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_09.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_10",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_10.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_11",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_11.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_12",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_12.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_13",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_13.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_14",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_14.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_BaseColor_15",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_BaseColor_15.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_02_MaskMap.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_MatID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_MatID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_02_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_02_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_02_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_04",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_04.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_05",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_05.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_06",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_06.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_07",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_07.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_08",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_08.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_09",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_09.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_10",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_10.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_11",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_11.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_12",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_12.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_13",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_13.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_14",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_14.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_BaseColor_15",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_BaseColor_15.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_03_MaskMap.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_MatID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_MatID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_BIKINI_SET_03_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_BIKINI_SET_03_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_BIKINI_SET_03_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_HAT_BaseColor_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_HAT_BaseColor_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_HAT_BaseColor_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_HAT_BaseColor_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_HAT_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_HAT_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_HAT_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_HAT_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_HAT_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BG_HAT_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_HAT_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_HAT_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_HAT_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SHOES_BaseColor_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SHOES_BaseColor_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SHOES_BaseColor_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SHOES_BaseColor_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SHOES_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SHOES_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SHOES_MaskMap.png"
+        },
+        {
+            "name": "T_BG_SHOES_MatID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SHOES_MatID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SHOES_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SHOES_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SHOES_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SHOES_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SHOES_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BG_SHOES_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SHOES_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SHOES_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SHOES_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SUNGLASSES_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SUNGLASSES_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SUNGLASSES_BaseColor_Alpha",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SUNGLASSES_BaseColor_Alpha.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SUNGLASSES_BaseColor_Alpha.png"
+        },
+        {
+            "name": "T_BG_SUNGLASSES_MaskMap",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SUNGLASSES_MaskMap.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SUNGLASSES_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SUNGLASSES_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SUNGLASSES_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SUNGLASSES_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SUNGLASSES_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BG_SUNGLASSES_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SUNGLASSES_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SUNGLASSES_Opacity",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SUNGLASSES_Opacity.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SUNGLASSES_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SUNGLASSES_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_04",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_04.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_05",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_05.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_06",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_06.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_07",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_07.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_08",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_08.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_09",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_09.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_10",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_10.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_11",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_11.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_12",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_12.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_13",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_13.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_14",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_14.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_BaseColor_15",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_BaseColor_15.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SWIMSUIT_01_MaskMap.png"
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_MatID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_MatID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SWIMSUIT_01_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_01_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_01_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_04",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_04.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_05",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_05.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_06",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_06.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_07",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_07.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_08",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_08.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_09",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_09.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_10",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_10.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_11",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_11.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_12",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_12.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_13",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_13.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_14",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_14.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_BaseColor_15",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_BaseColor_15.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SWIMSUIT_02_MaskMap.png"
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_MatID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_MatID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SWIMSUIT_02_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_02_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_02_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_04",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_04.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_05",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_05.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_06",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_06.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_07",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_07.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_08",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_08.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_09",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_09.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_10",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_10.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_11",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_11.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_12",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_12.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_13",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_13.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_14",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_14.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_BaseColor_15",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_BaseColor_15.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SWIMSUIT_03_MaskMap.png"
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_MatID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_MatID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BG_SWIMSUIT_03_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_SWIMSUIT_03_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BG_SWIMSUIT_03_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BODY_F_UPD_BaseColor_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BODY_F_UPD_BaseColor_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BODY_F_UPD_DetailWeight_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BODY_F_UPD_DetailWeight_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BODY_F_UPD_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BODY_F_UPD_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BODY_F_UPD_MaskMap.png"
+        },
+        {
+            "name": "T_BODY_F_UPD_Mask_Paint",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BODY_F_UPD_Mask_Paint.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BODY_F_UPD_MatID_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BODY_F_UPD_MatID_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BODY_F_UPD_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_BODY_F_UPD_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_BODY_F_UPD_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_BODY_F_UPD_Normal_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BODY_F_UPD_Normal_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BODY_F_UPD_Normal_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BODY_F_UPD_Normal_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BODY_F_UPD_Normal_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BODY_F_UPD_Normal_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BODY_F_UPD_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BODY_F_UPD_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BODY_F_UPD_SSS",
+            "ext": "jpg",
+            "path": "HighResTextures/T_BODY_F_UPD_SSS.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_AO",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_AO.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_BaseColor_01",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_01.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_01.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_02",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_02.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_02.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_03",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_03.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_03.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_04",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_04.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_04.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_05",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_05.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_05.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_06",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_06.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_06.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_07",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_07.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_07.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_08",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_08.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_08.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_09",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_09.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_09.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_10",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_10.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_10.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_11",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_11.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_11.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_12",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_12.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_12.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_13",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_13.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_13.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_14",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_14.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_14.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_15",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_15.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_15.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_16",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_16.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_16.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_17",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_17.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_17.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_18",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_18.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_18.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_19",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_19.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_19.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_20",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_20.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_20.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_21",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_21.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_21.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_22",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_22.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_22.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_23",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_23.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_23.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_24",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_24.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_24.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_25",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_25.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_25.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_26",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_26.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_26.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_27",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_27.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_27.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_28",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_28.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_28.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_29",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_29.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_29.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_30",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_30.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_30.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_31",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_31.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_31.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_32",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_32.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_32.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_33",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_33.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_33.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_34",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_34.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_34.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_35",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_35.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_35.png"
+        },
+        {
+            "name": "T_EYES_BaseColor_36",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_BaseColor_36.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_BaseColor_36.png"
+        },
+        {
+            "name": "T_EYES_DETAIL_Normal_MASK",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_DETAIL_Normal_MASK.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_DepthMask",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_DepthMask.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Emissive_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Emissive_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Emissive_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Emissive_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Emissive_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Emissive_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Emissive_04",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Emissive_04.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Emissive_05",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Emissive_05.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Gloss",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Gloss.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Heatmap",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Heatmap.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Height",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Height.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_MaskMap",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_MaskMap.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_MatID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_MatID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Normal_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Normal_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Normal_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Normal_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Parallax_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Parallax_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_Parallax_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Parallax_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_EYES_PupilAtlas",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_EYES_PupilAtlas.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_EYES_PupilAtlas.png"
+        },
+        {
+            "name": "T_EYES_Sclera",
+            "ext": "jpg",
+            "path": "HighResTextures/T_EYES_Sclera.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_ID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_ID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_albedo",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_albedo.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_alpha",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_alpha.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_ambient",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_ambient.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_depth",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_depth.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_direction",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_direction.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_root",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_root.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_specular",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_specular.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_translucency",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_translucency.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_STRAIGHT_wind",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_STRAIGHT_wind.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Black",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Black.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Blonde",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Blonde.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Blue",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Blue.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Blue_Ombre",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Blue_Ombre.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Blue_Ombre_alpha",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Blue_Ombre_alpha.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_HAIR_WAVY_BaseColor_Blue_Ombre_alpha.png"
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Natural",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Natural.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Orange_Ombre",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Orange_Ombre.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Orange_Ombre_alpha",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Orange_Ombre_alpha.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_HAIR_WAVY_BaseColor_Orange_Ombre_alpha.png"
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Red",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Red.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Red_Ombre",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Red_Ombre.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_Red_Ombre_alpha",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_Red_Ombre_alpha.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_HAIR_WAVY_BaseColor_Red_Ombre_alpha.png"
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_White",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_White.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_BaseColor_White_Ombre_alpha",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_HAIR_WAVY_BaseColor_White_Ombre_alpha.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_HAIR_WAVY_BaseColor_White_Ombre_alpha.png"
+        },
+        {
+            "name": "T_HAIR_WAVY_Depth",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_Depth.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_Direction",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_Direction.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_ID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_ID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_Root",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_Root.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_Specular",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_Specular.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_Translucency",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_Translucency.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_Transparent",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_HAIR_WAVY_Transparent.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_HAIR_WAVY_Transparent.png"
+        },
+        {
+            "name": "T_HAIR_WAVY_Wind",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_Wind.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_alpha",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_alpha.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_alpha_2",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_HAIR_WAVY_alpha_2.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_HAIR_WAVY_alpha_2.png"
+        },
+        {
+            "name": "T_HAIR_WAVY_ambient",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_ambient.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HAIR_WAVY_normal_LongHair",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HAIR_WAVY_normal_LongHair.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_DetailWeight",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_DetailWeight.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_00",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_00.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_04",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_04.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_05",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_05.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_06",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_06.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_07",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_07.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_08",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_08.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_09",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_09.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_09_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_09_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_09_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_09_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_10",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_10.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_11_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_11_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_11_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_11_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_11_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_11_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_12_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_12_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_12_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_12_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_12_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_12_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_13_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_13_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_13_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_13_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_13_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_13_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_14_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_14_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_14_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_14_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_15_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_15_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_15_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_15_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_16_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_16_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_16_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_16_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_16_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_16_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_16_04",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_16_04.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_16_05",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_16_05.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_17_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_17_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_17_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_17_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_18",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_18.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_19",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_19.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_20",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_20.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_21",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_21.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_22",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_22.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_23",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_23.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_BaseColor_24",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_BaseColor_24.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_F_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_HEAD_F_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_HEAD_F_MaskMap.png"
+        },
+        {
+            "name": "T_HEAD_F_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_F_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_MatID",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_MatID.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_HEAD_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_HEAD_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_HEAD_Normal_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_01_aegyosal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_01_aegyosal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_04",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_04.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_05",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_05.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_05_aegyosal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_05_aegyosal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_06",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_06.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_07",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_07.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_08",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_08.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_09",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_09.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_Normal_09_aegyosal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_Normal_09_aegyosal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_SSS",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_SSS.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_HEAD_SpecMask",
+            "ext": "jpg",
+            "path": "HighResTextures/T_HEAD_SpecMask.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_LASHES_BaseColor_01",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LASHES_BaseColor_01.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LASHES_BaseColor_01.png"
+        },
+        {
+            "name": "T_LASHES_BaseColor_02",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LASHES_BaseColor_02.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LASHES_BaseColor_02.png"
+        },
+        {
+            "name": "T_LASHES_BaseColor_03",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LASHES_BaseColor_03.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LASHES_BaseColor_03.png"
+        },
+        {
+            "name": "T_LASHES_BaseColor_04",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LASHES_BaseColor_04.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LASHES_BaseColor_04.png"
+        },
+        {
+            "name": "T_LASHES_BaseColor_05",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LASHES_BaseColor_05.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LASHES_BaseColor_05.png"
+        },
+        {
+            "name": "T_LASHES_BaseColor_06",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LASHES_BaseColor_06.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LASHES_BaseColor_06.png"
+        },
+        {
+            "name": "T_LASHES_BaseColor_07",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LASHES_BaseColor_07.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LASHES_BaseColor_07.png"
+        },
+        {
+            "name": "T_LASHES_BaseColor_08",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LASHES_BaseColor_08.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LASHES_BaseColor_08.png"
+        },
+        {
+            "name": "T_LASHES_BaseColor_09",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LASHES_BaseColor_09.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LASHES_BaseColor_09.png"
+        },
+        {
+            "name": "T_LINGERIE_BaseColor",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LINGERIE_BaseColor.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LINGERIE_BaseColor.png"
+        },
+        {
+            "name": "T_LINGERIE_Height",
+            "ext": "jpg",
+            "path": "HighResTextures/T_LINGERIE_Height.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_LINGERIE_MaskMap",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LINGERIE_MaskMap.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LINGERIE_MaskMap.png"
+        },
+        {
+            "name": "T_LINGERIE_Metallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_LINGERIE_Metallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_LINGERIE_MetallicSmoothness",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_LINGERIE_MetallicSmoothness.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_LINGERIE_MetallicSmoothness.png"
+        },
+        {
+            "name": "T_LINGERIE_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_LINGERIE_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_LINGERIE_OcclusionRoughnessMetallic",
+            "ext": "jpg",
+            "path": "HighResTextures/T_LINGERIE_OcclusionRoughnessMetallic.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_LINGERIE_Roughness",
+            "ext": "jpg",
+            "path": "HighResTextures/T_LINGERIE_Roughness.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_Pattern_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_Pattern_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_Pattern_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_Pattern_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_Pattern_03",
+            "ext": "jpg",
+            "path": "HighResTextures/T_Pattern_03.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_Placeholder_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_Placeholder_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_Placeholder_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_Placeholder_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_Placeholder_03",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_Placeholder_03.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_Placeholder_03.png"
+        },
+        {
+            "name": "T_SKIN_Normal_01",
+            "ext": "jpg",
+            "path": "HighResTextures/T_SKIN_Normal_01.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_SKIN_Normal_02",
+            "ext": "jpg",
+            "path": "HighResTextures/T_SKIN_Normal_02.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_SKIN_ScarAtlas",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_SKIN_ScarAtlas.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_SKIN_ScarAtlas.png"
+        },
+        {
+            "name": "T_SKIN_ScarAtlas_Normal",
+            "ext": "jpg",
+            "path": "HighResTextures/T_SKIN_ScarAtlas_Normal.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_SKIN_Specular",
+            "ext": "jpg",
+            "path": "HighResTextures/T_SKIN_Specular.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_SKIN_TattooAtlas",
+            "ext": "ktx2",
+            "path": "HighResTextures/T_SKIN_TattooAtlas.ktx2",
+            "fallbackExt": "png",
+            "fallbackPath": "HighResTextures/T_SKIN_TattooAtlas.png"
+        },
+        {
+            "name": "Waist_Bag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Waist_Bag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Woven_Circle_Bag_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Woven_Circle_Bag_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "Woven_Elegance_BaseColor",
+            "ext": "jpg",
+            "path": "HighResTextures/Woven_Elegance_BaseColor.jpg",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_01",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_01.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_02",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_02.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_03",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_03.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_04",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_04.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_05",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_05.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_06",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_06.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_07",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_07.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_08",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_08.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_09",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_09.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_10",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_10.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_11",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_11.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_12",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_12.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_13",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_13.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_14",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_14.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "T_BG_CLOTHES_15",
+            "ext": "png",
+            "path": "UI/T_BG_CLOTHES_15.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_0",
+            "ext": "png",
+            "path": "UI/anim_0.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_1",
+            "ext": "png",
+            "path": "UI/anim_1.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_10",
+            "ext": "png",
+            "path": "UI/anim_10.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_11",
+            "ext": "png",
+            "path": "UI/anim_11.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_12",
+            "ext": "png",
+            "path": "UI/anim_12.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_13",
+            "ext": "png",
+            "path": "UI/anim_13.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_14",
+            "ext": "png",
+            "path": "UI/anim_14.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_15",
+            "ext": "png",
+            "path": "UI/anim_15.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_16",
+            "ext": "png",
+            "path": "UI/anim_16.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_17",
+            "ext": "png",
+            "path": "UI/anim_17.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_18",
+            "ext": "png",
+            "path": "UI/anim_18.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_19",
+            "ext": "png",
+            "path": "UI/anim_19.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_2",
+            "ext": "png",
+            "path": "UI/anim_2.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_3",
+            "ext": "png",
+            "path": "UI/anim_3.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_4",
+            "ext": "png",
+            "path": "UI/anim_4.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_5",
+            "ext": "png",
+            "path": "UI/anim_5.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_6",
+            "ext": "png",
+            "path": "UI/anim_6.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_7",
+            "ext": "png",
+            "path": "UI/anim_7.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_8",
+            "ext": "png",
+            "path": "UI/anim_8.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "anim_9",
+            "ext": "png",
+            "path": "UI/anim_9.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_1",
+            "ext": "png",
+            "path": "UI/bag_1.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_10",
+            "ext": "png",
+            "path": "UI/bag_10.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_11",
+            "ext": "png",
+            "path": "UI/bag_11.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_12",
+            "ext": "png",
+            "path": "UI/bag_12.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_13",
+            "ext": "png",
+            "path": "UI/bag_13.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_14",
+            "ext": "png",
+            "path": "UI/bag_14.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_15",
+            "ext": "png",
+            "path": "UI/bag_15.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_16",
+            "ext": "png",
+            "path": "UI/bag_16.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_17",
+            "ext": "png",
+            "path": "UI/bag_17.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_18",
+            "ext": "png",
+            "path": "UI/bag_18.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_19",
+            "ext": "png",
+            "path": "UI/bag_19.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_2",
+            "ext": "png",
+            "path": "UI/bag_2.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_3",
+            "ext": "png",
+            "path": "UI/bag_3.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_4",
+            "ext": "png",
+            "path": "UI/bag_4.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_5",
+            "ext": "png",
+            "path": "UI/bag_5.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_6",
+            "ext": "png",
+            "path": "UI/bag_6.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_7",
+            "ext": "png",
+            "path": "UI/bag_7.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_8",
+            "ext": "png",
+            "path": "UI/bag_8.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "bag_9",
+            "ext": "png",
+            "path": "UI/bag_9.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_1",
+            "ext": "png",
+            "path": "UI/face_1.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_10",
+            "ext": "png",
+            "path": "UI/face_10.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_11",
+            "ext": "png",
+            "path": "UI/face_11.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_12",
+            "ext": "png",
+            "path": "UI/face_12.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_13",
+            "ext": "png",
+            "path": "UI/face_13.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_14",
+            "ext": "png",
+            "path": "UI/face_14.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_15",
+            "ext": "png",
+            "path": "UI/face_15.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_16",
+            "ext": "png",
+            "path": "UI/face_16.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_17",
+            "ext": "png",
+            "path": "UI/face_17.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_18",
+            "ext": "png",
+            "path": "UI/face_18.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_19",
+            "ext": "png",
+            "path": "UI/face_19.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_2",
+            "ext": "png",
+            "path": "UI/face_2.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_20",
+            "ext": "png",
+            "path": "UI/face_20.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_21",
+            "ext": "png",
+            "path": "UI/face_21.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_22",
+            "ext": "png",
+            "path": "UI/face_22.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_23",
+            "ext": "png",
+            "path": "UI/face_23.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_24",
+            "ext": "png",
+            "path": "UI/face_24.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_25",
+            "ext": "png",
+            "path": "UI/face_25.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_26",
+            "ext": "png",
+            "path": "UI/face_26.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_27",
+            "ext": "png",
+            "path": "UI/face_27.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_28",
+            "ext": "png",
+            "path": "UI/face_28.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_29",
+            "ext": "png",
+            "path": "UI/face_29.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_3",
+            "ext": "png",
+            "path": "UI/face_3.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_30",
+            "ext": "png",
+            "path": "UI/face_30.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_31",
+            "ext": "png",
+            "path": "UI/face_31.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_32",
+            "ext": "png",
+            "path": "UI/face_32.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_33",
+            "ext": "png",
+            "path": "UI/face_33.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_34",
+            "ext": "png",
+            "path": "UI/face_34.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_35",
+            "ext": "png",
+            "path": "UI/face_35.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_36",
+            "ext": "png",
+            "path": "UI/face_36.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_37",
+            "ext": "png",
+            "path": "UI/face_37.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_38",
+            "ext": "png",
+            "path": "UI/face_38.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_39",
+            "ext": "png",
+            "path": "UI/face_39.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_4",
+            "ext": "png",
+            "path": "UI/face_4.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_40",
+            "ext": "png",
+            "path": "UI/face_40.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_41",
+            "ext": "png",
+            "path": "UI/face_41.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_42",
+            "ext": "png",
+            "path": "UI/face_42.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_43",
+            "ext": "png",
+            "path": "UI/face_43.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_44",
+            "ext": "png",
+            "path": "UI/face_44.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_5",
+            "ext": "png",
+            "path": "UI/face_5.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_6",
+            "ext": "png",
+            "path": "UI/face_6.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_7",
+            "ext": "png",
+            "path": "UI/face_7.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_8",
+            "ext": "png",
+            "path": "UI/face_8.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        },
+        {
+            "name": "face_9",
+            "ext": "png",
+            "path": "UI/face_9.png",
+            "fallbackExt": "",
+            "fallbackPath": ""
+        }
+    ]
+}

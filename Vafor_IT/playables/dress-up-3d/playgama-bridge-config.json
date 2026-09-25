@@ -1,0 +1,38 @@
+{
+    "$schema": "https://bridge.playgama.com/v1/stable/schema.json",
+    "disableLoadingLogo": false,
+    "advertisement": {
+        "interstitial": {
+            "preloadOnStart": true,
+            "placementFallback": "interstitial_dress_up_3d"
+        },
+        "rewarded": {
+            "preloadOnStart": true,
+            "placementFallback": "rewarded_dress_up_3d"
+        },
+        "useBuiltInErrorPopup": true,
+        "backfillId": ""
+    },
+    "payments": [],
+    "leaderboards": [],
+    "sendAnalyticsEvents": false,
+    "platforms": {
+        "youtube": {
+            "name": "Dress Up 3D",
+            "loadingSound": {
+                "url": "./playgama.mp3"
+            }
+        }
+    },
+    "saas": {
+        "publicToken": "cmri18swt020bla0hkw4l8x4o"
+    },
+    "device": {
+        "supportedOrientations": [
+            "portrait",
+            "landscape"
+        ]
+    },
+    "forciblySetPlatformId": "youtube",
+    "showFullLoadingLogo": true
+}

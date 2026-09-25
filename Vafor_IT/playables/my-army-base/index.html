@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>YT Game Wrapper WebGL Template</title>
+    <link rel="stylesheet" href="TemplateData/style.css" nonce="KIyZqFwDxSQKCxouhZ07cw">
+    <script>
+/*!
+ * ytgame-shim.js — drop-in replacement for the YouTube Playables Web SDK (ytgame.js).
+ *
+ * The scraped "youtube-playables" wrappers ship a real ytgame.js plus an
+ * obfuscated ad / anti-tamper blob. Off YouTube, the real SDK's ad + data calls
+ * post to a parent frame that never answers, so they hang; that blob worked
+ * around it by loading a third-party ad script and showing interstitial,
+ * sidebar and popup ads.
+ *
+ * strip_ads.py removes the blob and swaps ytgame.js for this file. Result:
+ *   - ad calls resolve instantly (no ad shown)
+ *   - saveData/loadData actually work, backed by localStorage
+ *   - every other call is a safe no-op
+ *   - unknown calls can't throw (Proxy fallback)
+ */
+(function () {
+  'use strict';
+  var KEY = 'ytg:' + (location.pathname || 'game');
+  var res = function (v) { return Promise.resolve(v); };
+  var noop = function () {};
+  var listeners = {};
+
+  function store(get, val) {
+    try {
+      if (get) return localStorage.getItem(KEY);
+      if (val == null) localStorage.removeItem(KEY);
+      else localStorage.setItem(KEY, String(val));
+    } catch (e) {}
+    return null;
+  }
+
+  var game = {
+    firstFrameReady: noop,
+    gameReady: noop,
+    loadingProgress: noop,
+    hasLoadingUI: function () { return false; },
+    onPause: function (cb) { listeners.pause = cb; },
+    onResume: function (cb) { listeners.resume = cb; },
+    saveData: function (d) { store(false, d); return res(); },
+    loadData: function () { return res(store(true) || ''); },
+    getData: function () { return store(true) || ''; }
+  };
+
+  var ads = {
+    requestInterstitialAd: function () { return res(); },
+    requestRewardedAd: function () { return res(); },
+    adBreak: function () { return res(); }
+  };
+
+  var system = {
+    getEngagementType: function () { return 'PLAYING'; },
+    getConfig: function () { return { engagementType: 'PLAYING' }; },
+    isAudioEnabled: function () { return true; },
+    onAudioEnabledChange: noop,
+    getLanguage: function () { return (navigator.language || 'en').slice(0, 2); },
+    getSurface: function () { return 'BROWSER'; }
+  };
+
+  var engagement = { sendAbandonment: noop };
+  var health = { logError: noop, logWarning: noop, stuck: noop, unstuck: noop };
+
+  // Any property/method we didn't define returns a chainable no-op that also
+  // works as a resolved promise, so `ytgame.whatever.foo().then(...)` never throws.
+  function chainNoop() {
+    var f = function () { return res(); };
+    return new Proxy(f, {
+      get: function (t, p) {
+        if (p === 'then' || p === 'catch' || p === 'finally') return undefined;
+        return chainNoop();
+      },
+      apply: function () { return res(); }
+    });
+  }
+  function wrap(obj) {
+    return new Proxy(obj, {
+      get: function (t, p) {
+        if (p in t) return t[p];
+        if (typeof p === 'symbol') return t[p];
+        return chainNoop();
+      }
+    });
+  }
+
+  var ytgame = {
+    SDK_VERSION: '1.7.0-shim',
+    IN_PLAYABLES_ENV: false,
+    game: wrap(game),
+    ads: wrap(ads),
+    system: wrap(system),
+    engagement: wrap(engagement),
+    health: wrap(health)
+  };
+
+  try { Object.defineProperty(window, 'ytgame', { value: wrap(ytgame), writable: false, configurable: true }); }
+  catch (e) { window.ytgame = wrap(ytgame); }
+
+  // Fire resume once, in case a game waits for it before starting.
+  setTimeout(function () { try { if (listeners.resume) listeners.resume(); } catch (e) {} }, 0);
+})();
+</script>
+</head>
+
+<body>
+    <div id="unity-container" class="unity-desktop">
+        <canvas id="unity-canvas" width=100% height=100% tabindex="-1"></canvas>
+        <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full"></div>
+            </div>
+        </div>
+        <div id="unity-warning"> </div>
+    </div>
+
+    <script src="unarchiver.min.js" nonce="KIyZqFwDxSQKCxouhZ07cw"></script>
+    <script nonce="KIyZqFwDxSQKCxouhZ07cw">var container = document.querySelector("#unity-container");
+        var canvas = document.querySelector("#unity-canvas");
+        var loadingBar = document.querySelector("#unity-loading-bar");
+        var progressBarFull = document.querySelector("#unity-progress-bar-full");
+        var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+        var fullscreenOverlayButton = document.querySelector("#unity-overlay-fullscreen-button");
+        var quitcanvas = document.querySelector("#quit-canvas");
+        var warningBanner = document.querySelector("#unity-warning");
+
+        function unityShowBanner(msg, type) {
+            // warningBanner logiği buraya eklenebilir
+        }
+
+        var buildUrl = "Build";
+        var loaderUrl = buildUrl + "/15fa44fff37b52ed959c40df00799c7e.loader.js";
+        var config = {
+            dataUrl: buildUrl + "/c2ba9688a114bb41561c86f02a45a76f.data",
+            frameworkUrl: buildUrl + "/5cc06859949e070f54d7152254e21167.framework.js",
+            codeUrl: buildUrl + "/b4131526b670fbee6e86dde4607012fb.wasm",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "Nitrodog",
+            productName: "My Army Base",
+            productVersion: "0.1.1",
+            showBanner: unityShowBanner,
+            autoSyncPersistentDataPath: true, // HATA ÇÖZÜMÜ İÇİN EKLENEN KISIM
+        };
+
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            var meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+            document.getElementsByTagName('head')[0].appendChild(meta);
+            container.className = "unity-mobile";
+            canvas.className = "unity-mobile";
+        } else {
+            canvas.style.width = "100%";
+            canvas.style.height = "100%";
+        }
+
+        loadingBar.style.display = "block";
+
+        const subZipStr = '.zip';
+        const subWASMStr = '.wasm';
+        const subJSStr = '.js';
+        const subDataStr = '.data';
+
+        loadResources = (callback) => {
+            var dataUrl = config.dataUrl;
+            var shouldDecompress = true;
+
+            if (!dataUrl.includes(subZipStr)) {
+                if (UrlExists(dataUrl + subZipStr)) {
+                    dataUrl = dataUrl + subZipStr;
+                } else {
+                    shouldDecompress = false;
+                }
+            }
+
+            if (shouldDecompress) {
+                var blobTypeData = GetBlobType(dataUrl);
+                DecompressFile(dataUrl, blobTypeData, (file) => {
+                    config.dataUrl = file;
+                    LoadWASM(callback);
+                });
+            } else {
+                LoadWASM(callback);
+            }
+        }
+
+        loadZipData = (url, callback) => {
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    callback(blob);
+                });
+        }
+
+        function LoadWASM(callback) {
+            var codeUrl = config.codeUrl;
+            var shouldDecompress = true;
+
+            if (!codeUrl.includes(subZipStr)) {
+                if (UrlExists(codeUrl + subZipStr)) {
+                    codeUrl = codeUrl + subZipStr;
+                } else {
+                    shouldDecompress = false;
+                }
+            }
+
+            if (shouldDecompress) {
+                var blobTypeWASM = GetBlobType(codeUrl);
+                DecompressFile(codeUrl, blobTypeWASM, (file) => {
+                    config.codeUrl = file;
+                    callback();
+                });
+            } else {
+                callback();
+            }
+        }
+
+        function GetBlobType(urlToCheck) {
+            var blobType = 'application/octet-stream';
+            if (urlToCheck.includes(subWASMStr)) {
+                blobType = 'application/wasm';
+            } else if (urlToCheck.includes(subJSStr)) {
+                blobType = 'text/javascript';
+            }
+            return blobType;
+        }
+
+        function UrlExists(urlToCheck) {
+            var httpReq = new XMLHttpRequest();
+            httpReq.open('HEAD', urlToCheck, false);
+            httpReq.send();
+            return httpReq.status != 404;
+        }
+
+        function DecompressFile(file, blobMimeType, callback) {
+            let decompressedFile;
+
+            loadZipData(file, (f) => {
+                Unarchiver.open(f).then(async function (archive) {
+                    for (let entry of archive.entries) {
+                        if (entry.is_file) {
+                            let entryRead = await entry.read();
+                            let entryData = await entryRead.arrayBuffer();
+                            let dataBlob = new Blob([new Uint8Array(entryData)], { type: blobMimeType });
+                            decompressedFile = window.URL.createObjectURL(dataBlob);
+                        }
+                    }
+                    callback(decompressedFile);
+                });
+            });
+        }
+
+        var unityGameInstance = null;
+
+        function InitUnitySection() {
+            var script = document.createElement("script");
+            script.src = loaderUrl;
+            script.onload = () => {
+                createUnityInstance(canvas, config, (progress) => {
+                    progressBarFull.style.width = 100 * progress + "%";
+                }).then((unityInstance) => {
+                    unityGameInstance = unityInstance;
+                    loadingBar.style.display = "none";
+                }).catch((message) => {
+                    console.error(message);
+                });
+            };
+
+            document.body.appendChild(script);
+        }
+
+        InitUnitySection();</script>
+</body>
+</html>

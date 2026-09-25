@@ -726,5 +726,110 @@
         "linksrc": "/Vafor_IT/trex-runner/",
         "foldername": "trex-runner",
         "category": "Arcade"
+    },
+    {
+        "name": "Stealth Master",
+        "imgsrc": "https://yt3.ggpht.com/q5ANnCdGhOD3dhbJWAG3I3uode4P1Dpfw7VT0sPr5bQK3_2wOCf9GFey_C6Eym8wuj11slA56wGC=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/stealth-master/",
+        "foldername": "playables-stealth-master",
+        "category": "Playables"
+    },
+    {
+        "name": "My Mini Mart",
+        "imgsrc": "https://yt3.ggpht.com/HA1P2baH4_tEwWAq6YAVym8Qe4db_tAuBZXesx2q544D2nfOK17IN8-AJAaVKc8cKlansS4ye1vdph0=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/my-mini-mart/",
+        "foldername": "playables-my-mini-mart",
+        "category": "Playables"
+    },
+    {
+        "name": "Decor Life - Home Design Game",
+        "imgsrc": "https://yt3.ggpht.com/hSlRZipGTwf4eP3b8aner_LkM35TLGAUdnbt1SrW0Y5Sxr_tvMZoTfnBS_JcWfqVv7NlC22gqF_z=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/decor-life/",
+        "foldername": "playables-decor-life",
+        "category": "Playables"
+    },
+    {
+        "name": "Prison Life: Idle Game",
+        "imgsrc": "https://yt3.ggpht.com/-coH3t2V8lGa_4lOpLgKruNSQqPUmxP8JShp9Or2BirQYlk9EPqH8EvbIVuXwqbVbvkIc8RE7AICkvU=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/prison-life-idle-game/",
+        "foldername": "playables-prison-life-idle-game",
+        "category": "Playables"
+    },
+    {
+        "name": "Pizza Ready!",
+        "imgsrc": "https://yt3.ggpht.com/8Serru_uEMRxOT8VCAOOua2IKakP6JInHrACnI7Zth4PIR0A2iNpoS5c9_16Qg1q8Togrq9plwqwFQ=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/pizza-ready/",
+        "foldername": "playables-pizza-ready",
+        "category": "Playables"
+    },
+    {
+        "name": "Gas Station: Junkyard Tycoon",
+        "imgsrc": "https://yt3.ggpht.com/uKaWIIrszQwZpNwsvQGQaDY0zlmKk63lXRouLT5sdG3-uiV_00fDekmn2QF8vBpRnM6yN7n992EQaQ=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/gas-station-junkyard-tycoon/",
+        "foldername": "playables-gas-station-junkyard-tycoon",
+        "category": "Playables"
+    },
+    {
+        "name": "Brain Up: Tricky Quiz",
+        "imgsrc": "https://yt3.ggpht.com/9AR1AYoD1xYCZTITXrXFk8cuBKnzmVeYBXYmMGNxzZjyhmcJIviHxsuNbuQ_QUeClm9lI6zHELLHdg=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/brain-up-tricky-quiz/",
+        "foldername": "playables-brain-up-tricky-quiz",
+        "category": "Playables"
+    },
+    {
+        "name": "Survival Island 3D",
+        "imgsrc": "https://yt3.ggpht.com/JTnUzV5xXeGQN6siZNf68V45oetAs3F9HkNDli2j1P2j-1uoh7PYl4Cfoa48fI-Q6-tMqgiKqhIlXQ=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/survival-island-3d/",
+        "foldername": "playables-survival-island-3d",
+        "category": "Playables"
+    },
+    {
+        "name": "Dress Up 3D",
+        "imgsrc": "https://yt3.ggpht.com/nK1jlokYvJBQA1lSuEFsHcoNa17KZXf0CNdibVkcHApP72imPhRLCe5UHc-hDm0Q-JpWyM0Hi3i8fw=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/dress-up-3d/",
+        "foldername": "playables-dress-up-3d",
+        "category": "Playables"
+    },
+    {
+        "name": "Tank Stars",
+        "imgsrc": "https://yt3.ggpht.com/VNuZhcUm6VDFy5S6v7cAqMjsH5m_n9v63Z-EiRcytUSPdt0QgfZoVYEvRWo82IiarXWWCIU-sQM8a1k=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/tank-stars/",
+        "foldername": "playables-tank-stars",
+        "category": "Playables"
+    },
+    {
+        "name": "Animals vs Zombies",
+        "imgsrc": "https://yt3.ggpht.com/4urufSyEDu8LyH5INh140UCn2XcLfipTssTC2KQ_5XliSTLa2XHhquCkCUp5QkGo7KcPZfVEvinUhL4=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/animals-vs-zombies/",
+        "foldername": "playables-animals-vs-zombies",
+        "category": "Playables"
+    },
+    {
+        "name": "My Army Base",
+        "imgsrc": "https://yt3.ggpht.com/IaemDeSGRDPuoPzAipHinTy0YAOM8Wp_OMwevbBSgIRxzaSpm-8ybn5eh2DN2eLfY8c12D6DsSiiwg=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/my-army-base/",
+        "foldername": "playables-my-army-base",
+        "category": "Playables"
+    },
+    {
+        "name": "Tricky Minds: Brainy Puzzle",
+        "imgsrc": "https://yt3.ggpht.com/0FaQgnHnXNB3PChpr1PqjyAC2peHbD1CPrZUL2gpPxkK0I-JSyW7ItGyhqqPXVPO7cFwTKb4dhFGaQ=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/tricky-minds-brainy-puzzle/",
+        "foldername": "playables-tricky-minds-brainy-puzzle",
+        "category": "Playables"
+    },
+    {
+        "name": "Warrior Factory",
+        "imgsrc": "https://yt3.ggpht.com/C9bmrN9L4Xm9zoUj8o84Lz_1bE8fctttIbdnuqMxTQhTSOK7Ra4fPxsshzTCz9AKxUycstfUymzuDQ=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/warrior-factory/",
+        "foldername": "playables-warrior-factory",
+        "category": "Playables"
+    },
+    {
+        "name": "Epic Plane Evolution",
+        "imgsrc": "https://yt3.ggpht.com/k1oA4gioosP18LYUnlbXkh-CAHQQvBas5bIL-3HlxWeNiicv9lqcDqjl9-gZWqv9FPN_1kTjabZOGEc=s512-rw-nd-v1",
+        "linksrc": "/Vafor_IT/playables/epic-plane-evolution/",
+        "foldername": "playables-epic-plane-evolution",
+        "category": "Playables"
     }
 ]
