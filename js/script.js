@@ -531,7 +531,7 @@ async function fetchSourceCatalog() {
         // A failed source resolves as an empty list — filtered out of the
         // combined catalog and its tab never renders.
         const catalog = {
-            [SOURCE_MAIN]: value(0, []),
+            [SOURCE_MAIN]: value(0, []).filter(gxme => !gxme.missing),
             [SOURCE_ONE]: available(value(1, [])),
             [SOURCE_TWO]: available(value(2, [])),
             [SOURCE_THREE]: available(value(3, []))

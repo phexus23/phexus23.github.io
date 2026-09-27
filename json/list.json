@@ -732,28 +732,32 @@
         "imgsrc": "https://yt3.ggpht.com/q5ANnCdGhOD3dhbJWAG3I3uode4P1Dpfw7VT0sPr5bQK3_2wOCf9GFey_C6Eym8wuj11slA56wGC=s512-rw-nd-v1",
         "linksrc": "/Vafor_IT/playables/stealth-master/",
         "foldername": "playables-stealth-master",
-        "category": "Playables"
+        "category": "Playables",
+        "missing": true
     },
     {
         "name": "My Mini Mart",
         "imgsrc": "https://yt3.ggpht.com/HA1P2baH4_tEwWAq6YAVym8Qe4db_tAuBZXesx2q544D2nfOK17IN8-AJAaVKc8cKlansS4ye1vdph0=s512-rw-nd-v1",
         "linksrc": "/Vafor_IT/playables/my-mini-mart/",
         "foldername": "playables-my-mini-mart",
-        "category": "Playables"
+        "category": "Playables",
+        "missing": true
     },
     {
         "name": "Decor Life - Home Design Game",
         "imgsrc": "https://yt3.ggpht.com/hSlRZipGTwf4eP3b8aner_LkM35TLGAUdnbt1SrW0Y5Sxr_tvMZoTfnBS_JcWfqVv7NlC22gqF_z=s512-rw-nd-v1",
         "linksrc": "/Vafor_IT/playables/decor-life/",
         "foldername": "playables-decor-life",
-        "category": "Playables"
+        "category": "Playables",
+        "missing": true
     },
     {
         "name": "Prison Life: Idle Game",
         "imgsrc": "https://yt3.ggpht.com/-coH3t2V8lGa_4lOpLgKruNSQqPUmxP8JShp9Or2BirQYlk9EPqH8EvbIVuXwqbVbvkIc8RE7AICkvU=s512-rw-nd-v1",
         "linksrc": "/Vafor_IT/playables/prison-life-idle-game/",
         "foldername": "playables-prison-life-idle-game",
-        "category": "Playables"
+        "category": "Playables",
+        "missing": true
     },
     {
         "name": "Pizza Ready!",
@@ -767,7 +771,8 @@
         "imgsrc": "https://yt3.ggpht.com/uKaWIIrszQwZpNwsvQGQaDY0zlmKk63lXRouLT5sdG3-uiV_00fDekmn2QF8vBpRnM6yN7n992EQaQ=s512-rw-nd-v1",
         "linksrc": "/Vafor_IT/playables/gas-station-junkyard-tycoon/",
         "foldername": "playables-gas-station-junkyard-tycoon",
-        "category": "Playables"
+        "category": "Playables",
+        "missing": true
     },
     {
         "name": "Brain Up: Tricky Quiz",

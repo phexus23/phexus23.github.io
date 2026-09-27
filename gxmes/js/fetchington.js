@@ -404,7 +404,7 @@ async function fetchData(index) {
             item = data[index];
         }
 
-        if (!item) throw new Error('Game not found');
+        if (!item || item.missing) throw new Error('Game not found');
         const name1 = item.name;
         const imgsrc = item.imgsrc;
 

@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const gxmeGrid = document.getElementById('gxmeGrid');
             // Only Main games are featured, and only ones with a real
             // picture — never a generated placeholder.
-            const featured = gxmes.filter(hasRealImage);
+            const featured = gxmes.filter(gxme => hasRealImage(gxme) && !gxme.missing);
             const randomgxmes = featured.sort(() => 0.5 - Math.random()).slice(0, 4);
 
             randomgxmes.forEach(gxme => {

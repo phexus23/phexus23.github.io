@@ -305,19 +305,18 @@
   //   unityGameInstance.SendMessage("DeleteData", "SaveData");
   // };
   window.onblur = function() {
-    unityGameInstance.SendMessage("DeleteData", "SaveData");
+    if (unityGameInstance) unityGameInstance.SendMessage("DeleteData", "SaveData");
   };
   window.ontouchcancel = function() {
-    unityGameInstance.SendMessage("DeleteData", "SaveData");
+    if (unityGameInstance) unityGameInstance.SendMessage("DeleteData", "SaveData");
   };
 
   window.ontouchleave = function() {
-    unityGameInstance.SendMessage("DeleteData", "SaveData");
+    if (unityGameInstance) unityGameInstance.SendMessage("DeleteData", "SaveData");
   };
-  
+
   window.BeforeUnloadEvent = function (){
-    unityGameInstance.SendMessage("DeleteData", "SaveData");
-    wait(1000);
+    if (unityGameInstance) unityGameInstance.SendMessage("DeleteData", "SaveData");
   }
   
   
