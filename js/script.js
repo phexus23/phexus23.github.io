@@ -717,9 +717,10 @@ function renderGamesGrid(container, gxmesList, opts = {}) {
     // removeGamesFromDownHosts() to sweep it back out afterward.
     const isAvailable = groupAvailable;
 
+    let renderedList;
     if (gxmesList.length <= GRID_CHUNK_SIZE) {
-        gxmesList = gxmesList.filter(isAvailable);
-        container.innerHTML = gxmesList.map(cardHTML).join('');
+        renderedList = gxmesList.filter(isAvailable);
+        container.innerHTML = renderedList.map(cardHTML).join('');
     } else {
         // Chunked path. A single sentinel div rides at the end of the grid;
         // when it scrolls within 600px of the viewport the next chunk is
@@ -755,11 +756,13 @@ function renderGamesGrid(container, gxmesList, opts = {}) {
         // Only the first chunk is actually in the DOM at this point (later
         // chunks attach their own handlers above, inside appendChunk) - the
         // zip below needs to line up with that, not the full source list.
-        gxmesList = firstChunk;
+        // gxmesList itself is left untouched here since appendChunk's
+        // closure still needs the full list to slice later chunks from.
+        renderedList = firstChunk;
     }
 
     const cards = Array.from(container.querySelectorAll('.gxme-card'));
-    cards.forEach((card, i) => attachOneCard(card, gxmesList[i], opts));
+    cards.forEach((card, i) => attachOneCard(card, renderedList[i], opts));
     return cards;
 }
 
