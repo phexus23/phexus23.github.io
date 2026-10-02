@@ -140,8 +140,23 @@ async function validateCdnGame(src) {
         const parsed = new DOMParser().parseFromString(html, 'text/html');
         return Boolean(parsed.body && parsed.body.querySelector('*'));
     } catch (error) {
-        // A CORS/network read failure is inconclusive; the iframe may still load.
-        return null;
+        // A CORS-blocked read is inconclusive on its own - a perfectly fine
+        // site with no Access-Control-Allow-Origin header fails the exact
+        // same way a genuinely dead/refused host does, both throwing the
+        // same generic "Failed to fetch" with no way to tell them apart from
+        // the error alone. Disambiguate with a second, no-cors probe of the
+        // same URL: a no-cors fetch resolves (opaque response, but
+        // *resolves*) the moment the request reaches a real server
+        // regardless of CORS headers, and only rejects on an actual
+        // network-level failure (DNS, TCP refusal, a filter dropping or
+        // resetting the connection) - the same trick pingCandidateHostOnce()
+        // above already relies on for its non-CORS-OK hosts.
+        try {
+            await fetch(src, { cache: 'no-store', mode: 'no-cors' });
+            return null; // reached a real server - CORS-only gap, inconclusive as before
+        } catch (networkError) {
+            return false; // no-cors rejected too - genuine network-level failure
+        }
     }
 }
 
@@ -353,6 +368,14 @@ function playCandidate(candidateList, i, key, requestedName, meta, domainCheck) 
         settled = true;
         playCandidate(candidateList, i + 1, key, requestedName, meta, domainCheck);
     }
+    function commit() {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        hideGameStatus(status);
+        writeGameSourceCache(key, src);
+        meta(item, src);
+    }
 
     domainCheck.then(hostStatus => {
         if (!settled && !candidateHostWorks(src, hostStatus)) advance();
@@ -360,13 +383,32 @@ function playCandidate(candidateList, i, key, requestedName, meta, domainCheck) 
 
     const timeout = window.setTimeout(advance, 10000);
 
+    // A cross-origin iframe navigation that fails outright - connection
+    // refused, DNS failure, a filter resetting the connection - still fires
+    // the iframe's own "load" event: the browser's internal error page
+    // counts as "finished loading" just like real content would, and
+    // there's no cross-origin-safe way to read what's actually inside the
+    // frame to tell the difference (confirmed: the `error` event below
+    // never fires for this - only `load` does, for both a real page and the
+    // browser's own connection-error page alike). So `load` alone can't be
+    // trusted as "this candidate works" for a cross-origin src -
+    // viableCandidates() already screened this URL once before
+    // playCandidate() started, but that was a point-in-time pre-check, not a
+    // gate on this actual attempt; re-validate it live, in parallel with the
+    // navigation below, and wait for that verdict before committing. A
+    // same-origin candidate (Main's own /gxmes/<foldername>/ page) gets no
+    // such check and still commits the instant it loads, same as before.
+    const candidateHost = hostOfUrl(src);
+    const isCrossOrigin = Boolean(candidateHost) && candidateHost !== location.hostname;
+    const validated = isCrossOrigin ? validateCdnGame(src) : null;
+    if (validated) {
+        validated.then(ok => { if (ok === false) advance(); });
+    }
+
     iframe.addEventListener('load', function onLoad() {
         if (settled) return;
-        settled = true;
-        window.clearTimeout(timeout);
-        hideGameStatus(status);
-        writeGameSourceCache(key, src);
-        meta(item, src);
+        if (validated) validated.then(ok => { if (ok !== false) commit(); });
+        else commit();
     }, { once: true });
 
     iframe.addEventListener('error', function onError() {
